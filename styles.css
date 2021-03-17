@@ -1,7 +1,6 @@
 * {
     margin: 0;
     padding: 0;
-    height: 500px;
     box-sizing: border-box;
 }
 
@@ -10,19 +9,52 @@ body {
     background-repeat: no-repeat;
     background-position: 0px -450px;
     background-size: cover;
-}
+} 
 
 .menu-container {
-
+    padding: 5px 0;
     background-color: red;
-
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .menu {
-
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 85em;
 }
 
 .brand-name {
-    font-family: 'Bigshot One', cursive;
+    font-family: 'Quicksand', sans-serif;
+    font-size: 3em;
     color: white;
+}
+
+.login-button {
+    color: white;
+    box-sizing: border-box;
+    text-decoration: none;
+    text-align: center;
+    padding: 10px 30px;
+    background-color: #38B6FF;
+    border-radius: 20px;
+    font-family: 'Roboto', sans-serif;
+    font-size: 1em;
+    margin-left: 20px;
+}
+
+.register-button {
+    margin-left: auto;
+    margin-right: ;
+    color: white;
+    box-sizing: border-box;
+    text-decoration: none;
+    text-align: center;
+    padding: 10px 30px;
+    background-color: #38B6FF;
+    border-radius: 20px;
+    font-family: 'Roboto', sans-serif;
+    font-size: 1em;
 }
