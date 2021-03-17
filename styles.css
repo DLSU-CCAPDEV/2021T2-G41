@@ -1,0 +1,28 @@
+* {
+    margin: 0;
+    padding: 0;
+    height: 500px;
+    box-sizing: border-box;
+}
+
+body {
+    background-image: url("img/pexels-d-j-3995905.jpg");
+    background-repeat: no-repeat;
+    background-position: 0px -450px;
+    background-size: cover;
+}
+
+.menu-container {
+
+    background-color: red;
+
+}
+
+.menu {
+
+}
+
+.brand-name {
+    font-family: 'Bigshot One', cursive;
+    color: white;
+}
