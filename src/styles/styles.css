@@ -12,6 +12,8 @@ body {
 } 
 
 .menu-container {
+    position: sticky;
+    top: 0;
     padding: 5px 0;
     background-color: red;
     display: flex;
@@ -29,6 +31,7 @@ body {
 .brand-name {
     font-family: 'Quicksand', sans-serif;
     font-size: 3em;
+    position: sticky;
     color: white;
 }
 
@@ -38,21 +41,11 @@ body {
     text-decoration: none;
     text-align: center;
     padding: 10px 30px;
-    background-color: #38B6FF;
+    background-color: #309cdb;
     border-radius: 20px;
     font-family: 'Roboto', sans-serif;
     font-size: 1em;
     margin-left: 20px;
-}
-
-.login-button:hover,
-.register-button:hover {
-    background-color:#009bf5;
-}
-
-.login-button:active,
-.register-button:active {
-    background-color:#006ba8;
 }
 
 .register-button {
@@ -63,21 +56,30 @@ body {
     text-decoration: none;
     text-align: center;
     padding: 10px 30px;
-    background-color: #38B6FF;
+    background-color: #309cdb;
     border-radius: 20px;
     font-family: 'Roboto', sans-serif;
     font-size: 1em;
+}
+
+.login-button:hover,
+.register-button:hover {
+    background-color:#008ddf;
+}
+
+.login-button:active,
+.register-button:active {
+    background-color:#006ba8;
 }
 
 .welcome-container {
     display: flex;
     justify-content: center;
     padding: 50px 0px;
-    opacity: 80%;
 }
 
 .welcome {
-    background-color: #FCEFE9;
+    background-color: rgb(252, 239, 233, .8);
     height: 360px;
     width: 1100px;
 }
@@ -116,7 +118,6 @@ body {
     font-weight: 100;
 }
 
-
 .features-container {
     display: flex;
     justify-content: center;
@@ -128,15 +129,45 @@ body {
     color: white;
     display: flex;
     justify-content: center;
+    align-items: flex-start;
     font-family: 'Barlow Semi Condensed', sans-serif;
     font-weight: 100;
     font-size: 4.5em;
-    padding: 20px 85px;
-    border-radius: 25px;
+    padding: 20px 85px 25px 85px;
+    border-radius: 45px;
 }
 
 .arrow-container {
     display: flex;
     justify-content: center;
     padding: 5px 0;
+}
+
+div[class="features"] > p {
+    margin: 0px 0px;
+}
+
+.features-info-container {
+    border: green solid;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    margin-bottom: 45px;
+}
+
+.features-info {
+    border: blueviolet solid;
+    height: 450px;
+    width: 1450px;
+}
+
+.footer {
+    background-color: rgb(252, 239, 233);
+    padding: 10px 20px;
+}
+
+div[class="footer"] > p {
+    font-size: 1em;
+    font-family: 'Barlow Semi Condensed', sans-serif;
+    font-weight: 300;
 }
