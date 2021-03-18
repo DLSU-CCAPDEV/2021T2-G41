@@ -31,7 +31,6 @@ body {
 .brand-name {
     font-family: 'Quicksand', sans-serif;
     font-size: 3em;
-    position: sticky;
     color: white;
 }
 
@@ -148,17 +147,90 @@ div[class="features"] > p {
 }
 
 .features-info-container {
-    border: green solid;
     display: flex;
     justify-content: space-around;
     align-items: center;
     margin-bottom: 45px;
 }
 
-.features-info {
-    border: blueviolet solid;
+.features-info-box {
     height: 450px;
     width: 1450px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.feature1-container {
+    background-color: #D3EFFF;
+    border-radius: 35px;
+    height: 400px;
+    width: 600px;
+}
+
+.feature1-header-box {
+    height: 150px;
+    display: flex;
+    justify-content: space-between;
+}
+
+#card-img {
+    padding-top: 15px;
+    padding-left: 35px;
+    resize: both;
+}
+
+#feature1-txt {
+    font-family: 'Quicksand', sans-serif;
+    font-size: 5em;
+    letter-spacing: -3px;
+    padding-top: 25px;
+    padding-right: 55px;
+}
+
+div[class="feature1-text"] > p {
+    font-size: 1.3em;
+    font-family: 'Barlow Semi Condensed', sans-serif;
+    font-weight: 100;
+    margin: 40px 60px;
+    line-height: 35px;
+    text-align: justify;
+}
+
+.feature2-container {
+    background-color: #D3EFFF;
+    border-radius: 35px;
+    height: 400px;
+    width: 600px;
+}
+
+.feature2-header-box {
+    height: 150px;
+    display: flex;
+    justify-content: space-between;
+}
+
+#book-img {
+    padding-top: 15px;
+    padding-left: 35px;
+    resize: both;
+}
+
+#feature2-txt {
+    font-family: 'Quicksand', sans-serif;
+    font-size: 5em;
+    letter-spacing: -3px;
+    padding-top: 25px;
+    padding-right: 35px;
+}
+
+div[class="feature2-text"] > p {
+    font-size: 1.3em;
+    font-family: 'Barlow Semi Condensed', sans-serif;
+    font-weight: 100;
+    margin: 40px 60px;
+    line-height: 35px;
+    text-align: justify;
 }
 
 .footer {
