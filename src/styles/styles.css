@@ -32,6 +32,7 @@ body {
     font-family: 'Quicksand', sans-serif;
     font-size: 3em;
     color: white;
+    text-decoration: none;
 }
 
 .login-button {
@@ -242,4 +243,107 @@ div[class="footer"] > p {
     font-size: 1em;
     font-family: 'Barlow Semi Condensed', sans-serif;
     font-weight: 300;
+}
+
+.header-container {
+    height: 200px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#login-text {
+    font-size: 3em;
+    font-weight: 300;
+    font-family: 'Roboto', sans-serif;
+    color: white;
+    background-color: rgb(255, 22, 22, 0.85);
+    width: 400px;
+    height: 100px;
+    text-align: center;
+    padding-top: 20px;
+    border-radius: 45px;
+}
+
+.form-container {
+    margin-top: 50px;
+    height: 400px;
+    display: flex;
+    justify-content: center;
+}
+
+[class="form-container"] > form {
+    display: flex;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    width: 800px;
+}
+
+#email-login-text {
+    color: white;
+    font-size: 3em;
+    font-weight: 500;
+    font-family: 'Roboto', sans-serif;
+    text-shadow: #006ba8;
+    text
+}
+
+#email-login {
+    width: 550px;
+    padding: 12px 20px;
+    margin-top: 5px;
+    margin-left: 117px;
+}
+
+#password-login-text {
+    color: white;
+    font-size: 3em;
+    font-weight: 500;
+    font-family: 'Roboto', sans-serif;
+}
+
+#password-login {
+    width: 550px;
+    padding: 12px 20px;
+    margin-top: 5px;
+    margin-left: 24px;
+}
+
+#create-button {
+    margin-bottom: 150px;
+    margin-left: 650px;
+    background-color: #309cdb;
+    font-family: 'Roboto', sans-serif;
+    font-size: 1em;
+    color: white;
+    border: none;
+    padding: 16px 32px;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+#create-button:hover {
+    margin-bottom: 150px;
+    margin-left: 650px;
+    background-color: #008ddf;
+    font-family: 'Roboto', sans-serif;
+    font-size: 1em;
+    color: white;
+    border: none;
+    padding: 16px 32px;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+#create-button:active {
+    margin-bottom: 150px;
+    margin-left: 650px;
+    background-color: #006ba8;
+    font-family: 'Roboto', sans-serif;
+    font-size: 1em;
+    color: white;
+    border: none;
+    padding: 16px 32px;
+    text-decoration: none;
+    cursor: pointer;
 }
