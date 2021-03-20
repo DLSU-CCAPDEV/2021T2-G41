@@ -50,7 +50,6 @@ body {
 
 .register-button {
     margin-left: auto;
-    margin-right: ;
     color: white;
     box-sizing: border-box;
     text-decoration: none;
@@ -285,7 +284,6 @@ div[class="footer"] > p {
     font-weight: 500;
     font-family: 'Roboto', sans-serif;
     text-shadow: #006ba8;
-    text
 }
 
 #email-login {
@@ -317,9 +315,10 @@ div[class="footer"] > p {
     font-size: 1em;
     color: white;
     border: none;
-    padding: 16px 32px;
+    padding: 10px 40px;
     text-decoration: none;
     cursor: pointer;
+    border-radius: 40px;
 }
 
 #create-button:hover {
@@ -330,9 +329,11 @@ div[class="footer"] > p {
     font-size: 1em;
     color: white;
     border: none;
-    padding: 16px 32px;
+    padding: 10px 40px;
     text-decoration: none;
     cursor: pointer;
+    border-radius: 20px;
+    outline: none;
 }
 
 #create-button:active {
@@ -343,7 +344,8 @@ div[class="footer"] > p {
     font-size: 1em;
     color: white;
     border: none;
-    padding: 16px 32px;
+    padding: 10px 40px;
     text-decoration: none;
     cursor: pointer;
+    outline: none;
 }
