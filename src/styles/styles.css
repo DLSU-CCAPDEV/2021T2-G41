@@ -271,11 +271,25 @@ div[class="footer"] > p {
     justify-content: center;
 }
 
+.form-container-register {
+    margin-top: 50px;
+    height: 400px;
+    display: flex;
+    justify-content: center;
+}
+
 [class="form-container"] > form {
     display: flex;
     align-items: flex-start;
     flex-wrap: wrap;
     width: 800px;
+}
+
+[class="form-container-register"] > form {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    width: 1000px;
 }
 
 #email-login-text, #email-register-text {
@@ -307,7 +321,7 @@ div[class="footer"] > p {
     margin-left: 24px;
 }
 
-#create-button {
+#login-button {
     margin-bottom: 150px;
     margin-left: 650px;
     background-color: #309cdb;
@@ -321,7 +335,7 @@ div[class="footer"] > p {
     border-radius: 40px;
 }
 
-#create-button:hover {
+#login-button:hover {
     margin-bottom: 150px;
     margin-left: 650px;
     background-color: #008ddf;
@@ -336,9 +350,52 @@ div[class="footer"] > p {
     outline: none;
 }
 
-#create-button:active {
+#login-button:active {
     margin-bottom: 150px;
     margin-left: 650px;
+    background-color: #006ba8;
+    font-family: 'Roboto', sans-serif;
+    font-size: 1em;
+    color: white;
+    border: none;
+    padding: 10px 40px;
+    text-decoration: none;
+    cursor: pointer;
+    outline: none;
+}
+
+#create-button {
+    margin-bottom: 150px;
+    margin-left: 750px;
+    background-color: #309cdb;
+    font-family: 'Roboto', sans-serif;
+    font-size: 1em;
+    color: white;
+    border: none;
+    padding: 10px 40px;
+    text-decoration: none;
+    cursor: pointer;
+    border-radius: 40px;
+}
+
+#create-button:hover {
+    margin-bottom: 150px;
+    margin-left: 750px;
+    background-color: #008ddf;
+    font-family: 'Roboto', sans-serif;
+    font-size: 1em;
+    color: white;
+    border: none;
+    padding: 10px 40px;
+    text-decoration: none;
+    cursor: pointer;
+    border-radius: 20px;
+    outline: none;
+}
+
+#create-button:active {
+    margin-bottom: 150px;
+    margin-left: 750px;
     background-color: #006ba8;
     font-family: 'Roboto', sans-serif;
     font-size: 1em;
