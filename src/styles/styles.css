@@ -251,7 +251,7 @@ div[class="footer"] > p {
     align-items: center;
 }
 
-#login-text {
+#login-text, #register-text {
     font-size: 3em;
     font-weight: 300;
     font-family: 'Roboto', sans-serif;
@@ -278,7 +278,7 @@ div[class="footer"] > p {
     width: 800px;
 }
 
-#email-login-text {
+#email-login-text, #email-register-text {
     color: white;
     font-size: 3em;
     font-weight: 500;
@@ -286,21 +286,21 @@ div[class="footer"] > p {
     text-shadow: #006ba8;
 }
 
-#email-login {
+#email-login, #email-register {
     width: 550px;
     padding: 12px 20px;
     margin-top: 5px;
     margin-left: 117px;
 }
 
-#password-login-text {
+#password-login-text, #password-register-text {
     color: white;
     font-size: 3em;
     font-weight: 500;
     font-family: 'Roboto', sans-serif;
 }
 
-#password-login {
+#password-login, #password-register {
     width: 550px;
     padding: 12px 20px;
     margin-top: 5px;
