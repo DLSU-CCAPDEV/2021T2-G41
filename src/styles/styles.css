@@ -34,6 +34,7 @@ body {
     font-size: 3em;
     color: white;
     text-decoration: none;
+    user-select: none;
 }
 
 .login-button {
