@@ -1,0 +1,33 @@
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+div[class="menu-container"] > p {
+    font-family: 'Roboto', sans-serif;
+    font-size: 3.5em;
+    font-weight: 500;
+    color: grey;
+    margin-bottom: 15px;
+    margin-top: 20px;
+    user-select: none;
+}
+
+div[class="menu-container"] li {
+    font-family: 'Roboto', sans-serif;
+    list-style: none;
+    font-size: 2em;
+    margin-bottom: 12px;
+    margin-left: 25px;
+    font-weight: 300;
+}
+
+div[class="menu-container"] a {
+    text-decoration: none;
+    color: black;
+}
+
+div[class="menu-container"] strong {
+    font-weight: 900;
+}
