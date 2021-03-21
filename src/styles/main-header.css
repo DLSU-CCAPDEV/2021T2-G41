@@ -19,7 +19,7 @@ Contains styles for brand logo, dictionary text input & search icon, arrow down 
     display: flex;
     justify-content: space-between;
     align-items: center;
-    width: 85em;
+    width: 90%;
 }
 
 .brand-container {
@@ -91,9 +91,9 @@ Contains styles for brand logo, dictionary text input & search icon, arrow down 
 .dropdown-content {
     display: none;
     position: absolute;
-    right: 25px;
+    right: 1%;
     top: 45px;
-    width: 180px;
+    width: 12%;
     height: 118px;
     background-color: #EF3232;
     box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
@@ -105,7 +105,7 @@ div[class="dropdown-content"] > a {
     text-decoration: none;
     padding-bottom: 10px;
     font-family: 'Roboto', sans-serif;
-    font-size: 1em;
+    font-size: 100%;
     padding: 10px 25px;
 }
 
