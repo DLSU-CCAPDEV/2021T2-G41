@@ -1,3 +1,11 @@
+/* Skeleton CSS for top header menu.
+Contains styles for brand logo, dictionary text input & search icon, arrow down button & dropdown */
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
 .header-container {
     display: flex;
     justify-content: center;
@@ -59,6 +67,7 @@
 
 #dictionary-search-button:active, 
 #dictionary-search-button:hover {
+    cursor: pointer;
     outline: none;
 }
 
@@ -73,9 +82,43 @@
     outline: none;
 }
 
-.header-more-button:hover, 
-.header-more-button:active {
+.dropdown-container {
+    display: block;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    right: 25px;
+    top: 45px;
+    width: 180px;
+    height: 118px;
+    background-color: #EF3232;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+}
+
+div[class="dropdown-content"] > a {
+    display: block;
+    color: white;
+    text-decoration: none;
+    padding-bottom: 10px;
+    font-family: 'Roboto', sans-serif;
+    font-size: 1em;
+    padding: 10px 25px;
+}
+
+.dropdown-container:hover .dropdown-content {
     outline: none;
+    display: block;
+}
+
+.header-more-button:hover {
+    outline: none;
+    filter: brightness(0.50);
+}
+
+.dropdown-container a:hover {
+    background-color: #ff4040;
 }
 
 .content-container {
