@@ -164,6 +164,7 @@ div[class="features"] > p {
 }
 
 .feature1-container {
+    visibility: hidden;
     background-color: #D3EFFF;
     border-radius: 35px;
     height: 400px;
@@ -200,6 +201,7 @@ div[class="feature1-text"] > p {
 }
 
 .feature2-container {
+    visibility: hidden;
     background-color: #D3EFFF;
     border-radius: 35px;
     height: 400px;
