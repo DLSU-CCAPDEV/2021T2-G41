@@ -68,5 +68,99 @@ td.deck-options-button {
 }
 
 td.deck-options-button:hover {
-    filter: invert(55%);
+    filter: drop-shadow(5px 5px 12px gray);
+}
+
+#modal-deck-container {
+    display: none;
+    border: 2px solid blue;
+    position: fixed;
+    padding-top: 83px;
+    padding-bottom: 112px;
+    padding-left: 437px;
+    padding-right: 401px;
+    right: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.4);
+}
+
+.modal-deck-content {
+    background-color: #fefefe;
+    height: 100%;
+}
+
+#modal-deck-btn-close {
+    color: #aaaaaa;
+    display: inline;
+    float: right;
+    font-size: 40px;
+    font-weight: bold;
+    margin-right: 45px;
+    margin-top: 10px;
+    cursor: pointer;
+}
+
+#modal-deck-btn-close:hover {
+    color: #000;
+    text-decoration: none;
+}
+
+.modal-deck-title {
+    font-family: 'Roboto', sans-serif;
+    font-size: 2.5em;
+    font-weight: 400;
+    padding: 0 40px;
+    padding-top: 20px;
+    clear: both;
+}
+
+.txt-modal-top {
+    clear: none;
+}
+
+.modal-deck-text {
+    font-family: 'Roboto', sans-serif;
+    font-size: 1.8em;
+    font-weight: 300;
+    padding: 20px 40px;
+}
+
+.modal-deck-btn {
+    border: none;
+    background-color: #b8defc;
+    padding: 10px 30px;
+    text-align: center;
+    text-decoration: none;
+    outline: none;
+    margin-left: 40px;
+    border-radius: 5px;
+    font-size: 1em;
+}
+
+.txt-newCardsPerDay, .txt-maxReviewsPerDay {
+    float: left;
+}
+
+.modal-deck-form-container {
+    float: left;
+    margin-top: 20px;
+    margin-left: 25px;
+}
+
+#modal-deck-input-newCardsPerDay {
+    background-color: #FCEFE9;
+    padding: 10px 5px;
+    width: 25%;
+    outline: none;
+    border: none;
+}
+
+.btn-deleteDeck {
+    color: white;
+    background-color: red;
+    clear: both;
+    display: block;
 }
