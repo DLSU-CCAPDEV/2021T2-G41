@@ -8,13 +8,13 @@ body {
 }
 
 .deck-select-container {
-    margin-top: 20px;
-    width: 77%;
+    width: 100%;
+    padding: 2% 3%;
 }
 
 .deck-select-table {
     border: none;
-    width: 90%;
+    width: 100%;
 }
 
 table[class="deck-select-table"] th {
@@ -27,7 +27,7 @@ table[class="deck-select-table"] th {
 
 table[class="deck-select-table"] th.deck-name-th {
     padding-left: 0px;
-    padding-right: 750px;
+    width: 100%;
 }
 
 table[class="deck-select-table"] td {
