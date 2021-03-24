@@ -1,10 +1,5 @@
 .content-container {
     display: flex;
-    padding-left: 45px;
-}
-
-.menu-container {
-	flex-grow: 1;
 }
 
 .subcontent-container {
@@ -12,8 +7,6 @@
 	display: flex;
 	align-items: center;
 	flex-direction: column;
-	background-color: white;
-
 }
 
 div[class="subcontent-container"] a {
