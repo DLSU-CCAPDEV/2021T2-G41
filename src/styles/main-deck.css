@@ -73,7 +73,6 @@ td.deck-options-button:hover {
 
 #modal-deck-container {
     display: none;
-    border: 2px solid blue;
     position: fixed;
     padding-top: 83px;
     padding-bottom: 112px;
