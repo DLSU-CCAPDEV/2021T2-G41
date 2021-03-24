@@ -3,7 +3,7 @@
 }
 
 .subcontent-container {
-	flex-grow: 7;
+	width: 100%;
 	display: flex;
 	align-items: center;
 	flex-direction: column;
@@ -29,7 +29,6 @@ div[class="subcontent-container"] a {
 }
 
 .flashcard {
-	
 	width: 30%;
 	height: 500px;
 	min-width: 400px;
@@ -37,7 +36,6 @@ div[class="subcontent-container"] a {
 	transition: all 0.5s ease;
 	background-color: white;
 	border-radius: 20px;
-
 }
 
 .flashcard:hover {
@@ -85,9 +83,8 @@ div[class="subcontent-container"] a {
 	color: black;
 	font-family: 'Roboto', sans-serif;
     font-size: 2em;
-    font-weight: 450;
+    font-weight: 300;
 }
-
 
 
 .btn-container {
