@@ -4,12 +4,12 @@ let deck_onModal = document.getElementsByClassName("deck-options-button");
 
 let deck_offModal = document.getElementById("modal-deck-btn-close");
 
-a = function() {
+show = function() {
     deck_modal.style.display = "block";
 };
 
 for (var i = 0; i < deck_onModal.length; i++) {
-    deck_onModal[i].addEventListener('click', a);
+    deck_onModal[i].addEventListener('click', show);
 }
 
 deck_offModal.onclick = function() {
