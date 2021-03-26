@@ -71,8 +71,8 @@
                         <td class="browse-table-date-data">01-Nov-21</td>
                     </tr>
                     <tr>
-                        <td class="browse-table-front-data">叶う</td>
-                        <td>Kanau<br>[to come true (of a wish, prayer, etc.); to be realized; to be fulfilled]</td>
+                        <td class="browse-table-front-data">開く</td>
+                        <td>Aku<br>[to open (a door etc.)]</td>
                         <td>Core 2K Japanese Vocabulary</td>
                         <td class="browse-table-date-data">01-Nov-21</td>
                     </tr>
@@ -82,14 +82,21 @@
                 <form action="#" id="browse-edit-form">
                     <div style="display: flex; flex-grow: 1; flex-flow: column; justify-content: center;">
                         <p id="browse-edit-front-txt">Front</p>
-                        <textarea id="browse-edit-front-input" placeholder="Front content"></textarea>
+                        <textarea id="browse-edit-front-input" placeholder="Edit front content" disabled></textarea>
                     </div>
                     <div style="display: flex; flex-grow: 1; flex-flow: column; justify-content: center;">
                         <p id="browse-edit-back-txt">Back</p>
-                        <textarea id="browse-edit-back-input" placeholder="Back content"></textarea>
+                        <textarea id="browse-edit-back-input" placeholder="Edit back content" disabled></textarea>
                     </div>
                 </form>
-                <button form="browse-edit-form" id="browse-edit-submit-btn">Save</button>
+                <div id="browse-edit-buttons">
+                    <select form="browse-edit-form" id="browse-edit-select-deck" disabled>
+                        <option value="0001">Essential 1000 Kanji</option>
+                        <option value="0002">Core 2K Japanese Vocabulary</option>
+                        <option value="0003">Tae Kim Japanese Grammar</option>
+                    </select>
+                        <button form="browse-edit-form" id="browse-edit-submit-btn" class="mui-btn mui-btn--primary" disabled>Save</button>
+                </div>
             </div>
         </div>
     </div>
