@@ -1,6 +1,6 @@
 .menu-container {
     align-self: stretch;
-    height: 110%;
+    height: 100%;
 }
 
 .subaction {
@@ -56,7 +56,7 @@
 #browse-table {
     width: 100%;
     overflow-y: scroll;
-    border-collapse: separate;
+    border-collapse: collapse;
 }
 
 table[id="browse-table"] th, td {
@@ -76,6 +76,19 @@ tr:not(.browse-table-row-th) {
     box-shadow: 0 0 0 1px rgb(207, 207, 207);
     border-radius: 0px;
     padding-bottom: 10px;
+    cursor: pointer;
+    animation-name: none;
+    animation-duration: 0.2s;
+    animation-fill-mode: forwards;
+}
+
+@keyframes box-select {
+    from {
+        box-shadow: 0 0 0 1px rgb(207, 207, 207);
+    }
+    to {
+        box-shadow: 0 0 0 2px rgb(36, 36, 36);
+    }
 }
 
 .browse-table-date-th {
@@ -142,17 +155,39 @@ tr:not(.browse-table-row-th) {
     left: 5%;
 }
 
+#browse-edit-buttons {
+    display: flex;
+    justify-content: flex-start;
+}
+
 #browse-edit-submit-btn {
+    color: white;
     align-self: flex-start;
     margin-top: 2.5%;
     margin-left: 2.5%;
     width: 10%;
-    background-color: greenyellow;
+    background-color: grey;
     outline: none;
     padding: 8px 28px;
+    margin-right: 30px;
     border: none;
     border-radius: 20px;
     font-family: 'Roboto', sans-serif;
     font-size: 1em;
-    cursor: pointer;
+    cursor: unset;
+}
+
+#browse-edit-select-deck {
+    color: white;
+    align-self: flex-start;
+    margin-top: 2.5%;
+    margin-left: 2.5%;
+    width: fit-content;
+    background-color: red;
+    outline: none;
+    padding: 8px 28px;
+    margin-right: 30px;
+    border: none;
+    font-family: 'Roboto', sans-serif;
+    font-size: 1em;
 }
