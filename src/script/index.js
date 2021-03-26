@@ -23,3 +23,23 @@ const options = {
 const myObserver = new IntersectionObserver(callback, options);
 myObserver.observe(feature1);
 myObserver.observe(feature2);
+
+var loginCloseBtn = document.getElementById("login-close-btn");
+loginCloseBtn.addEventListener('click', function(){
+    document.getElementById("login-modal").classList.remove("is-active");
+});
+
+var loginBtn = document.getElementById("login-button");
+loginBtn.addEventListener('click', function() {
+    document.getElementById("login-modal").classList.add("is-active");
+});
+
+var registerCloseBtn = document.getElementById("register-close-btn");
+registerCloseBtn.addEventListener('click', function(){
+    document.getElementById("register-modal").classList.remove("is-active");
+});
+
+var registerBtn = document.getElementById("register-button");
+registerBtn.addEventListener('click', function() {
+    document.getElementById("register-modal").classList.add("is-active");
+});

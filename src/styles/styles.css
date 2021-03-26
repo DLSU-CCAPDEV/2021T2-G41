@@ -41,7 +41,7 @@ body {
     user-select: none;
 }
 
-.login-button {
+#login-button {
     font-family: 'Roboto', sans-serif;
     font-size: 1.2em;
     box-sizing: border-box;
@@ -51,7 +51,7 @@ body {
     margin-left: 20px;
 }
 
-.register-button {
+#register-button {
     font-family: 'Roboto', sans-serif;
     font-size: 1.2em;
     margin-left: auto;
@@ -323,49 +323,6 @@ div[class="footer"] > p {
     margin-left: 24px;
 }
 
-#login-button {
-    margin-bottom: 150px;
-    margin-left: 650px;
-    background-color: #309cdb;
-    font-family: 'Roboto', sans-serif;
-    font-size: 1em;
-    color: white;
-    border: none;
-    padding: 10px 40px;
-    text-decoration: none;
-    cursor: pointer;
-    border-radius: 40px;
-}
-
-#login-button:hover {
-    margin-bottom: 150px;
-    margin-left: 650px;
-    background-color: #008ddf;
-    font-family: 'Roboto', sans-serif;
-    font-size: 1em;
-    color: white;
-    border: none;
-    padding: 10px 40px;
-    text-decoration: none;
-    cursor: pointer;
-    border-radius: 20px;
-    outline: none;
-}
-
-#login-button:active {
-    margin-bottom: 150px;
-    margin-left: 650px;
-    background-color: #006ba8;
-    font-family: 'Roboto', sans-serif;
-    font-size: 1em;
-    color: white;
-    border: none;
-    padding: 10px 40px;
-    text-decoration: none;
-    cursor: pointer;
-    outline: none;
-}
-
 #create-button {
     margin-bottom: 150px;
     margin-left: 750px;
@@ -407,4 +364,21 @@ div[class="footer"] > p {
     text-decoration: none;
     cursor: pointer;
     outline: none;
+}
+
+form[id="login-form"] .container {
+    display: flex;
+}
+
+#login-submit {
+    margin-top: 10px;
+}
+
+#login-google {
+    margin-top: 10px;
+    margin-left: 10px;
+    background-image: url("../../img/nav-buttons/google_sign_in.png");
+    background-position: 0px 0px;
+    width: 31%;
+    background-position: -5px -3px;
 }
