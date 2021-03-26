@@ -41,7 +41,7 @@
     </section>
 
 
-      <div class="content-container"> <!-- content-container: Everything below the top header menu | main-menu.css -->
+    <div class="content-container"> <!-- content-container: Everything below the top header menu | main-menu.css -->
         <!-- menu-container: links on the left side (Decks, Browse, Dictionary) -->
         <div class="menu-container">
             <p>Study</p>
@@ -63,12 +63,18 @@
 
 	        <div class="flashcard">
 	        	
-	        	<div class="card-front">叶う</div>
+	        	<div class="card-front">
+                    <div class="front-word">叶う</div>
+
+                    <div class="front-footer">Click flashcard to flip</div>
+                </div>
 
 	        	<div class="card-back">
 	        			<div class="back-word">Kanau</div>
                         <br>
 	        			<div class="back-definition"> [to come true (of a wish, prayer, etc.); to be realized; to be fulfilled] </div>
+
+                        <div class="back-footer">Click flashcard to flip</div>
 	        	</div>
 
 	        </div>
@@ -86,5 +92,7 @@
         
         
     </div>
+
+    <script src="../script/study-session.js"></script>
 </body>
 </html>
