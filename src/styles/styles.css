@@ -5,6 +5,10 @@
     box-sizing: border-box;
 }
 
+html, body {
+    line-height: unset !important;
+}
+
 body {
     background-image: url("../../img/torii.jpg");
     background-repeat: no-repeat;
@@ -38,39 +42,26 @@ body {
 }
 
 .login-button {
-    color: white;
+    font-family: 'Roboto', sans-serif;
+    font-size: 1.2em;
     box-sizing: border-box;
     text-decoration: none;
     text-align: center;
     padding: 10px 30px;
-    background-color: #309cdb;
-    border-radius: 20px;
-    font-family: 'Roboto', sans-serif;
-    font-size: 1em;
     margin-left: 20px;
 }
 
 .register-button {
+    font-family: 'Roboto', sans-serif;
+    font-size: 1.2em;
     margin-left: auto;
-    color: white;
     box-sizing: border-box;
     text-decoration: none;
     text-align: center;
     padding: 10px 30px;
-    background-color: #309cdb;
     border-radius: 20px;
-    font-family: 'Roboto', sans-serif;
-    font-size: 1em;
-}
-
-.login-button:hover,
-.register-button:hover {
-    background-color:#008ddf;
-}
-
-.login-button:active,
-.register-button:active {
-    background-color:#006ba8;
+    position: relative;	
+	user-select: none;
 }
 
 .welcome-container {
@@ -110,13 +101,14 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-top: 10px;
+    margin-top: unset;
 }
 
 #welcome-msg2-txt {
     font-size: 3em;
     font-family: 'Barlow Semi Condensed', sans-serif;
     font-weight: 100;
+    margin-top: 10px;
 }
 
 .features-container {
@@ -184,6 +176,7 @@ div[class="features"] > p {
 }
 
 #feature1-txt {
+    color: black;
     font-family: 'Quicksand', sans-serif;
     font-size: 5em;
     letter-spacing: -3px;
@@ -192,6 +185,7 @@ div[class="features"] > p {
 }
 
 div[class="feature1-text"] > p {
+    color: black;
     font-size: 1.3em;
     font-family: 'Barlow Semi Condensed', sans-serif;
     font-weight: 100;
@@ -221,6 +215,7 @@ div[class="feature1-text"] > p {
 }
 
 #feature2-txt {
+    color: black;
     font-family: 'Quicksand', sans-serif;
     font-size: 5em;
     letter-spacing: -3px;
@@ -229,6 +224,7 @@ div[class="feature1-text"] > p {
 }
 
 div[class="feature2-text"] > p {
+    color: black;
     font-size: 1.3em;
     font-family: 'Barlow Semi Condensed', sans-serif;
     font-weight: 100;
@@ -237,7 +233,9 @@ div[class="feature2-text"] > p {
     text-align: justify;
 }
 
-.footer {
+.footer-msg {
+    font-family: 'Barlow Semi Condensed', sans-serif;
+    font-size: 1em;
     background-color: rgb(252, 239, 233);
     padding: 10px 20px;
 }
