@@ -127,4 +127,5 @@ div[class="dropdown-content"] > a {
     justify-content: space-between;
     align-items: stretch;
     height: 100%;
+    width: 100%;
 }
