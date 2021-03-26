@@ -61,6 +61,8 @@ table[id="browse-table"] th, td {
     border-collapse: collapse;
     font-family: 'Roboto', sans-serif;
     font-size: 0.9em;
+    padding: 5px 0px;
+    padding-left: 4px;
 }
 
 table[id="browse-table"] th {
