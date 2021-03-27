@@ -32,6 +32,7 @@ loginCloseBtn.addEventListener('click', function(){
 var loginBtn = document.getElementById("login-button");
 loginBtn.addEventListener('click', function() {
     document.getElementById("login-modal").classList.add("is-active");
+    document.getElementById("login-card").classList.add("animate__fadeInDown");
 });
 
 var registerCloseBtn = document.getElementById("register-close-btn");
@@ -42,4 +43,5 @@ registerCloseBtn.addEventListener('click', function(){
 var registerBtn = document.getElementById("register-button");
 registerBtn.addEventListener('click', function() {
     document.getElementById("register-modal").classList.add("is-active");
+    document.getElementById("register-card").classList.add("animate__fadeInDown");
 });
