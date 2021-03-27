@@ -16,7 +16,6 @@ body {
 table[class="deck-select-table"] th {
     font-family: 'Roboto', sans-serif;
     font-size: 2em;
-    padding-right: 10px;
     padding-right: 50px;
     text-align: start;
 }
@@ -35,6 +34,8 @@ table[class="deck-select-table"] td {
 td.deck-name-td > a {
     text-decoration: none;
     color: black;
+    position: relative;
+    display: block;
 }
 
 td.due-count {
