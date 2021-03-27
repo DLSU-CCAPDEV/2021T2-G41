@@ -62,10 +62,13 @@ td.deck-options-button {
     right: -18px;
     bottom: -20px;
     padding: 21px 28px;
+    transition: all 0.2s;
+    cursor: pointer;
 }
 
 td.deck-options-button:hover {
-    filter: drop-shadow(5px 5px 12px gray);
+    -webkit-transform: scale(1.25, 1.25);
+    transform: scale(1.25, 1.25);
 }
 
 #modal-deck-container {
