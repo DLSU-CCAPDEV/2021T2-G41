@@ -15,7 +15,6 @@ for (var i = 1; i < browse_table.rows.length; i++) {
         document.getElementById('browse-edit-submit-btn').disabled = false;
         document.getElementById('browse-edit-select-deck').disabled = false;
         document.getElementById('browse-edit-submit-btn').style.cursor = "pointer";
-        document.getElementById('browse-edit-submit-btn').style.backgroundColor = "green";
 
         document.getElementById('browse-edit-front-input').value = this.cells[0].innerHTML;
         document.getElementById('browse-edit-back-input').value = this.cells[1].innerHTML;

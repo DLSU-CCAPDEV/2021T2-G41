@@ -165,27 +165,23 @@ tr:not(.browse-table-row-th) {
     margin-top: 2.5%;
     margin-left: 2.5%;
     width: 10%;
-    background-color: grey;
     outline: none;
     padding: 8px 28px;
     margin-right: 30px;
     border: none;
-    border-radius: 20px;
     font-family: 'Roboto', sans-serif;
     font-size: 1em;
     cursor: unset;
 }
 
+div#browse-edit-buttons div.select {
+    margin-top: 25px;
+}
+
 #browse-edit-select-deck {
-    color: white;
+    color: black;
     align-self: flex-start;
-    margin-top: 2.5%;
-    margin-left: 2.5%;
-    width: fit-content;
-    background-color: red;
-    outline: none;
-    padding: 8px 28px;
-    margin-right: 30px;
+    border: 1px solid grey;
     border: none;
     font-family: 'Roboto', sans-serif;
     font-size: 1em;

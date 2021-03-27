@@ -16,6 +16,7 @@
      <link rel="preconnect" href="https://fonts.gstatic.com">
      <link rel="preconnect" href="https://fonts.gstatic.com">
      <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;900&display=swap" rel="stylesheet">
+          <!-- import Bulma -->
      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.2/css/bulma.min.css">
 </head>
 <body>
@@ -91,12 +92,14 @@
                     </div>
                 </form>
                 <div id="browse-edit-buttons">
-                    <select form="browse-edit-form" id="browse-edit-select-deck" disabled>
-                        <option value="0001">Essential 1000 Kanji</option>
-                        <option value="0002">Core 2K Japanese Vocabulary</option>
-                        <option value="0003">Tae Kim Japanese Grammar</option>
-                    </select>
-                        <button form="browse-edit-form" id="browse-edit-submit-btn" class="mui-btn mui-btn--primary" disabled>Save</button>
+                    <div class="select is-primary">
+                        <select form="browse-edit-form" id="browse-edit-select-deck" disabled>
+                            <option value="0001">Essential 1000 Kanji</option>
+                            <option value="0002">Core 2K Japanese Vocabulary</option>
+                            <option value="0003">Tae Kim Japanese Grammar</option>
+                        </select>
+                    </div>
+                        <button form="browse-edit-form" id="browse-edit-submit-btn" class="button is-primary" disabled>Save</button>
                 </div>
             </div>
         </div>
