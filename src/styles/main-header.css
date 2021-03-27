@@ -6,6 +6,10 @@ Contains styles for brand logo, dictionary text input & search icon, arrow down 
     box-sizing: border-box;
 }
 
+body {
+    line-height: unset !important;
+}
+
 .header-container {
     top: 0;
     position: sticky;
@@ -34,9 +38,16 @@ Contains styles for brand logo, dictionary text input & search icon, arrow down 
     display: flex;
 }
 
-.icon {
+.brand-name:hover {
+    text-decoration: none;
+    color: white;
+}
+
+.brand-icon, .icon {
     height: auto;
     width: 26%;
+    align-self: center;
+
 }
 
 .dictionary-container {
@@ -94,7 +105,9 @@ Contains styles for brand logo, dictionary text input & search icon, arrow down 
     right: 1%;
     top: 45px;
     width: 12%;
-    background-color: #EF3232;
+    padding-top: 0px !important;
+    padding-bottom: 0px !important;
+    background-color: #EF3232 !important;
     box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
 }
 

@@ -57,12 +57,13 @@
 
 table[id="browse-table"] th, td {
     text-align: left;
+    vertical-align: middle !important;
     overflow-x: hidden;
     border-collapse: collapse;
     font-family: 'Roboto', sans-serif;
     font-size: 0.9em;
-    padding: 5px 0px;
-    padding-left: 4px;
+    padding: 5px 0px !important;
+    padding-left: 4px !important;
 }
 
 table[id="browse-table"] th {
