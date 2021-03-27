@@ -92,6 +92,7 @@ body {
 }
 
 #welcome-msg1-txt {
+    color: black;
     font-size: 4.5em;
     font-family: 'Barlow Semi Condensed', sans-serif;
     font-weight: 100;
