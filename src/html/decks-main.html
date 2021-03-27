@@ -84,26 +84,36 @@
                 </tr>
            </table>
         </div>
-        <div id="modal-deck-container">
-            <div class="modal-deck-content">
-                <span id="modal-deck-btn-close">&times;</span>
-                <p class="txt-modal-top modal-deck-title">Deck options</p>
-                <p class="modal-deck-text">Core 2K Japanese Vocabulary</p>
-                <button class="modal-deck-btn txt-change-name">Change name</button>
-                <button class="modal-deck-btn txt-see-all-cards">See all cards</button>
-                <p class="modal-deck-title">New cards</p>
-                <p class="modal-deck-text txt-newCardsPerDay">New cards/day</p>
-                <form action="#" class="modal-deck-form-container">
-                    <input type="number" name="modal-deck-input-newCardsPerDay" min="1" value="10" id="modal-deck-input-newCardsPerDay">
-                    <input type="submit" class="modal-deck-btn" value="Save">
-                </form>
-                <p class="modal-deck-title">Reviews</p>
-                <p class="modal-deck-text txt-maxReviewsPerDay">Max. review/day</p>
-                <form action="#" class="modal-deck-form-container">
-                    <input type="number" name="modal-deck-input-newCardsPerDay" min="1" value="10" id="modal-deck-input-newCardsPerDay">
-                    <input type="submit" class="modal-deck-btn" value="Save">
-                </form>
-                <button class="modal-deck-btn btn-deleteDeck">Delete deck</button>
+        <div id="modal-deck-container" class="modal">
+            <div class="modal-background"></div>
+            <div class="modal-card">
+                <header class="modal-card-head">
+                    <p class="modal-card-title">Deck Options</p>
+                    <button class="delete is-large" aria-label="close" id="modal-deck-btn-close"></button>
+                </header>
+                <section class="modal-card-body">
+                    <p class="title is-2 modal-deck-title">Core 2K Japanese Vocabulary</p>
+                    <div class="container">
+                        <button class="button is-primary txt-change-name modal-deck-btn" >Change name</button>
+                        <button class="button is-primary txt-see-all-cards modal-deck-btn">See all cards</button>
+                    </div>
+                    <form action="#" id="modal-deck-form-container">
+                        <p class="title is-2 modal-deck-title">New cards</p>
+                        <div class="container">
+                            <p class="title is-2 modal-deck-text txt-newCardsPerDay">New cards/day</p>
+                            <input type="number" name="modal-deck-input-newCardsPerDay" id="modal-deck-input-newCardsPerDay" min="1" value="10">
+                        </div>
+                        <p class="title is-2 modal-deck-title">Reviews</p>
+                        <div class="container">
+                            <p class="title is-2 modal-deck-text txt-maxReviewsPerDay">Max. reviews/day</p>
+                            <input type="number" name="modal-deck-input-reviewCardsPerDay" id="modal-deck-input-reviewCardsPerDay" min="1" value="10">
+                        </div>
+                        <div class="container">
+                            <input type="button" value="Save" class="button is-primary" id="modal-deck-save-btn">
+                            <input type="button" value="DELETE Deck" class="button is-danger" id="modal-deck-delete-btn">
+                        </div>
+                    </form>
+                </section>
             </div>
         </div>
     </div>
