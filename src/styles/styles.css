@@ -378,7 +378,13 @@ form[id="login-form"] .container {
     margin-top: 10px;
     margin-left: 10px;
     background-image: url("../../img/nav-buttons/google_sign_in.png");
-    background-position: 0px 0px;
-    width: 31%;
-    background-position: -5px -3px;
+    transition: background-image 0.1s;
+    background-size: 99%;
+    width: 28%;
+    border: none;
+    background-position: 1px 0px;
+}
+
+#login-google:hover {
+    background-image: url("../../img/nav-buttons/google_sign_in-hover.png");
 }
