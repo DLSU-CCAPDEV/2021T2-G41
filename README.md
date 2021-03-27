@@ -1,4 +1,6 @@
 # Group 41 | Kanau
-![image](https://user-images.githubusercontent.com/55874439/112672692-beae4100-8e9e-11eb-88bf-1aa81c487116.png)
+<p align="center">
+    <img src="https://user-images.githubusercontent.com/55874439/112708392-bda40080-8eec-11eb-9a11-e6c412980db5.png"/>
+</p>
 
 The web app will be deployed on [Firebase](https://firebase.google.com/).
