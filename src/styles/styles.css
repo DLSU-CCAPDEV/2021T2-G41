@@ -41,6 +41,11 @@ body {
     user-select: none;
 }
 
+#brand-logo {
+    height: 4.2%;
+    width: 4.2%;
+}
+
 #login-button {
     font-family: 'Roboto', sans-serif;
     font-size: 1.2em;
