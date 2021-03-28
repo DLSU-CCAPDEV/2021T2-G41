@@ -43,9 +43,10 @@ div[class="subcontent-container"] a {
 	height: 500px;
 	min-width: 400px;
 	transform-style: preserve-3d;
-	transition: all 1s ease;
+	transition: all 0.4s ease;
 	background-color: white;
 	border-radius: 20px;
+	box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.2);
 	cursor: pointer;
 }
 
@@ -139,6 +140,7 @@ div[class="subcontent-container"] a {
 
 #pass-btn{
     background-color: #58D68D;
+	outline: none;
 }
 
 #pass-btn:hover {
@@ -152,6 +154,7 @@ div[class="subcontent-container"] a {
 #fail-btn {
     background-color: #E74C3C;
 	margin-bottom: 1em !important;
+	outline: none;
 }
 
 #fail-btn:hover {
@@ -161,3 +164,7 @@ div[class="subcontent-container"] a {
 #fail-btn:active {
 	background-color: #E74C3C;
 }
+
+.animate__animated.animate__fadeOutLeft {
+	--animate-duration: 0.3s;
+  }
