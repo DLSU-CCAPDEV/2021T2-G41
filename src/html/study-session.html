@@ -46,8 +46,7 @@
     </section>
 
 
-    <div class="content-container"> <!-- content-container: Everything below the top header menu | main-menu.css -->
-        <!-- menu-container: links on the left side (Decks, Browse, Dictionary) -->
+    <div class="content-container">
         <div class="menu-container">
             <p>Study</p>
             <ul>
@@ -66,30 +65,25 @@
 				<div class="deck-name"><a href="#">Core 2K Japanese Vocabulary</a></div>
         	</div>
 
-            <ul id="list-of-cards">
-                <li>
-                    <div class="flashcard">
-                        
-                        <div class="card-front">
-                            <div class="front-word">叶う</div>
+                <div class="animate__animated flashcard">
+                    
+                    <div class="card-front">
+                        <div class="front-word" id="front-word">叶う</div>
 
-                            <div class="front-footer">Click flashcard to flip</div>
-                        </div>
-
-                        <div class="card-back">
-                                <div class="back-word">Kanau</div>
-                                <br>
-                                <div class="back-definition"> [to come true (of a wish, prayer, etc.); to be realized; to be fulfilled] </div>
-
-                                <div class="back-footer">Click flashcard to flip</div>
-                        </div>
-
+                        <div class="front-footer">Click flashcard to flip</div>
                     </div>
-                </li>
-            </ul>
+
+                    <div class="card-back">
+                            <div class="back-word" id="back-word">Kanau</div>
+                            <br>
+                            <div class="back-definition" id="back-definition"> [to come true (of a wish, prayer, etc.); to be realized; to be fulfilled] </div>
+
+                            <div class="back-footer">Click flashcard to flip</div>
+                    </div>
+
+                </div>
 
 	        <div class="btn-container">
-
 	        	<button class="buttons" id="pass-btn">PASS</button>
 
 	        	<button class="buttons" id="fail-btn">FAIL</button>
