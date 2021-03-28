@@ -151,6 +151,7 @@ div[class="subcontent-container"] a {
 
 #fail-btn {
     background-color: #E74C3C;
+	margin-bottom: 1em !important;
 }
 
 #fail-btn:hover {
