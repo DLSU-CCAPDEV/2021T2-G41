@@ -39,6 +39,5 @@ document.addEventListener('click', function(event) {
 
         document.getElementById('browse-edit-front-input').value = "";
         document.getElementById('browse-edit-back-input').value = "";
-        document.getElementById('browse-edit-submit-btn').style.backgroundColor = "grey";
     }
 });
