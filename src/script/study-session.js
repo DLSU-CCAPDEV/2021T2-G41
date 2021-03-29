@@ -7,7 +7,7 @@ var frontWordNode = document.getElementById("front-word");
 var backWordNode = document.getElementById("back-word");
 var backDefinitionNode = document.getElementById("back-definition");
 
-// Card data for study session (hardcoded for now)
+// Card data for study session (HARCODED for now)
 var reviewCards = [
 	{
 		frontWord: "叶う",
@@ -24,7 +24,8 @@ var reviewCards = [
 var currentCardIndex = 0;
 var maxCards = 2;
 
-// Initialize review for first card
+// Initialize review for first card, track if fadeIn or fadeOut
+var isFadeIn = false;
 frontWordNode.innerHTML = reviewCards[currentCardIndex].frontWord;
 backWordNode.innerHTML = reviewCards[currentCardIndex].backWord;
 backDefinitionNode.innerHTML = reviewCards[currentCardIndex].backDefinition;
@@ -33,17 +34,21 @@ flashcard.addEventListener('click', function() {
 	flashcard.classList.toggle('flip');
 })
 
-flashcard.addEventListener('click', function() {
-	flashcard.classList.remove("animate__fadeInRight");
+flashcard.addEventListener('animationend', function() {
+	if (isFadeIn) {
+		flashcard.classList.remove("animate__fadeInRight");
+		isFadeIn = false;
+	}
 });
 
 passBtn.addEventListener('click', function() {
 	if (currentCardIndex < maxCards - 1) {
-		flashcard.classList.add("animate__fadeInRight");
 		currentCardIndex += 1;
 		frontWordNode.innerHTML = reviewCards[currentCardIndex].frontWord;
 		backWordNode.innerHTML = reviewCards[currentCardIndex].backWord;
 		backDefinitionNode.innerHTML = reviewCards[currentCardIndex].backDefinition;
+		flashcard.classList.add("animate__fadeInRight");
+		isFadeIn = true;
 	}
 	else {
 		flashcard.classList.add("animate__fadeOutLeft");
