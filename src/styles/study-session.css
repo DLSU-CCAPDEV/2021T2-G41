@@ -43,7 +43,7 @@ div[class="subcontent-container"] a {
 	height: 500px;
 	min-width: 400px;
 	transform-style: preserve-3d;
-	transition: all 0.4s ease;
+	transition: all 0.3s ease;
 	background-color: white;
 	border-radius: 20px;
 	box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.2);
@@ -165,6 +165,7 @@ div[class="subcontent-container"] a {
 	background-color: #E74C3C;
 }
 
+.animate__animated.animate__fadeInRight, 
 .animate__animated.animate__fadeOutLeft {
 	--animate-duration: 0.3s;
   }
