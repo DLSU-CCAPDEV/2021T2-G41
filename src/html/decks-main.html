@@ -53,8 +53,8 @@
                <li><a href="browse-main.html">Browse</a></li>
                <li><a href="dictionary.html">Dictionary</a></li>
                <br>
-               <li><a href="#" class="subaction">Add card</a></li>
-               <li><a href="#" class="subaction">Create deck</a></li>
+               <li><a href="#" class="subaction" id="addCard-btn">Add card</a></li>
+               <li><a href="#" class="subaction" id="createDeck-btn">Create deck</a></li>
             </ul>
         </div>
         <div class="deck-select-container">
@@ -91,10 +91,10 @@
                     <button class="delete is-large" aria-label="close" id="modal-deck-btn-close"></button>
                 </header>
                 <section class="modal-card-body">
-                    <p class="title is-2 modal-deck-title">Core 2K Japanese Vocabulary</p>
+                    <p class="title is-2 modal-deck-title" id="modal-deck-title" contenteditable="false">Core 2K Japanese Vocabulary</p>
                     <div class="container">
-                        <button class="button is-primary txt-change-name modal-deck-btn" >Change name</button>
-                        <button class="button is-primary txt-see-all-cards modal-deck-btn">See all cards</button>
+                        <button class="button is-primary txt-change-name modal-deck-btn" id="modal-changeName-btn">Change name</button>
+                        <button class="button is-primary txt-see-all-cards modal-deck-btn" id="modal-seeAllCards-btn">See all cards</button>
                     </div>
                     <form action="#" id="modal-deck-form-container">
                         <p class="title is-2 modal-deck-title">New cards</p>
@@ -111,6 +111,38 @@
                             <input type="button" value="Save" class="button is-primary" id="modal-deck-save-btn">
                             <input type="button" value="DELETE Deck" class="button is-danger" id="modal-deck-delete-btn">
                         </div>
+                    </form>
+                </section>
+            </div>
+        </div>
+        <div id="modal-addCard-container" class="modal">
+            <div class="modal-card">
+                <header class="modal-card-head">
+                    <p class="modal-card-title">Add card</p>
+                    <button class="delete is-large" aria-label="close" id="modal-addCard-btn-close"></button>
+                </header>
+                <section class="modal-card-body">
+                    <form action="#" id="modal-addCard-form-container">
+                        <p class="title is-2 modal-deck-text">Front</p>
+                        <textarea name="modal-addCard-front-input" id="modal-addCard-front-input" class="textarea"></textarea>
+                        <p class="title is-2 modal-deck-text">Back</p>
+                        <textarea name="modal-addCard-back-input" id="modal-addCard-back-input" class="textarea"></textarea>
+                        <input type="button" value="Add" class="button is-primary" id="modal-addCard-save-btn">
+                    </form>
+                </section>
+            </div>
+        </div>
+        <div id="modal-addDeck-container" class="modal">
+            <div class="modal-card">
+                <header class="modal-card-head">
+                    <p class="modal-card-title">Create new deck</p>
+                    <button class="delete is-large" aria-label="close" id="modal-addDeck-btn-close"></button>
+                </header>
+                <section class="modal-card-body">
+                    <form action="#" id="modal-addDeck-form-container">
+                        <p class="title is-2 modal-deck-text">New deck name</p>
+                        <input type="text" name="modal-addDeck-front-input" id="modal-addDeck-front-input" class="input">
+                        <input type="button" value="Add" class="button is-primary" id="modal-addDeck-save-btn">
                     </form>
                 </section>
             </div>
