@@ -19,17 +19,37 @@ var addDeckModal = document.getElementById("modal-addDeck-container");
 var addDeck_onModal = document.getElementById("createDeck-btn");
 var addDeck_offModal = document.getElementById("modal-addDeck-btn-close");
 
+function getDeckRowAndCol(element) { // Returns [Row,Col]
+    let row = undefined, col = undefined;
+    row = element.parentNode.rowIndex;
+    col = element.cellIndex;
+    return [row, col];
+}
+
 // Add event for each deck option button, open the deck modal
 for (var i = 0; i < deck_onModal.length; i++) {
+    // Show modal
     deck_onModal[i].addEventListener('click', function() {
         deck_modal.style.display = "block";
     });
+    // Update modal information
+    deck_onModal[i].onclick = function() {
+        let selectedRowNCol = getDeckRowAndCol(this); // no need?
+        // Show deck name
+        originalDeckName = this.parentElement.cells[0].childNodes[0].innerText;
+        document.getElementById("modal-deck-title").textContent = originalDeckName;
+    };
 }
 
 // Click outside the deck modal to exit modal
 window.onclick = function(event) {
     if (event.target == deck_modal) {
         deck_modal.style.display = "none";
+        changeNameBtn.disabled = false;
+        modalDeckTitle.contentEditable = false;
+        modalDeckTitle.style.border = "unset";
+        originalDeckName = undefined;
+        
     }
 }
 
@@ -39,6 +59,7 @@ deck_offModal.onclick = function() {
     changeNameBtn.disabled = false;
     modalDeckTitle.contentEditable = false;
     modalDeckTitle.style.border = "unset";
+    originalDeckName = undefined;
 }
 
 // In modal, change deck name
