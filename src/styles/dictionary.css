@@ -39,6 +39,7 @@
 .content-body {
 	width: 100%;
 	padding: 30px;
+	padding-left: 8%;
 	display: flex;
 }
 
@@ -58,6 +59,7 @@
 
 .content-footer {
 	padding: 30px;
+	padding-left: 8%;
 	display: flex;
 }
 
