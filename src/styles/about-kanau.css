@@ -1,0 +1,48 @@
+#meet-the-team {
+    color: black;
+    text-align: center;
+    font-family: 'Quicksand', sans-serif;
+    font-size: 3.5em;
+    margin: 2% 0%;
+}
+
+#gabby-container {
+    background-color: red;
+}
+
+#adrian-container {
+    background-color: rgba(0, 0, 255, 0.664);
+}
+
+#gabby-img-container, #adrian-img-container {
+    display: flex;
+    justify-content: center;
+    padding: 75px 0px;
+}
+
+#gabby-img, #adrian-img {
+    max-width: 255px !important;
+    height: auto !important;
+    border-radius: 145px;
+}
+
+#gabby-desc-container, #adrian-desc-container {
+    padding: 2% 0%;
+    color: white;
+    display: flex;
+    flex-direction: column;
+}
+
+#gabby-name, #adrian-name {
+    font-family: 'Quicksand', sans-serif;
+    font-size: 3em;
+}
+
+#gabby-desc, #adrian-desc {
+    margin-top: 15px;
+    font-family: 'Barlow Semi Condensed', sans-serif;
+    font-size: 1.5em;
+    line-height: 1.6;
+    width: 80%;
+    text-align: justify;
+}
