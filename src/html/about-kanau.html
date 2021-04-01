@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>About Kanau</title>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../styles/main-header.css">
+    <link rel="stylesheet" href="../styles/about-kanau.css">
+    <link rel="icon" href="../../afavicon.ico">
+    <title>Kanau</title>
+     <!-- import fonts -->
+     <link rel="preconnect" href="https://fonts.gstatic.com">
+     <link rel="preconnect" href="https://fonts.gstatic.com">
+     <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@700&display=swap" rel="stylesheet">
+     <link rel="preconnect" href="https://fonts.gstatic.com">
+     <link rel="preconnect" href="https://fonts.gstatic.com">
+     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;900&display=swap" rel="stylesheet">
+     <!-- import animations -->
+     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+     <!-- import Bulma -->
+     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.2/css/bulma.min.css">
+</head>
+<body>
+    <section class="header-container"> <!-- header-container: Contains everything on the top bar | main-header.css -->
+        <div class="header">
+            <div class="brand-container">
+                <a href="decks-main.html" class="brand-name">Kanau</p><img src="../../img/logo-transparent-dark.png" class="brand-icon"></a>
+            </div>
+            <div class="dropdown-container">
+                <button class="header-more-button"></button>
+                <div class="dropdown-content">
+                    <a href="#">Account Settings</a>
+                    <a href="decks-main.html">Return to decks</a>
+                    <a href="index.html">Logout</a>
+                </div>
+            </div>
+        </div>
+    </section>
+    <div id="subcontent">
+        <div class="columns">
+            <div class="column is-full" id="column-title">
+                <p id="meet-the-team" class="animate__animated animate__fadeInDown">Meet the Team</p>
+                <div class="columns animate__animated is-hidden" id="gabby-container">
+                    <div class="column" id="gabby-img-container">
+                            <img src="../../img/confidential secrets/me_lol.jpg" alt="Gabby" id="gabby-img">
+                    </div>
+                    <div class="column" id="gabby-desc-container">
+                        <p id="gabby-name">Gabby</p>
+                        <p id="gabby-desc">Thanks for using Kanau!
+                            As both a Computer Science undergraduate and striving Japanese learner, 
+                            I came up of making this web app to help others simplifiy their language learning path using my method of Flashcard study.
+                        </p>
+                    </div>
+                </div>
+                <div class="columns animate__animated is-hidden" id="adrian-container">
+                    <div class="column" id="adrian-img-container">
+                            <img src="../../img/confidential secrets/adrian-lol.jpg" alt="Adrian" id="adrian-img">
+                    </div>
+                    <div class="column" id="adrian-desc-container">
+                        <p id="adrian-name">Adrian</p>
+                        <p id="adrian-desc">I like software development. Add more text.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="../script/about-kanau.js"></script>
+</body>
+</html>
