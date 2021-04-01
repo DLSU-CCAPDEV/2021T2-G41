@@ -47,7 +47,7 @@
                <li><a href="browse-main.html"><strong>Browse</strong></a></li>
                <li><a href="dictionary.html">Dictionary</a></li>
                <br>
-               <li><a href="#" class="subaction">Add card</a></li>
+               <li><a href="#" class="subaction" id="addCard-btn">Add card</a></li>
                <li><a href="#" class="subaction">Filter options</a></li>
             </ul>
         </div>
@@ -101,6 +101,24 @@
                     </div>
                         <button form="browse-edit-form" id="browse-edit-submit-btn" class="button is-primary" disabled>Save</button>
                 </div>
+            </div>
+        </div>
+
+         <div id="modal-addCard-container" class="modal">
+            <div class="modal-card">
+                <header class="modal-card-head">
+                    <p class="modal-card-title">Add card</p>
+                    <button class="delete is-large" aria-label="close" id="modal-addCard-btn-close"></button>
+                </header>
+                <section class="modal-card-body">
+                    <form action="#" id="modal-addCard-form-container">
+                        <p class="title is-2 modal-deck-text">Front</p>
+                        <textarea name="modal-addCard-front-input" id="modal-addCard-front-input" class="textarea"></textarea>
+                        <p class="title is-2 modal-deck-text">Back</p>
+                        <textarea name="modal-addCard-back-input" id="modal-addCard-back-input" class="textarea"></textarea>
+                        <input type="button" value="Add" class="button is-primary" id="modal-addCard-save-btn">
+                    </form>
+                </section>
             </div>
         </div>
     </div>

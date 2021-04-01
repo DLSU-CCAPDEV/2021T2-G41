@@ -41,3 +41,16 @@ document.addEventListener('click', function(event) {
         document.getElementById('browse-edit-back-input').value = "";
     }
 });
+
+// Add card modal nodes
+var addCardModal = document.getElementById("modal-addCard-container");
+var addCard_onModal = document.getElementById("addCard-btn");
+var addCard_offModal = document.getElementById("modal-addCard-btn-close");
+
+addCard_onModal.addEventListener('click', function() {
+    addCardModal.style.display = "block";
+});
+
+addCard_offModal.addEventListener('click', function() {
+    addCardModal.style.display = "none";
+});
