@@ -10,6 +10,11 @@ var menuNavigationContainer = document.getElementById('navigation-menu');
 var filterContainer = document.getElementById('filter-form');
 var hideNav = false;
 
+// Add card modal nodes
+var addCardModal = document.getElementById("modal-addCard-container");
+var addCard_onModal = document.getElementById("addCard-btn");
+var addCard_offModal = document.getElementById("modal-addCard-btn-close");
+
 // Row selected event handler
 for (var i = 1; i < browse_table.rows.length; i++) {
     browse_table.rows[i].onclick = function() {
@@ -85,4 +90,12 @@ filterContainer.addEventListener('animationend', function() {
         menuNavigationContainer.classList.add('animate__fadeIn');
         filterContainer.classList.remove('animate__fadeOutLeft');
     }
+});
+
+addCard_onModal.addEventListener('click', function() {
+    addCardModal.style.display = "block";
+});
+
+addCard_offModal.addEventListener('click', function() {
+    addCardModal.style.display = "none";
 });

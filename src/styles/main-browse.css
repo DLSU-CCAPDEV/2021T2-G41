@@ -221,3 +221,7 @@ div#browse-edit-buttons div.select {
     font-size: 1.8em !important;
     font-weight: 300 !important;
 }
+
+#add-card-select-deck {
+    margin-left: 15px;
+}
