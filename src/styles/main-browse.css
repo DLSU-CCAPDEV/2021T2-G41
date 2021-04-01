@@ -195,3 +195,29 @@ div#browse-edit-buttons div.select {
     font-family: 'Roboto', sans-serif;
     font-size: 1em;
 }
+
+#modal-addCard-container {
+    display: none;
+    position: fixed;
+    padding-top: 83px;
+    padding-bottom: 112px;
+    padding-left: 437px;
+    padding-right: 401px;
+    right: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.4);
+}
+
+#modal-addCard-front-input, #modal-addCard-back-input {
+    margin-bottom: 15px;
+    resize: none;
+}
+
+.modal-deck-text {
+    font-family: 'Roboto', sans-serif !important;
+    font-size: 1.8em !important;
+    font-weight: 300 !important;
+}
