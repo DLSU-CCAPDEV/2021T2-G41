@@ -24,6 +24,7 @@
     max-width: 255px !important;
     height: auto !important;
     border-radius: 145px;
+    box-shadow: 5px 8px 12px rgb(0, 0, 0, 0.25);
 }
 
 #gabby-desc-container, #adrian-desc-container {
