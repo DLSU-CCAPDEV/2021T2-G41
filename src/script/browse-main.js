@@ -1,5 +1,14 @@
+// Card selection
 var browse_table = document.getElementById('browse-table');
 var rowSelected = NaN;
+
+// Filter option nodes
+var filterOptionsOnBtn = document.getElementById('filter-options-btn');
+var filterOptionsBackBtn = document.getElementById('filter-back-btn');
+var filterOptionsSaveBtn = document.getElementById('filter-save-btn');
+var menuNavigationContainer = document.getElementById('navigation-menu');
+var filterContainer = document.getElementById('filter-form');
+var hideNav = false;
 
 // Row selected event handler
 for (var i = 1; i < browse_table.rows.length; i++) {
@@ -43,5 +52,37 @@ document.addEventListener('click', function(event) {
 
         document.getElementById('browse-edit-front-input').value = "";
         document.getElementById('browse-edit-back-input').value = "";
+    }
+});
+
+filterOptionsOnBtn.addEventListener('click', function() {
+    menuNavigationContainer.classList.remove('animate__fadeIn');
+    menuNavigationContainer.classList.add('animate__fadeOut');
+    hideNav = true;
+});
+
+menuNavigationContainer.addEventListener('animationend', function() {
+    if (hideNav) {
+        menuNavigationContainer.classList.add('is-hidden');
+        filterContainer.classList.remove('is-hidden');
+        filterContainer.classList.remove('animate__fadeOutLeft');
+        filterContainer.classList.add('animate__fadeInLeft');
+        menuNavigationContainer.classList.remove('animate__fadeOut');
+    }
+});
+
+filterOptionsBackBtn.addEventListener('click', function() {
+    hideNav = false;
+    filterContainer.classList.remove('animate__fadeInLeft');
+    filterContainer.classList.add('animate__fadeOutLeft');
+});
+
+filterContainer.addEventListener('animationend', function() {
+    if (!hideNav) {
+        filterContainer.classList.add('is-hidden');
+        menuNavigationContainer.classList.remove('is-hidden');
+        menuNavigationContainer.classList.remove('animate__fadeOut');
+        menuNavigationContainer.classList.add('animate__fadeIn');
+        filterContainer.classList.remove('animate__fadeOutLeft');
     }
 });
