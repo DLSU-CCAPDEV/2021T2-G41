@@ -174,3 +174,7 @@ div#modal-deck-container div.container {
     overflow: auto;
     background-color: rgba(0,0,0,0.4);
 }
+
+#modal-addDeck-save-btn {
+    margin-top: 15px;
+}
