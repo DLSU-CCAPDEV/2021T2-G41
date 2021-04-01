@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Account Settings</title>
+	<meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../styles/main-menu.css">
+    <link rel="stylesheet" href="../styles/main-header.css">
+    <link rel="stylesheet" href="../styles/account-settings.css">
+    <link rel="icon" href="../../afavicon.ico">
+    <title>Kanau</title>
+     <!-- import fonts -->
+     <link rel="preconnect" href="https://fonts.gstatic.com">
+     <link rel="preconnect" href="https://fonts.gstatic.com">
+     <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@700&display=swap" rel="stylesheet">
+     <link rel="preconnect" href="https://fonts.gstatic.com">
+     <link rel="preconnect" href="https://fonts.gstatic.com">
+     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;900&display=swap" rel="stylesheet">
+     <!-- import Bulma -->
+     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.2/css/bulma.min.css">
+</head>
+<body>
+	<section class="header-container"> <!-- header-container: Contains everything on the top bar | main-header.css -->
+        <div class="header">
+            <div class="brand-container">
+                <a href="decks-main.html" class="brand-name">Kanau</p><img src="../../img/logo-transparent-dark.png" class="brand-icon"></a>
+            </div>
+            <form action="#" class="dictionary-container"> 
+                <input type="text" name="dictionary-query" id="dictionary-query" placeholder="English, Japanese word">
+                <input type="submit" value="" id="dictionary-search-button">
+            </form>
+            <div class="dropdown-container">
+                <button class="header-more-button"></button>
+                <div class="dropdown-content">
+                    <a href="decks-main.html">Return to decks</a>
+                    <a href="about-kanau.html">About Kanau</a>
+                    <a href="index.html">Logout</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="details-container">
+    	<p class="page-header">Account Details</p>
+    	<br>
+    	<p class="text-details">Current email:</p>
+    	<br>
+    	<div class="email-container">
+    		<div class="current-email">test_123@dlsu.edu.ph
+    			
+    			<button class="button is-primary" id="change-email-btn">Change Email</button>
+    			<button class="button is-primary" id="change-password-btn">Change Password</button>
+    		</div>
+
+    	</div>
+    	<br>
+    	<br>
+    	<p class="text-details">You have created 3 decks and 123 cards so far.</p>	
+    	<br>
+    	<button class="button is-danger">Delete All Flashcards</button>
+    	<br>
+    		<br>
+    	<a href="index.html" class="button is-danger">Delete Account</a>
+    </div>
+
+
+    <div class="modal" id="change-email-modal">
+    	<div class="modal-background"></div>
+ 		<div class="modal-card">
+                <header class="modal-card-head">
+                    <p class="modal-card-title">Change Email</p>
+                    <button class="delete is-large" aria-label="close" id="email-close-btn"></button>
+                </header>
+                <section class="modal-card-body">
+                   <form id="register-form" action="account-settings.html">
+                        <label for="old-email-input" class="content is-medium">Enter old Email</label>
+                        <input type="email" class="input" id="old-email-input">
+                        <label for="new-email-input" class="content is-medium">Enter new Email</label>
+                        <input type="email" class="input" id="new-email-input">
+                        <label for="confirm-email-input" class="content is-medium">Confirm new Email</label>
+                        <input type="email" class="input" id="confirm-email-input">
+                        <div class="container">
+                        	<br>
+                         <input class="button is-primary" id="login-submit" type="submit" value="Change">
+                        </div>
+                    </form>
+                </section>
+            </div>	
+    </div>
+
+    <div class="modal" id="change-password-modal">
+    	<div class="modal-background"></div>
+ 		<div class="modal-card">
+                <header class="modal-card-head">
+                    <p class="modal-card-title">Change Email</p>
+                    <button class="delete is-large" aria-label="close" id="password-close-btn"></button>
+                </header>
+                <section class="modal-card-body">
+                   <form id="register-form" action="account-settings.html">
+                        <label for="old-password-input" class="content is-medium">Enter old Password</label>
+                        <input type="password" class="input" id="old-password-input">
+                        <label for="new-password-input" class="content is-medium">Enter new Password</label>
+                        <input type="password" class="input" id="new-password-input">
+                        <label for="confirm-password-input" class="content is-medium">Confirm new Password</label>
+                        <input type="password" class="input" id="confirm-password-input">
+                        <div class="container">
+                        	<br>
+                         <input class="button is-primary" id="login-submit" type="submit" value="Change">
+                        </div>
+                    </form>
+                </section>
+            </div>	
+    </div>
+
+    <script src="../script/account-settings.js"></script>
+
+</body>
+</html>

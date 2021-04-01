@@ -1,0 +1,31 @@
+.details-container {
+	width: 100%;
+	padding: 50px 100px;
+}
+
+.email-container {
+	position: relative;
+}
+
+.page-header {
+	color: grey;
+	font-family: 'Roboto', sans-serif;
+    font-size: 4em;
+    font-weight: 450;
+}
+
+.text-details {
+	color: black;
+	font-family: 'Roboto', sans-serif;
+    font-size: 2.5em;
+}
+
+.current-email {
+	color: black;
+	font-family: 'Roboto', sans-serif;
+    font-size: 2em;
+}
+
+.button.is-primary {
+	background-color: #00d1b2;
+}
