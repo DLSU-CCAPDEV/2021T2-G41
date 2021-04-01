@@ -9,15 +9,17 @@
     <link rel="stylesheet" href="../styles/main-browse.css">
     <link rel="icon" href="../../afavicon.ico">
     <title>Kanau</title>
-     <!-- import fonts -->
-     <link rel="preconnect" href="https://fonts.gstatic.com">
-     <link rel="preconnect" href="https://fonts.gstatic.com">
-     <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@700&display=swap" rel="stylesheet">
-     <link rel="preconnect" href="https://fonts.gstatic.com">
-     <link rel="preconnect" href="https://fonts.gstatic.com">
-     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;900&display=swap" rel="stylesheet">
-          <!-- import Bulma -->
-     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.2/css/bulma.min.css">
+    <!-- import fonts -->
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;900&display=swap" rel="stylesheet">
+    <!-- import animations -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+    <!-- import Bulma -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.2/css/bulma.min.css">
 </head>
 <body>
     <section class="header-container"> <!-- header-container: Contains everything on the top bar | main-header.css -->
@@ -42,14 +44,49 @@
     <div class="content-container"> <!-- content-container: Everything below the top header menu | main-menu.css -->
         <div class="menu-container">
             <p>Study</p>
-            <ul>
+            <ul class="animate__animated animate__faster" id="navigation-menu">
                <li><a href="decks-main.html">Decks</a></li>
                <li><a href="browse-main.html"><strong>Browse</strong></a></li>
                <li><a href="dictionary.html">Dictionary</a></li>
                <br>
                <li><a href="#" class="subaction">Add card</a></li>
-               <li><a href="#" class="subaction">Filter options</a></li>
+               <li><a href="#" class="subaction" id="filter-options-btn">Filter options</a></li>
             </ul>
+            <form action="#" id="filter-form" class="animate__animated animate__faster is-hidden">
+                <div class="columns is-multiline is-mobile">
+                    <div class="column is-full">
+                        <p class="title is-2" id="filter-options-title">Filter options</p>
+                    </div>
+                    <div class="column is-full">
+                        <p class="subtitle is-4">Select Deck</p>
+                    </div>
+                    <div class="select is-full" id="deck-filter-container">
+                        <select name="deck-filter" id="deck-filter">
+                            <option value="0001">Essential 1000 Kanji</option>
+                            <option value="0002">Core 2K Japanese Vocabulary</option>
+                            <option value="0003">Tae Kim Japanese Grammar</option>
+                        </select>
+                    </div>
+                    <div class="column is-half">
+                        <label class="checkbox" id="added-today-check-container">
+                            <input type="checkbox" id="added-today-check">
+                            Added today
+                        </label>
+                    </div>
+                    <div class="column is-half">
+                        <label class="checkbox" id="review-today-check-container">
+                            <input type="checkbox" id="review-today-check">
+                            Reviewed today
+                        </label>
+                    </div>
+                    <div class="column is-half">
+                        <button form="" id="filter-back-btn" class="button is-warning">←Back</button>
+                    </div>
+                    <div class="column is-half">
+                        <button form="" id="filter-save-btn" class="button is-primary">Save</button>
+                    </div>
+                </div>
+            </form>
         </div>
         <div class="browse-container">
             <div class="filter-container">
