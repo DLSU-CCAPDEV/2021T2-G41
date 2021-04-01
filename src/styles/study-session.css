@@ -115,8 +115,13 @@ div[class="subcontent-container"] a {
     font-weight: 300;
 }
 
+div#study-complete-msg-container p{
+	margin-top: 15px !important;
+	text-align: center;
+	line-height: 1.8;
+}
 
-.btn-container {
+#btn-container {
 	display: flex;
 	width: 300px;
 	justify-content: space-between;
@@ -166,6 +171,7 @@ div[class="subcontent-container"] a {
 }
 
 .animate__animated.animate__fadeInRight, 
-.animate__animated.animate__fadeOutLeft {
+.animate__animated.animate__fadeOutLeft,
+.animate__animated.animate__fadeOutDown {
 	--animate-duration: 0.3s;
   }
