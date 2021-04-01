@@ -56,3 +56,29 @@ div[class="menu-container"] li:hover {
 div[class="menu-container"] strong {
     font-weight: 900;
 }
+
+#filter-options-title {
+    font-family: 'Roboto', sans-serif;
+    font-size: 2em;
+    font-weight: 300;
+    color: black;
+    margin-bottom: 15px;
+    margin-top: 20px;
+    user-select: none;
+}
+
+#deck-filter-container {
+    margin-bottom: 15px;
+}
+
+#added-today-check-container {
+    margin-right: 15px;
+}
+
+/* Modifier for animation (for filter options) */
+.animate__animated.animate__fadeInLeft,
+.animate__animated.animate__fadeOutLeft,
+.animate__animated.animate__fadeIn,
+.animate__animated.animate__fadeOut {
+    --animate-duration: 0.4s;
+  }
