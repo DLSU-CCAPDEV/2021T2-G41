@@ -156,6 +156,10 @@ div#modal-deck-container div.container {
     resize: none;
 }
 
+#add-card-select-deck {
+    margin-left: 15px;
+}
+
 #modal-addDeck-container {
     display: none;
     position: fixed;
@@ -169,8 +173,4 @@ div#modal-deck-container div.container {
     height: 100%;
     overflow: auto;
     background-color: rgba(0,0,0,0.4);
-}
-
-#modal-addDeck-front-input {
-    margin-bottom: 15px;
 }
