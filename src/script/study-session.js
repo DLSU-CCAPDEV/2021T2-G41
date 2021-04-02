@@ -16,25 +16,58 @@ var reviewCount = document.getElementById("review-count");
 var reviewCards = [
 	{
 		frontWord: "叶う",
-		backWord: "Kanau",
-		backDefinition: "[to come true (of a wish, prayer, etc.); to be realized; to be fulfilled]"
+		backWord: "Kanau<br>[to come true (of a wish, prayer, etc.); to be realized; to be fulfilled]",
 	},
 	{
 		frontWord: "開く",
-		backWord: "Aku",
-		backDefinition: "To open (a door etc.)"
-	}];
+		backWord: "Aku<br>To open (a door etc.)",
+	},
+    {
+        frontWord: "切る",
+        backWord: "Kiru<br>To Cut",
+
+    },
+    {
+        frontWord: "閉める",
+        backWord: "Shimeru<br>To close something (intransitive verb)",
+
+    },
+    {
+        frontWord: "食べる",
+        backWord: "Taberu<br>To eat something",
+
+    },
+    {
+        frontWord: "閉める",
+        backWord: "Shimeru<br>To close something (intransitive verb)",
+
+    },
+    {
+        frontWord: "届ける",
+        backWord: "Todokeru<br>To deliver something",
+
+    },
+    {
+        frontWord: "慰める",
+        backWord: "Nagusameru<br>To comfort",
+
+    },
+    {
+        frontWord: "話す",
+        backWord: "Hanasu<br>To talk, to discourse (e.g story)",
+
+    }];
 
 // track current card being studied
 var hasFinishedStudying = false;
 var currentCardIndex = 0;
-var maxCards = 2;
+var maxCards = reviewCards.length;
 
 // Initialize review for first card, track if fadeIn or fadeOut
 var isFadeIn = false;
 frontWordNode.innerHTML = reviewCards[0].frontWord;
-backWordNode.innerHTML = reviewCards[0].backWord;
-backDefinitionNode.innerHTML = reviewCards[0].backDefinition;
+backWordNode.innerHTML = reviewCards[0].frontWord;
+backDefinitionNode.innerHTML = reviewCards[0].backWord;
 reviewCount.innerHTML = maxCards - currentCardIndex;
 
 flashcard.addEventListener('click', function() {
@@ -60,8 +93,8 @@ passBtn.addEventListener('click', function() {
 		reviewCount.innerHTML = maxCards - currentCardIndex;
 		reviewCards.shift();
 		frontWordNode.innerHTML = reviewCards[0].frontWord;
-		backWordNode.innerHTML = reviewCards[0].backWord;
-		backDefinitionNode.innerHTML = reviewCards[0].backDefinition;
+		backWordNode.innerHTML = reviewCards[0].frontWord;
+		backDefinitionNode.innerHTML = reviewCards[0].backWord;
 		flashcard.classList.add("animate__fadeInRight");
 		isFadeIn = true;
 	}
@@ -75,8 +108,8 @@ passBtn.addEventListener('click', function() {
 failBtn.addEventListener('click', function() {
 	reviewCards.push(reviewCards.shift());
 	frontWordNode.innerHTML = reviewCards[0].frontWord;
-	backWordNode.innerHTML = reviewCards[0].backWord;
-	backDefinitionNode.innerHTML = reviewCards[0].backDefinition;
+	backWordNode.innerHTML = reviewCards[0].frontWord;
+	backDefinitionNode.innerHTML = reviewCards[0].backWord;
 	flashcard.classList.add("animate__fadeInRight");
 	isFadeIn = true;
 });
