@@ -10,6 +10,7 @@ meetTheTeamText.addEventListener("animationend", function () {
 })
 
 gabbyContainer.addEventListener("animationend", function() {
+    gabbyContainer.classList.remove('animate__fadeInLeft');
     adrianContainer.classList.remove("is-hidden");
     adrianContainer.classList.add("animate__fadeInRight");
 });
