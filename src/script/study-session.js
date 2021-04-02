@@ -10,6 +10,7 @@ var finishMessage2 = document.getElementById('msg-2');
 var frontWordNode = document.getElementById("front-word");
 var backWordNode = document.getElementById("back-word");
 var backDefinitionNode = document.getElementById("back-definition");
+var reviewCount = document.getElementById("review-count");
 
 // Card data for study session (HARCODED for now)
 var reviewCards = [
@@ -31,9 +32,10 @@ var maxCards = 2;
 
 // Initialize review for first card, track if fadeIn or fadeOut
 var isFadeIn = false;
-frontWordNode.innerHTML = reviewCards[currentCardIndex].frontWord;
-backWordNode.innerHTML = reviewCards[currentCardIndex].backWord;
-backDefinitionNode.innerHTML = reviewCards[currentCardIndex].backDefinition;
+frontWordNode.innerHTML = reviewCards[0].frontWord;
+backWordNode.innerHTML = reviewCards[0].backWord;
+backDefinitionNode.innerHTML = reviewCards[0].backDefinition;
+reviewCount.innerHTML = maxCards - currentCardIndex;
 
 flashcard.addEventListener('click', function() {
 	flashcard.classList.toggle('flip');
@@ -55,9 +57,11 @@ passBtn.addEventListener('click', function() {
 	if (currentCardIndex < maxCards - 1) {
 		flashcard.classList.remove('flip');
 		currentCardIndex += 1;
-		frontWordNode.innerHTML = reviewCards[currentCardIndex].frontWord;
-		backWordNode.innerHTML = reviewCards[currentCardIndex].backWord;
-		backDefinitionNode.innerHTML = reviewCards[currentCardIndex].backDefinition;
+		reviewCount.innerHTML = maxCards - currentCardIndex;
+		reviewCards.shift();
+		frontWordNode.innerHTML = reviewCards[0].frontWord;
+		backWordNode.innerHTML = reviewCards[0].backWord;
+		backDefinitionNode.innerHTML = reviewCards[0].backDefinition;
 		flashcard.classList.add("animate__fadeInRight");
 		isFadeIn = true;
 	}
@@ -66,4 +70,13 @@ passBtn.addEventListener('click', function() {
 		btnContainer.classList.add('animate__fadeOutDown');
 		hasFinishedStudying = true;
 	}
+});
+
+failBtn.addEventListener('click', function() {
+	reviewCards.push(reviewCards.shift());
+	frontWordNode.innerHTML = reviewCards[0].frontWord;
+	backWordNode.innerHTML = reviewCards[0].backWord;
+	backDefinitionNode.innerHTML = reviewCards[0].backDefinition;
+	flashcard.classList.add("animate__fadeInRight");
+	isFadeIn = true;
 });

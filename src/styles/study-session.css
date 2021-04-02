@@ -170,6 +170,12 @@ div#study-complete-msg-container p{
 	background-color: #E74C3C;
 }
 
+#review-count {
+	color: red;
+	margin-top: 15px;
+	text-shadow: black;
+}
+
 .animate__animated.animate__fadeInRight, 
 .animate__animated.animate__fadeOutLeft,
 .animate__animated.animate__fadeOutDown {
