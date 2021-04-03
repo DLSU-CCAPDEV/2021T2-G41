@@ -17,6 +17,8 @@ body {
     justify-content: center;
     background-color: red;
     max-height: 60px;
+    -webkit-box-shadow: 0px 6px 23px -18px rgba(0,0,0,0.8); 
+    box-shadow: 0px 6px 23px -18px rgba(0,0,0,0.8);
 }
 
 .header {
