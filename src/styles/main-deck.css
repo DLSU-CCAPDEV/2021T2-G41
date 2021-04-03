@@ -178,3 +178,12 @@ div#modal-deck-container div.container {
 #modal-addDeck-save-btn {
     margin-top: 15px;
 }
+
+#torii-static {
+    display: float;
+    position: fixed;
+    bottom: 10px;
+    right: 10px;
+    height: auto;
+    width: 5%;
+}
