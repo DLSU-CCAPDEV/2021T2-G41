@@ -1,31 +1,17 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Browse - Kanau</title>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <%- include('./partials/links.ejs') %>
     <link rel="stylesheet" href="../styles/main-menu.css">
     <link rel="stylesheet" href="../styles/main-header.css">
     <link rel="stylesheet" href="../styles/main-browse.css">
-    <link rel="icon" href="../../afavicon.ico">
-    <title>Kanau</title>
-    <!-- import fonts -->
-    <link rel="preconnect" href="https://fonts.gstatic.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com">
-    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@700&display=swap" rel="stylesheet">
-    <link rel="preconnect" href="https://fonts.gstatic.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com">
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;900&display=swap" rel="stylesheet">
-    <!-- import animations -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
-    <!-- import Bulma -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.2/css/bulma.min.css">
 </head>
 <body>
     <section class="header-container"> <!-- header-container: Contains everything on the top bar | main-header.css -->
         <div class="header">
             <div class="brand-container">
-                <a href="decks-main.html" class="brand-name">Kanau</p><img src="../../img/logo-transparent-dark.png" class="brand-icon"></a>
+                <a href="decks" class="brand-name">Kanau</p><img src="../../img/logo-transparent-dark.png" class="brand-icon"></a>
             </div>
             <form action="#" class="dictionary-container"> 
                 <input type="text" name="dictionary-query" id="dictionary-query" placeholder="English, Japanese word">
@@ -34,9 +20,9 @@
             <div class="dropdown-container">
                 <button class="header-more-button"></button>
                 <div class="dropdown-content">
-                    <a href="./account-settings.html">Account Settings</a>
-                    <a href="about-kanau.html">About Kanau</a>
-                    <a href="../html/index.html">Logout</a>
+                    <a href="account">Account Settings</a>
+                    <a href="about">About Kanau</a>
+                    <a href="index">Logout</a>
                 </div>
             </div>
         </div>
@@ -45,9 +31,9 @@
         <div class="menu-container">
             <p>Study</p>
             <ul class="animate__animated animate__faster" id="navigation-menu">
-               <li><a href="decks-main.html">Decks</a></li>
-               <li><a href="browse-main.html"><strong>Browse</strong></a></li>
-               <li><a href="dictionary.html">Dictionary</a></li>
+               <li><a href="decks">Decks</a></li>
+               <li><a href="browse"><strong>Browse</strong></a></li>
+               <li><a href="dictionary">Dictionary</a></li>
                <br>
                <li><a href="#" class="subaction" id="addCard-btn">Add card</a></li>
                <li><a href="#" class="subaction" id="filter-options-btn">Filter options</a></li>
