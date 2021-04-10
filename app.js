@@ -55,7 +55,7 @@ app.get('/decks', (req, res) => {
 app.get('/dictionary', function(req, res) {
     console.log("Requested term: " + req.query.termQuery);
     if (!req.query.termQuery) {
-        res.render('views/dictionary.ejs', {Dictionary: null, isSearch: false});
+        res.render('views/dictionary.ejs', {Dictionary: null, isSearch: false, title: 'Kanau | About us'});
         res.end();
         return;
     }
@@ -94,7 +94,7 @@ app.get('/dictionary', function(req, res) {
         
         console.log("==== AFTER PARSING to readable object format ====");
         console.log(DictionaryResults);
-        res.render('views/dictionary.ejs', {Dictionary: DictionaryResults, isSearch: true});
+        res.render('views/dictionary.ejs', {Dictionary: DictionaryResults, isSearch: true, title: 'Kanau | About us'});
     })
     .catch(error =>
         console.log(error));
