@@ -1,5 +1,4 @@
 const express = require('express');
-
 const mongoose = require('mongoose');
 const path = require('path');
 
@@ -8,6 +7,7 @@ const Dictionary = require('./models/dictionary');
 
 // express app
 const app = express();
+const dictionaryURI = "mongodb+srv://dbAdmin:admin123@kanaugcp.tm0gd.mongodb.net/Dictionary?retryWrites=true&w=majority";
 
 // connect to Dictionary database
 mongoose.connect(dictionaryURI, {useNewUrlParser: true, useUnifiedTopology: true})
@@ -55,7 +55,7 @@ app.get('/decks', (req, res) => {
 app.get('/dictionary', function(req, res) {
     console.log("Requested term: " + req.query.termQuery);
     if (!req.query.termQuery) {
-        res.render('dictionary.ejs', {Dictionary: null, isSearch: false});
+        res.render('views/dictionary.ejs', {Dictionary: null, isSearch: false});
         res.end();
         return;
     }
@@ -94,7 +94,7 @@ app.get('/dictionary', function(req, res) {
         
         console.log("==== AFTER PARSING to readable object format ====");
         console.log(DictionaryResults);
-        res.render('dictionary.ejs', {Dictionary: DictionaryResults, isSearch: true});
+        res.render('views/dictionary.ejs', {Dictionary: DictionaryResults, isSearch: true});
     })
     .catch(error =>
         console.log(error));
