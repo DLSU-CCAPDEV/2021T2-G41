@@ -26,15 +26,14 @@ app.use('/img', express.static('./img'));
 // takes url encoded data and parse it into an object usable from a req object
 app.use(express.urlencoded({extended: true}));
 
-app.get('/', function(req, res) {
-    res.render('dictionary.ejs', {Dictionary: null, isSearch: false});
-});
-
-app.post('/dictionary.html', function(req, res) {
-    console.log("Requested term: " + req.body.termQuery);
-    if (!req.body.termQuery)
+app.get('/dictionary', function(req, res) {
+    console.log("Requested term: " + req.query.termQuery);
+    if (!req.query.termQuery) {
         res.render('dictionary.ejs', {Dictionary: null, isSearch: false});
-    Dictionary.find({Kanji: {"$regex": req.body.termQuery, "$options": "i"} }).sort({TermID: 'asc'})
+        res.end();
+        return;
+    }
+    Dictionary.find({Kanji: {"$regex": req.query.termQuery, "$options": "i"} }).sort({TermID: 'asc'})
     .then(result => {
         console.log(result);
         let termKanji = [];
@@ -72,5 +71,5 @@ app.post('/dictionary.html', function(req, res) {
         res.render('dictionary.ejs', {Dictionary: DictionaryResults, isSearch: true});
     })
     .catch(error =>
-        console.log(error))
+        console.log(error));
 });
