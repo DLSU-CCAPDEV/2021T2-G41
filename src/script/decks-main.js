@@ -18,6 +18,7 @@ var addCard_offModal = document.getElementById("modal-addCard-btn-close");
 var addDeckModal = document.getElementById("modal-addDeck-container");
 var addDeck_onModal = document.getElementById("createDeck-btn");
 var addDeck_offModal = document.getElementById("modal-addDeck-btn-close");
+var addDeck_saveBtn = document.getElementById("modal-addDeck-save-btn");
 
 function getDeckRowAndCol(element) { // Returns [Row,Col]
     let row = undefined, col = undefined;
@@ -40,6 +41,8 @@ for (var i = 0; i < deck_onModal.length; i++) {
         document.getElementById("modal-deck-title").textContent = originalDeckName;
     };
 }
+
+/* DECK MODAL events */
 
 // Click outside the deck modal to exit modal
 window.onclick = function(event) {
@@ -88,4 +91,19 @@ addDeck_onModal.addEventListener('click', function() {
 
 addDeck_offModal.addEventListener('click', function() {
     addDeckModal.style.display = "none";
+});
+
+addDeck_saveBtn.addEventListener('click', function(event) {
+    var xhttp = new XMLHttpRequest();
+
+    xhttp.open('GET', '/testajax', true);
+    console.log("XHTTP instance created!");
+
+    xhttp.onload = function() {
+        console.log("GOT transaction!");
+        console.log("STATUS" + this.status);
+        console.log(this.responseText);
+    };
+
+    xhttp.send();
 });
