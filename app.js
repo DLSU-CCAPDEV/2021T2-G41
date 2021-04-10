@@ -104,8 +104,12 @@ app.get('/study', (req, res) => {
   res.render('views/study-session', { title: 'Kanau | Study'});
 });
 
+app.get('/testajax', (req, res) => {
+  res.status(200).send('just some random testing going on here');
+});
 
 // 404 page
 app.use((req, res) => {
+  console.log("404 on URL: " + req.url);
   res.status(404).sendFile('./src/html/404.html', { root: __dirname });
 });
