@@ -1,4 +1,5 @@
 const express = require('express');
+
 const mongoose = require('mongoose');
 const path = require('path');
 
@@ -7,24 +8,49 @@ const Dictionary = require('./models/dictionary');
 
 // express app
 const app = express();
-const dictionaryURI = "mongodb+srv://dbAdmin:admin123@kanaugcp.tm0gd.mongodb.net/Dictionary?retryWrites=true&w=majority";
 
-// register view engine
-app.set('view engine', 'ejs');
-app.set('views', path.join(__dirname, 'src/html')); // FIX for Failed to lookup view error
-
+// connect to Dictionary database
 mongoose.connect(dictionaryURI, {useNewUrlParser: true, useUnifiedTopology: true})
     .then(app.listen(3000))
     .catch(function(error) {
         console.log(error);
     });
 
-// make client-side scripts accessible (This is the FIX for the text only problem)
+// make client-side scripts and files accessible
 app.use(express.static('src'));
 app.use('/img', express.static('./img'));
 
+// register view engine
+app.set('view engine','ejs');
+app.set('views', 'src');
+
 // takes url encoded data and parse it into an object usable from a req object
 app.use(express.urlencoded({extended: true}));
+
+app.get('/', (req, res) => {
+  res.render('views/index', { title: 'Welcome to Kanau'});
+});
+
+// redirects
+app.get('/index', (req, res) => {
+  res.redirect('/');
+});
+
+app.get('/account', (req, res) => {
+  res.render('views/account-settings', { title: 'Kanau | Account'});
+});
+
+app.get('/about', (req, res) => {
+  res.render('views/about-kanau', { title: 'Kanau | About us'});
+});
+
+app.get('/browse', (req, res) => {
+  res.render('views/browse-main', { title: 'Kanau | Browse'});
+});
+
+app.get('/decks', (req, res) => {
+  res.render('views/decks-main', { title: 'Kanau | Decks'});
+});
 
 app.get('/dictionary', function(req, res) {
     console.log("Requested term: " + req.query.termQuery);
@@ -72,4 +98,14 @@ app.get('/dictionary', function(req, res) {
     })
     .catch(error =>
         console.log(error));
+});
+
+app.get('/study', (req, res) => {
+  res.render('views/study-session', { title: 'Kanau | Study'});
+});
+
+
+// 404 page
+app.use((req, res) => {
+  res.status(404).sendFile('./src/html/404.html', { root: __dirname });
 });

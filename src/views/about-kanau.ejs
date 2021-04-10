@@ -1,38 +1,23 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>About Kanau</title>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <%- include('./partials/links.ejs') %>
     <link rel="stylesheet" href="../styles/main-header.css">
     <link rel="stylesheet" href="../styles/about-kanau.css">
-    <link rel="icon" href="../../afavicon.ico">
-    <title>Kanau</title>
-     <!-- import fonts -->
-     <link rel="preconnect" href="https://fonts.gstatic.com">
-     <link rel="preconnect" href="https://fonts.gstatic.com">
-     <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@700&display=swap" rel="stylesheet">
-     <link rel="preconnect" href="https://fonts.gstatic.com">
-     <link rel="preconnect" href="https://fonts.gstatic.com">
-     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;900&display=swap" rel="stylesheet">
-     <!-- import animations -->
-     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
-     <!-- import Bulma -->
-     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.2/css/bulma.min.css">
 </head>
 <body>
     <section class="header-container"> <!-- header-container: Contains everything on the top bar | main-header.css -->
         <div class="header">
             <div class="brand-container">
-                <a href="decks-main.html" class="brand-name">Kanau</p><img src="../../img/logo-transparent-dark.png" class="brand-icon"></a>
+                <a href="decks" class="brand-name">Kanau</p><img src="../../img/logo-transparent-dark.png" class="brand-icon"></a>
             </div>
             <div class="dropdown-container">
                 <button class="header-more-button"></button>
                 <div class="dropdown-content">
-                    <a href="account-settings.html">Account Settings</a>
-                    <a href="decks-main.html">Return to decks</a>
-                    <a href="index.html">Logout</a>
+                    <a href="account">Account Settings</a>
+                    <a href="decks">Return to decks</a>
+                    <a href="index">Logout</a>
                 </div>
             </div>
         </div>
