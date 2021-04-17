@@ -6,7 +6,7 @@ const path = require('path');
 const Dictionary = require('./models/dictionary');
 const Test = require('./models/test'); // TODO: add function call for specified collection name
 const Flashcard = require('./models/flashcards');
-var flashcardInfoModel = null, flashcardModel = null;
+var flashcardInfoModel = null, flashcardModel = null, deckSettingModel = null;
 
 // express app & MongoDB URIs
 const app = express();
@@ -85,21 +85,32 @@ app.get('/decks', (req, res) => {
     console.log("created flashcard model");
   }
 
+  if (!deckSettingModel) {
+    var deckSettingSchema = Flashcard.DeckSettingSchema(username);
+    deckSettingModel = flashcardConnection.model('deck settings', deckSettingSchema, username);
+  }
+
+  var _due = 0, _new = 0;
+
   // Get decks
-  flashcardInfoModel.find({Tag: "Index"}, 'decks')
-  .then(results => {
+  flashcardInfoModel.find({Tag: "Index"}, 'decks') // Get deck names
+  .then(results => { 
     console.log(results);
     personalDecks = results[0].decks.slice();
     console.log("assign decks...");
     console.log(personalDecks);
 
     personalDecks.forEach(deck => {
-      flashcardModel.find({Deck: deck})
-      .then(results =>
-        console.log("GOT Flashcards!"))
-      .catch(err =>
-        console.log(err))
-    });
+      // Get deck settings (max new/reviews)
+      deckSettingModel.find({Tag: "Deck Settings", Deck: deck})
+      .then(result => {
+        console.log("GET Deck preferences for " + deck);
+        console.log(result);
+
+        // TODO: Find new & review cards (limit), get return length
+      })
+      .catch(err => console.log(err));
+
   })
   .catch(err => console.log(err));
 
@@ -113,7 +124,7 @@ app.get('/dictionary', function(req, res) {
         res.end();
         return;
     }
-    Dictionary.find({Kanji: {"$regex": req.query.termQuery, "$options": "i"} }).sort({TermID: 'asc'})
+    Dictionary.find({Kanji: {"$regex": req.query.termQuery, "$options": "i"} }).sort({TermID: 'asc'}).limit(2)
     .then(result => {
         console.log(result);
         let termKanji = [];
