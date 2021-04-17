@@ -4,17 +4,27 @@ const path = require('path');
 
 // get models
 const Dictionary = require('./models/dictionary');
+const Test = require('./models/test'); // TODO: add function call for specified collection name
+const Flashcard = require('./models/flashcards');
+var flashcardInfoModel = null, flashcardModel = null;
 
-// express app
+// express app & MongoDB URIs
 const app = express();
 const dictionaryURI = "mongodb+srv://dbAdmin:admin123@kanaugcp.tm0gd.mongodb.net/Dictionary?retryWrites=true&w=majority";
+const flashcardURI = "mongodb+srv://dbAdmin:admin123@kanaugcp.tm0gd.mongodb.net/Flashcards?retryWrites=true&w=majority";
 
-// connect to Dictionary database
+// connect to Dictionary database (default connection)
 mongoose.connect(dictionaryURI, {useNewUrlParser: true, useUnifiedTopology: true})
     .then(app.listen(3000))
     .catch(function(error) {
         console.log(error);
     });
+
+// Other database connnections
+const flashcardConnection = mongoose.createConnection(flashcardURI, {useNewUrlParser: true, useUnifiedTopology: true});
+
+// Misc nodes
+var personalDecks = null;
 
 // make client-side scripts and files accessible
 app.use(express.static('src'));
@@ -28,6 +38,17 @@ app.set('views', 'src');
 app.use(express.urlencoded({extended: true}));
 
 app.get('/', (req, res) => {
+  res.render('views/index', { title: 'Welcome to Kanau'});
+});
+
+app.get('/add', (req, res) => {
+  Test.findOne({ data: "hello" })
+  .then(result => console.log(result))
+  .catch(err => console.log(err));
+
+  Test.updateOne({ data: "hello" }, {newData: "hey!"})
+  .then(result => console.log(result))
+  .catch(err => console.log(err));
   res.render('views/index', { title: 'Welcome to Kanau'});
 });
 
@@ -49,7 +70,40 @@ app.get('/browse', (req, res) => {
 });
 
 app.get('/decks', (req, res) => {
-  res.render('views/decks-main', { title: 'Kanau | Decks'});
+  var username = "sampleuser@test.com";
+
+  // Prepare models
+  if (!flashcardInfoModel) { // check if model has already been compiled
+    var flashcardInfoSchema = Flashcard.FlashcardInfoSchema(username);
+    flashcardInfoModel = flashcardConnection.model('tag', flashcardInfoSchema, username);
+    console.log("created flashcardInfo model");
+  }
+
+  if (!flashcardModel) {
+    var flashcardSchema = Flashcard.Flashcardschema(username);
+    flashcardModel = flashcardConnection.model('flashcard', flashcardSchema, username);
+    console.log("created flashcard model");
+  }
+
+  // Get decks
+  flashcardInfoModel.find({Tag: "Index"}, 'decks')
+  .then(results => {
+    console.log(results);
+    personalDecks = results[0].decks.slice();
+    console.log("assign decks...");
+    console.log(personalDecks);
+
+    personalDecks.forEach(deck => {
+      flashcardModel.find({Deck: deck})
+      .then(results =>
+        console.log("GOT Flashcards!"))
+      .catch(err =>
+        console.log(err))
+    });
+  })
+  .catch(err => console.log(err));
+
+  res.render('views/decks-main', {decks: personalDecks, title: 'Kanau | Decks'});
 });
 
 app.get('/dictionary', function(req, res) {
@@ -111,5 +165,5 @@ app.get('/testajax', (req, res) => {
 // 404 page
 app.use((req, res) => {
   console.log("404 on URL: " + req.url);
-  res.status(404).sendFile('./src/html/404.html', { root: __dirname });
+  res.status(404).sendFile('./src/html/404.ejs', { root: __dirname });
 });
