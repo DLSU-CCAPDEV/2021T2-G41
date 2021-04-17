@@ -48,36 +48,18 @@
                    <th>Due</th>
                    <th>New</th>
                </tr>
-               <tr>
+               <!--<tr>
                    <td class="deck-name-td"><a href="study" class="effect-underline">Essential 1000 Kanji</a></td>
                    <td class="due-count">25</td>
                    <td class="new-count">10</td>
                    <td class="deck-options-button"></td>
-                </tr>
-                <tr>
-                    <td class="deck-name-td"><a href="study" class="effect-underline">Core 2K Japanese Vocabulary</a></td>
-                    <td class="due-count">17</td>
-                    <td class="new-count">10</td>
+                </tr> -->
+                <%decks.forEach(deck => { %>
+                    <td class="deck-name-td"><a href="study" class="effect-underline"><%=deck%></a></td>
+                    <td class="due-count">X</td>
+                    <td class="new-count">X</td>
                     <td class="deck-options-button"></td>
-                </tr>
-                <tr>
-                    <td class="deck-name-td"><a href="study" class="effect-underline">Tae Kim Japanese Grammar</a></td>
-                    <td class="due-count">5</td>
-                    <td class="new-count">10</td>
-                    <td class="deck-options-button"></td>
-                </tr>
-                <tr>
-                    <td class="deck-name-td"><a href="study" class="effect-underline">JLPT N5 Tango Deck</a></td>
-                    <td class="due-count">19</td>
-                    <td class="new-count">10</td>
-                    <td class="deck-options-button"></td>
-                </tr>
-                <tr>
-                    <td class="deck-name-td"><a href="study" class="effect-underline">Personal vocabulary</a></td>
-                    <td class="due-count">2</td>
-                    <td class="new-count">10</td>
-                    <td class="deck-options-button"></td>
-                </tr>
+                <%});%>
            </table>
         </div>
         <div id="modal-deck-container" class="modal">
