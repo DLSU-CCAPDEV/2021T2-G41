@@ -118,7 +118,7 @@ app.get('/decks', (req, res) => {
       .catch(err => console.log(err));
     })
     // TODO: No decks available
-    res.render('views/decks-main', {decks: personalDecks, _dueAndNewDecks = null, title: 'Kanau | Decks'});
+    res.render('views/decks-main', {decks: personalDecks, _dueAndNewDecks: null, title: 'Kanau | Decks'});
   })
   .catch(err => console.log(err));
 });
