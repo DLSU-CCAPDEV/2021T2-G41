@@ -54,10 +54,10 @@
                    <td class="new-count">10</td>
                    <td class="deck-options-button"></td>
                 </tr> -->
-                <%decks.forEach(deck => { %>
+                <%decks.forEach((deck, i) => { %>
                     <td class="deck-name-td"><a href="study" class="effect-underline"><%=deck%></a></td>
-                    <td class="due-count">X</td> <!--TODO Work on this!-->
-                    <td class="new-count">X</td>
+                    <td class="due-count"><%=_dueAndNewDecks[i][0]%></td>
+                    <td class="new-count"><%=_dueAndNewDecks[i][1]%></td>
                     <td class="deck-options-button"></td>
                 <%});%>
            </table>

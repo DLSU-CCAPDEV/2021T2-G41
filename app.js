@@ -90,31 +90,37 @@ app.get('/decks', (req, res) => {
     deckSettingModel = flashcardConnection.model('deck settings', deckSettingSchema, username);
   }
 
-  var _due = 0, _new = 0;
+  var _dueAndNewDecks = [] // 2D Array for storing deck settings [[due,new]]
 
   // Get decks
   flashcardInfoModel.find({Tag: "Index"}, 'decks') // Get deck names
-  .then(results => { 
+  .then(results => {
     console.log(results);
     personalDecks = results[0].decks.slice();
     console.log("assign decks...");
     console.log(personalDecks);
 
-    personalDecks.forEach(deck => {
-      // Get deck settings (max new/reviews)
+    personalDecks.forEach((deck, index, array) => {
+      // Get deck settings (max reviews/new)
       deckSettingModel.find({Tag: "Deck Settings", Deck: deck})
       .then(result => {
         console.log("GET Deck preferences for " + deck);
-        console.log(result);
+        console.log(result[0]);
 
-        // TODO: Find new & review cards (limit), get return length
+        _dueAndNewDecks.push([result[0].MaxReviews, result[0].MaxNew]);
+        console.log(_dueAndNewDecks + "!!!");
+
+        if (index == array.length - 1) {
+          res.render('views/decks-main', {decks: personalDecks, _dueAndNewDecks, title: 'Kanau | Decks'});
+          console.log("RENDERED EJS");
+        }
       })
       .catch(err => console.log(err));
-
+    })
+    // TODO: No decks available
+    res.render('views/decks-main', {decks: personalDecks, _dueAndNewDecks = null, title: 'Kanau | Decks'});
   })
   .catch(err => console.log(err));
-
-  res.render('views/decks-main', {decks: personalDecks, title: 'Kanau | Decks'});
 });
 
 app.get('/dictionary', function(req, res) {
