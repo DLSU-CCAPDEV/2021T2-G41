@@ -107,6 +107,7 @@ app.get('/decks', (req, res) => {
         console.log("GET Deck preferences for " + deck);
         console.log(result[0]);
 
+        // TODO adjust new/review count based on actual decks returned after db query
         _dueAndNewDecks.push([result[0].MaxReviews, result[0].MaxNew]);
         console.log(_dueAndNewDecks + "!!!");
 
@@ -118,7 +119,7 @@ app.get('/decks', (req, res) => {
       .catch(err => console.log(err));
     })
     // TODO: No decks available
-    res.render('views/decks-main', {decks: personalDecks, _dueAndNewDecks: null, title: 'Kanau | Decks'});
+    // res.render('views/decks-main', {decks: personalDecks, _dueAndNewDecks: null, title: 'Kanau | Decks'});
   })
   .catch(err => console.log(err));
 });
@@ -171,7 +172,8 @@ app.get('/dictionary', function(req, res) {
         console.log(error));
 });
 
-app.get('/study', (req, res) => {
+app.get('/study/:deck', (req, res) => {
+  console.log("ENTERED Study on deck: " + req.params.deck);
   res.render('views/study-session', { title: 'Kanau | Study'});
 });
 
