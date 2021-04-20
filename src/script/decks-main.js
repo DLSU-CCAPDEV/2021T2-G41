@@ -1,24 +1,32 @@
+// Deck title node (for directing to study page)
+var deck_titles = document.querySelectorAll(".deck-name-td");
+
 // Deck main modal nodes
-var deck_modal = document.getElementById("modal-deck-container");
-var deck_onModal = document.getElementsByClassName("deck-options-button");
-var deck_offModal = document.getElementById("modal-deck-btn-close");
+const deck_modal = document.getElementById("modal-deck-container");
+const deck_onModal = document.getElementsByClassName("deck-options-button");
+const deck_offModal = document.getElementById("modal-deck-btn-close");
 
 // Deck sub modal nodes
-var changeNameBtn = document.getElementById("modal-changeName-btn");
-var seeAllCards = document.getElementById("modal-seeAllCards-btn");
+const changeNameBtn = document.getElementById("modal-changeName-btn");
+const seeAllCards = document.getElementById("modal-seeAllCards-btn");
 var modalDeckTitle = document.getElementById("modal-deck-title");
 var originalDeckName = undefined;
 
 // Add card modal nodes
-var addCardModal = document.getElementById("modal-addCard-container");
-var addCard_onModal = document.getElementById("addCard-btn");
-var addCard_offModal = document.getElementById("modal-addCard-btn-close");
+const addCardModal = document.getElementById("modal-addCard-container");
+const addCard_onModal = document.getElementById("addCard-btn");
+const addCard_offModal = document.getElementById("modal-addCard-btn-close");
 
 // Add new deck modal nodes
-var addDeckModal = document.getElementById("modal-addDeck-container");
-var addDeck_onModal = document.getElementById("createDeck-btn");
-var addDeck_offModal = document.getElementById("modal-addDeck-btn-close");
-var addDeck_saveBtn = document.getElementById("modal-addDeck-save-btn");
+const addDeckModal = document.getElementById("modal-addDeck-container");
+const addDeck_onModal = document.getElementById("createDeck-btn");
+const addDeck_offModal = document.getElementById("modal-addDeck-btn-close");
+const addDeck_saveBtn = document.getElementById("modal-addDeck-save-btn");
+
+// Direct to study page event when a deck title is clicked
+deck_titles.forEach(title => {
+    title.addEventListener('click', () => window.location.assign('study/' + title.innerText));
+});
 
 function getDeckRowAndCol(element) { // Returns [Row,Col]
     let row = undefined, col = undefined;
