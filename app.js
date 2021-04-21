@@ -2,16 +2,19 @@ const express = require('express');
 const mongoose = require('mongoose');
 const path = require('path');
 
-// get models
+// get schemas
 const Dictionary = require('./models/dictionary');
 const Test = require('./models/test'); // TODO: add function call for specified collection name
 const Flashcard = require('./models/flashcards');
+// set models
 var flashcardInfoModel = null, flashcardModel = null, deckSettingModel = null;
 
 // express app & MongoDB URIs
 const app = express();
 const dictionaryURI = "mongodb+srv://dbAdmin:admin123@kanaugcp.tm0gd.mongodb.net/Dictionary?retryWrites=true&w=majority";
 const flashcardURI = "mongodb+srv://dbAdmin:admin123@kanaugcp.tm0gd.mongodb.net/Flashcards?retryWrites=true&w=majority";
+
+var username = null; // Current user (based on email)
 
 // connect to Dictionary database (default connection)
 mongoose.connect(dictionaryURI, {useNewUrlParser: true, useUnifiedTopology: true})
@@ -70,9 +73,9 @@ app.get('/browse', (req, res) => {
 });
 
 app.get('/decks', (req, res) => {
-  var username = "sampleuser@test.com";
+  username = "sampleuser@test.com";
 
-  // Prepare models
+  // Prepare models TODO: move these set statements outside
   if (!flashcardInfoModel) { // check if model has already been compiled
     var flashcardInfoSchema = Flashcard.FlashcardInfoSchema(username);
     flashcardInfoModel = flashcardConnection.model('tag', flashcardInfoSchema, username);
@@ -109,7 +112,7 @@ app.get('/decks', (req, res) => {
 
         // TODO adjust new/review count based on actual decks returned after db query
         _dueAndNewDecks.push([result[0].MaxReviews, result[0].MaxNew]);
-        console.log(_dueAndNewDecks + "!!!");
+        console.log(_dueAndNewDecks + "deck preference GOT!");
 
         if (index == array.length - 1) {
           res.render('views/decks-main', {decks: personalDecks, _dueAndNewDecks, title: 'Kanau | Decks'});
@@ -174,7 +177,44 @@ app.get('/dictionary', function(req, res) {
 
 app.get('/study/:deck', (req, res) => {
   console.log("ENTERED Study on deck: " + req.params.deck);
-  res.render('views/study-session', { title: 'Kanau | Study'});
+  res.render('views/study-session', {title: 'Kanau | Decks', deckName: req.params.deck});
+});
+
+app.get('/getStudyCards', (req, res) => {
+  let _new, _review;
+  let deckName = req.query.deck;
+  let cards = {
+    newCards: [],
+    reviewCards: []
+  };
+
+  let currDate = new Date();
+  console.log("Current date: " + currDate.toString());
+
+  console.log("GET deck AJAX Request! for " + deckName + ". Retrieving cards...");
+  
+  // Get deck settings
+  deckSettingModel.findOne({Tag: "Deck Settings", Deck: deckName})
+  .then(result => {
+    console.log(result);
+    _new = result.MaxNew;
+    _review = result.MaxReviews;
+  });
+
+  // Get Review cards
+  flashcardModel.find({Deck: deckName, ReviewDate: {"$lte": currDate, "$ne": new Date("1971-01-01T00:00:01.000Z")}})
+  .limit(_review)
+  .then(results => {
+    // TODO get new and review cards based on current date
+    if (results.length == 0) {
+      console.log(results);
+      console.log("No cards due for review.");
+    }
+    else {
+      continue
+    }
+  })
+
 });
 
 app.get('/testajax', (req, res) => {
