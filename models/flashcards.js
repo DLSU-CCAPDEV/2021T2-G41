@@ -5,6 +5,7 @@ mongoose.pluralize(null);
 var FlashcardModel = null;
 
 var getSchema = {
+    // Data for a flashcard
     Flashcardschema : function(username) {
         const FlashcardSchema = new mongoose.Schema({
             FrontWord: String,
@@ -16,7 +17,7 @@ var getSchema = {
         return FlashcardSchema;
     },
 
-    // Contains all decks of a user
+    // What decks does the user have?
     FlashcardInfoSchema : function(username) {
         const FlashcardInfoSchema = new mongoose.Schema({
             Tag: String, // Index
