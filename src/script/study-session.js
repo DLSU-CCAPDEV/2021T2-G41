@@ -1,4 +1,5 @@
 var flashcard = document.querySelector(".flashcard");
+var deckName = document.getElementById('deck-name').innerText;
 var btnContainer = document.getElementById('btn-container');
 var passBtn = document.getElementById("pass-btn");
 var failBtn = document.getElementById("fail-btn");
@@ -11,6 +12,21 @@ var frontWordNode = document.getElementById("front-word");
 var backWordNode = document.getElementById("back-word");
 var backDefinitionNode = document.getElementById("back-definition");
 var reviewCount = document.getElementById("review-count");
+
+// AJAX call to retrieve cards for review/new
+function getFlashcards() {
+	let xhttp = new XMLHttpRequest();
+
+	xhttp.open('GET', '/getStudyCards?deck=' + deckName, true);
+
+	xhttp.onload = function () {
+		console.log("GOT transaction!");
+	};
+
+	xhttp.send();
+}
+
+getFlashcards();
 
 // Card data for study session (HARCODED for now)
 var reviewCards = [
@@ -70,6 +86,7 @@ backWordNode.innerHTML = reviewCards[0].frontWord;
 backDefinitionNode.innerHTML = reviewCards[0].backWord;
 reviewCount.innerHTML = maxCards - currentCardIndex;
 
+// flip event
 flashcard.addEventListener('click', function() {
 	flashcard.classList.toggle('flip');
 })
@@ -86,6 +103,7 @@ flashcard.addEventListener('animationend', function() {
 	}
 });
 
+// pass button event, replace card content with next, fade in to next card
 passBtn.addEventListener('click', function() {
 	if (currentCardIndex < maxCards - 1) {
 		flashcard.classList.remove('flip');
@@ -105,6 +123,8 @@ passBtn.addEventListener('click', function() {
 	}
 });
 
+/* 	fail button event, replace card content with next, move card to end of review, 
+ 	fade to next card */
 failBtn.addEventListener('click', function() {
 	reviewCards.push(reviewCards.shift());
 	frontWordNode.innerHTML = reviewCards[0].frontWord;
