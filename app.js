@@ -181,7 +181,8 @@ app.get('/study/:deck', (req, res) => {
 });
 
 app.get('/getStudyCards', (req, res) => {
-  let _new, _review;
+  console.log("~~~~GET STUDY CARDS REQUEST~~~~");
+  var _new, _review;
   let deckName = req.query.deck;
   let cards = {
     newCards: [],
@@ -189,31 +190,58 @@ app.get('/getStudyCards', (req, res) => {
   };
 
   let currDate = new Date();
-  console.log("Current date: " + currDate.toString());
+  console.log("Current date: " + currDate);
 
   console.log("GET deck AJAX Request! for " + deckName + ". Retrieving cards...");
   
-  // Get deck settings
+  // Get deck settings, then get cards
   deckSettingModel.findOne({Tag: "Deck Settings", Deck: deckName})
   .then(result => {
-    console.log(result);
     _new = result.MaxNew;
     _review = result.MaxReviews;
-  });
 
-  // Get Review cards
-  flashcardModel.find({Deck: deckName, ReviewDate: {"$lte": currDate, "$ne": new Date("1971-01-01T00:00:01.000Z")}})
-  .limit(_review)
-  .then(results => {
-    // TODO get new and review cards based on current date
-    if (results.length == 0) {
-      console.log(results);
-      console.log("No cards due for review.");
-    }
-    else {
-      continue
-    }
-  })
+    /* Get Review cards, limit to maximum review setting
+    Condition:if card review date is 1971-01-01T00:00:01.000Z, skip (new card)
+              if card review date <= current date, due for review
+              if card review date > current date, skip (not due)
+  */
+    flashcardModel.find({Deck: deckName, ReviewDate: {"$lte": currDate, "$ne": new Date("1970-01-01T00:00:01.000Z")}})
+    .limit(_review)
+    .then(reviewCards => {
+      if (reviewCards.length == 0) {
+        console.log("No cards due for review.");
+      }
+      else {
+        // proceed to add review cards
+        reviewCards.forEach(reviewCard => {
+          cards.reviewCards.push(reviewCard);
+          console.log("Added " + reviewCard + " to review cards.");
+        });
+      }
+
+      /*  Get New cards, limit to maximum new setting
+      Condition:if card review date is 1971-01-01T00:00:01.000Z, due for study
+                if card review date <= or > current date, skip
+      */
+      flashcardModel.find({Deck: deckName, ReviewDate: new Date("1970-01-01T00:00:01.000Z")})
+      .limit(_new)
+      .then(newCards => {
+        if (newCards.length == 0) {
+          console.log("No New cards.");
+        }
+        else {
+          // proceed to add new cards
+          newCards.forEach(newCard => {
+            cards.newCards.push(newCard);
+            console.log("Added " + newCard + " to new cards.");
+          });
+        }
+        res.send(cards);
+      });
+
+    });
+
+  });
 
 });
 
