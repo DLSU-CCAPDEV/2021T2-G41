@@ -13,78 +13,46 @@ var backWordNode = document.getElementById("back-word");
 var backDefinitionNode = document.getElementById("back-definition");
 var reviewCount = document.getElementById("review-count");
 
+// Store cards for study
+var cards;
+var maxCards;
+var currentCardIndex = 0;
+
 // AJAX call to retrieve cards for review/new
 function getFlashcards() {
-	let xhttp = new XMLHttpRequest();
+	return new Promise((resolve, reject) => {
+		let xhttp = new XMLHttpRequest();
 
-	xhttp.open('GET', '/getStudyCards?deck=' + deckName, true);
-
-	xhttp.onload = function () {
-		console.log("GOT transaction!");
-	};
-
-	xhttp.send();
+		xhttp.open('GET', '/getStudyCards?deck=' + deckName, true);
+	
+		xhttp.onload = function () {
+			console.log("GOT cards!");
+			resolve(this.responseText);
+		};
+	
+		xhttp.send();
+	});
 }
 
-getFlashcards();
+async function loadFlashcards() {
+	cards = await getFlashcards();
+	cards = JSON.parse(cards);
+	console.log("Successfully loaded cards.");
+	console.log(cards);
 
-// Card data for study session (HARCODED for now)
-var reviewCards = [
-	{
-		frontWord: "叶う",
-		backWord: "Kanau<br>[to come true (of a wish, prayer, etc.); to be realized; to be fulfilled]",
-	},
-	{
-		frontWord: "開く",
-		backWord: "Aku<br>To open (a door etc.)",
-	},
-    {
-        frontWord: "切る",
-        backWord: "Kiru<br>To Cut",
+	maxCards = cards.newCards.length;
 
-    },
-    {
-        frontWord: "閉める",
-        backWord: "Shimeru<br>To close something (intransitive verb)",
+	// Initialize review for first card, track if fadeIn or fadeOut
+	frontWordNode.innerHTML = cards.newCards[0].FrontWord;
+	backWordNode.innerHTML = cards.newCards[0].FrontWord;
+	backDefinitionNode.innerHTML = cards.newCards[0].BackWord;
+	reviewCount.innerHTML = maxCards - currentCardIndex;
+}
 
-    },
-    {
-        frontWord: "食べる",
-        backWord: "Taberu<br>To eat something",
+loadFlashcards();
 
-    },
-    {
-        frontWord: "閉める",
-        backWord: "Shimeru<br>To close something (intransitive verb)",
-
-    },
-    {
-        frontWord: "届ける",
-        backWord: "Todokeru<br>To deliver something",
-
-    },
-    {
-        frontWord: "慰める",
-        backWord: "Nagusameru<br>To comfort",
-
-    },
-    {
-        frontWord: "話す",
-        backWord: "Hanasu<br>To talk, to discourse (e.g story)",
-
-    }];
-
-// track current card being studied
-var hasFinishedStudying = false;
-var currentCardIndex = 0;
-var maxCards = reviewCards.length;
-
-// Initialize review for first card, track if fadeIn or fadeOut
 var isFadeIn = false;
-frontWordNode.innerHTML = reviewCards[0].frontWord;
-backWordNode.innerHTML = reviewCards[0].frontWord;
-backDefinitionNode.innerHTML = reviewCards[0].backWord;
-reviewCount.innerHTML = maxCards - currentCardIndex;
+var hasFinishedStudying = false;
 
 // flip event
 flashcard.addEventListener('click', function() {
@@ -109,10 +77,10 @@ passBtn.addEventListener('click', function() {
 		flashcard.classList.remove('flip');
 		currentCardIndex += 1;
 		reviewCount.innerHTML = maxCards - currentCardIndex;
-		reviewCards.shift();
-		frontWordNode.innerHTML = reviewCards[0].frontWord;
-		backWordNode.innerHTML = reviewCards[0].frontWord;
-		backDefinitionNode.innerHTML = reviewCards[0].backWord;
+		cards.newCards.shift();
+		frontWordNode.innerHTML = cards.newCards[0].FrontWord;
+		backWordNode.innerHTML = cards.newCards[0].FrontWord;
+		backDefinitionNode.innerHTML = cards.newCards[0].BackWord;
 		flashcard.classList.add("animate__fadeInRight");
 		isFadeIn = true;
 	}
@@ -126,10 +94,10 @@ passBtn.addEventListener('click', function() {
 /* 	fail button event, replace card content with next, move card to end of review, 
  	fade to next card */
 failBtn.addEventListener('click', function() {
-	reviewCards.push(reviewCards.shift());
-	frontWordNode.innerHTML = reviewCards[0].frontWord;
-	backWordNode.innerHTML = reviewCards[0].frontWord;
-	backDefinitionNode.innerHTML = reviewCards[0].backWord;
+	cards.newCards.push(cards.newCards.shift());
+	frontWordNode.innerHTML = cards.newCards[0].FrontWord;
+	backWordNode.innerHTML = cards.newCards[0].FrontWord;
+	backDefinitionNode.innerHTML = cards.newCards[0].BackWord;
 	flashcard.classList.add("animate__fadeInRight");
 	isFadeIn = true;
 });
