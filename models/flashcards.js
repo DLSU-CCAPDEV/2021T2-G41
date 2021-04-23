@@ -33,7 +33,8 @@ var getSchema = {
             Tag: String, // Deck Settings
             Deck: String,
             MaxReviews: Number,
-            MaxNew: Number
+            MaxNew: Number,
+            ReviewInterval: Number // integer representing percentage
         });
 
         return DeckSettingSchema;
