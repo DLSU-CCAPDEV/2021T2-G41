@@ -7,7 +7,7 @@ const Dictionary = require('./models/dictionary');
 const Test = require('./models/test'); // TODO: add function call for specified collection name
 const Flashcard = require('./models/flashcards');
 // set models
-var flashcardInfoModel = null, flashcardModel = null, deckSettingModel = null;
+var decksInfoModel = null, flashcardModel = null, deckSettingModel = null;
 
 // express app & MongoDB URIs
 const app = express();
@@ -76,9 +76,9 @@ app.get('/decks', (req, res) => {
   username = "sampleuser@test.com";
 
   // Prepare models TODO: move these set statements outside
-  if (!flashcardInfoModel) { // check if model has already been compiled
-    var flashcardInfoSchema = Flashcard.FlashcardInfoSchema(username);
-    flashcardInfoModel = flashcardConnection.model('tag', flashcardInfoSchema, username);
+  if (!decksInfoModel) { // check if model has already been compiled
+    var decksInfoSchema = Flashcard.DecksInfoSchema(username);
+    decksInfoModel = flashcardConnection.model('tag', decksInfoSchema, username);
     console.log("created flashcardInfo model");
   }
 
@@ -96,11 +96,11 @@ app.get('/decks', (req, res) => {
   var _dueAndNewDecks = [] // 2D Array for storing deck settings [[due,new]]
 
   // Get decks
-  flashcardInfoModel.find({Tag: "Index"}, 'decks') // Get deck names
+  decksInfoModel.find({Tag: "Index"}, 'decks') // Get deck names
   .then(results => {
     console.log(results);
     personalDecks = results[0].decks.slice();
-    console.log("assign decks...");
+    console.log("THE DECK NAMES ARE: ");
     console.log(personalDecks);
 
     personalDecks.forEach((deck, index, array) => {
@@ -215,7 +215,7 @@ app.get('/getStudyCards', (req, res) => {
         // proceed to add review cards
         reviewCards.forEach(reviewCard => {
           cards.reviewCards.push(reviewCard);
-          console.log("Added " + reviewCard + " to review cards.");
+          // console.log("Added " + reviewCard + " to review cards.");
         });
       }
 
@@ -233,7 +233,7 @@ app.get('/getStudyCards', (req, res) => {
           // proceed to add new cards
           newCards.forEach(newCard => {
             cards.newCards.push(newCard);
-            console.log("Added " + newCard + " to new cards.");
+            // console.log("Added " + newCard + " to new cards.");
           });
         }
         res.send(cards);
@@ -246,11 +246,42 @@ app.get('/getStudyCards', (req, res) => {
 });
 
 app.post('/passCard', (req, res) => {
-  
+  const card = JSON.parse(req.body.card);
+
+  let currReviewDate = new Date();
+  currReviewDate.setDate(currReviewDate.getDate() + 0); // template for date add
+
+  if (card.ReviewInterval == null) { // new card, setup its first review date
+    let newReviewInterval, newReviewDate;
+    newReviewInterval = 1;
+    newReviewDate = currReviewDate.getDate() + 1;
+    flashcardModel.findByIdAndUpdate(card._id, {ReviewInterval: 1, ReviewDate: (currReviewDate.getDate + 1)})
+    .then(result => {
+      console.log('GOT Query response!');
+      console.log(result);
+      res.send("(Pass, NEW) Updated card review interval.");
+      return;
+    });
+  }
+
+  else if (card.ReviewInterval != null) {
+    let newReviewInterval, newReviewDate;
+    flashcardModel.findById(card._id)
+    .then(result => {
+      newReviewInterval = result.ReviewInterval * 2;
+      newReviewDate = currReviewDate.setDate(currReviewDate.getDate() + newReviewInterval);
+      flashcardModel.findByIdAndUpdate(card._id, {ReviewInterval: newReviewInterval, ReviewDate: newReviewDate})
+      res.send("(Pass) Updated card review interval.");
+      return;
+    });
+  }
+
 });
 
 app.post('/testajax', (req, res) => {
+  console.log("AJAX REQUEST DATA IS: ");
   console.log(req.body);
+
   res.status(200).send('just some random testing going on here');
 });
 
