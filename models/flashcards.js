@@ -11,20 +11,21 @@ var getSchema = {
             FrontWord: String,
             BackWord: String,
             Deck: String,
-            ReviewDate: Date
+            ReviewDate: Date, // date the card will be due for review
+            ReviewInterval: Number // how much DAYS to move add to the ReviewDate (pass)
         });
 
         return FlashcardSchema;
     },
 
     // What decks does the user have?
-    FlashcardInfoSchema : function(username) {
-        const FlashcardInfoSchema = new mongoose.Schema({
+    DecksInfoSchema : function(username) {
+        const DecksInfoSchema = new mongoose.Schema({
             Tag: String, // Index
             decks: Object // Array of deck names
         });
 
-        return FlashcardInfoSchema;
+        return DecksInfoSchema;
     },
 
     // Get preferences for a deck created by a user
@@ -34,7 +35,6 @@ var getSchema = {
             Deck: String,
             MaxReviews: Number,
             MaxNew: Number,
-            ReviewInterval: Number // integer representing percentage
         });
 
         return DeckSettingSchema;
