@@ -115,5 +115,5 @@ addDeck_saveBtn.addEventListener('click', function(event) {
         console.log(this.responseText);
     };
 
-    xhttp.send("text=lalala");
+    xhttp.send("front=Frontie%back=Backie");
 });
