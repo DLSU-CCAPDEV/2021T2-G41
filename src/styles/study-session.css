@@ -40,7 +40,7 @@ div[class="subcontent-container"] a {
 }
 
 .flashcard {
-	width: 30%;
+	width: 75%;
 	height: 500px;
 	min-width: 400px;
 	transform-style: preserve-3d;
@@ -56,10 +56,12 @@ div[class="subcontent-container"] a {
 }
 
 .card-front{
+	display: flex;
+	justify-content: center;
+	align-items: center;
 	position: absolute;
 	text-align: center;
 	vertical-align: middle;
-	padding-top: 40%;
 	width: 100%;
 	height: 100%;
 
@@ -89,9 +91,12 @@ div[class="subcontent-container"] a {
 }
 
 .card-back {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
 	position: absolute;
 	text-align: center;
-	padding-top: 30%;
 	width: 100%;
 	height: 100%;
 	backface-visibility: hidden;
