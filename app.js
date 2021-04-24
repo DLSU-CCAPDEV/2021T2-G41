@@ -245,7 +245,12 @@ app.get('/getStudyCards', (req, res) => {
 
 });
 
-app.get('/testajax', (req, res) => {
+app.post('/passCard', (req, res) => {
+  
+});
+
+app.post('/testajax', (req, res) => {
+  console.log(req.body);
   res.status(200).send('just some random testing going on here');
 });
 

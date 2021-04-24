@@ -104,14 +104,16 @@ addDeck_offModal.addEventListener('click', function() {
 addDeck_saveBtn.addEventListener('click', function(event) {
     var xhttp = new XMLHttpRequest();
 
-    xhttp.open('GET', '/testajax', true);
+    xhttp.open('POST', '/testajax', true);
     console.log("XHTTP instance created!");
 
+    xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    
     xhttp.onload = function() {
         console.log("GOT transaction!");
         console.log("STATUS" + this.status);
         console.log(this.responseText);
     };
 
-    xhttp.send();
+    xhttp.send("text=lalala");
 });
