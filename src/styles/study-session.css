@@ -176,10 +176,14 @@ div#study-complete-msg-container p{
 	background-color: #E74C3C;
 }
 
-#review-count {
-	color: red;
+#review-count, #new-count {
+	color: green;
 	margin-top: 15px;
 	text-shadow: black;
+}
+
+#new-count {
+	color: blue;
 }
 
 .animate__animated.animate__fadeInRight, 
