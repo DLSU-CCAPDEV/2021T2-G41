@@ -21,7 +21,7 @@ var getSchema = {
     FlashcardInfoSchema : function(username) {
         const FlashcardInfoSchema = new mongoose.Schema({
             Tag: String, // Index
-            decks: Object
+            decks: Object // Array of deck names
         });
 
         return FlashcardInfoSchema;
