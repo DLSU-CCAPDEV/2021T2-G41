@@ -11,7 +11,7 @@ var getSchema = {
             FrontWord: String,
             BackWord: String,
             Deck: String,
-            ReviewDate: Date, // date the card will be due for review
+            ReviewDate: Date, // date the card will be due for review | 1970-01-01T00:00:01.000Z if not yet studied
             ReviewInterval: Number // how much DAYS to move add to the ReviewDate (pass)
         });
 
@@ -35,6 +35,10 @@ var getSchema = {
             Deck: String,
             MaxReviews: Number,
             MaxNew: Number,
+
+            CurrentNew: Number, // keep track of new cards already studied per day
+            LastStudied: Date
+
         });
 
         return DeckSettingSchema;
