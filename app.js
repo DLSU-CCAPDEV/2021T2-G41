@@ -93,31 +93,69 @@ app.get('/decks', (req, res) => {
     deckSettingModel = flashcardConnection.model('deck settings', deckSettingSchema, username);
   }
 
-  var _dueAndNewDecks = [] // 2D Array for storing deck settings [[due,new]]
+  let _dueAndNewDecks = [] // 2D Array for storing new/review count [[due,new]]
+  let _due, _new; // track new/review count for each deck
+  let currDate = new Date(new Date().toDateString());
 
   // Get decks
   decksInfoModel.find({Tag: "Index"}, 'decks') // Get deck names
-  .then(results => {
-    console.log(results);
-    personalDecks = results[0].decks.slice();
+  .then(decksInfoResults => {
+    console.log(decksInfoResults);
+    personalDecks = decksInfoResults[0].decks.slice();
     console.log("THE DECK NAMES ARE: ");
     console.log(personalDecks);
 
     personalDecks.forEach((deck, index, array) => {
       // Get deck settings (max reviews/new)
       deckSettingModel.find({Tag: "Deck Settings", Deck: deck})
-      .then(result => {
+      .then(deckSettingResult => {
         console.log("GET Deck preferences for " + deck);
-        console.log(result[0]);
+        console.log(deckSettingResult[0]);
 
-        // TODO adjust new/review count based on actual decks returned after db query
-        _dueAndNewDecks.push([result[0].MaxReviews, result[0].MaxNew]);
-        console.log(_dueAndNewDecks + "deck preference GOT!");
-
-        if (index == array.length - 1) {
-          res.render('views/decks-main', {decks: personalDecks, _dueAndNewDecks, title: 'Kanau | Decks'});
-          console.log("RENDERED EJS");
+        // adjust new/review count based on actual decks returned after db query
+        if (deckSettingResult[0].LastStudied == null) { // Deck that has not been studied ever
+          flashcardModel.find({Deck: deck, ReviewDate: new Date("1970-01-01T00:00:01.000Z")})
+          .limit(deckSettingResult[0].MaxNew)
+          .then(newCountResult => {
+            console.log("Deck - " + deck + " NOT studied.");
+            if (newCountResult.length > deckSettingResult[0].MaxNew)
+              _new = deckSettingResult[0].MaxNew;
+            else 
+              _new = newCountResult.length;
+          })
         }
+        else if (deckSettingResult[0].LastStudied.toISOString() == currDate.toISOString()) { // Deck studied on the same current day
+          flashcardModel.find({Deck: deck, ReviewDate: new Date("1970-01-01T00:00:01.000Z")})
+          .limit(deckSettingResult[0].CurrentNew)
+          .then(newCountResult => {
+            console.log("Deck " + deck + " ready for REPEAT study session.");
+            _new = newCountResult.length;
+          })
+        } else {
+          flashcardModel.find({Deck: deck, ReviewDate: new Date("1970-01-01T00:00:01.000Z")})
+          .limit(deckSettingResult[0].MaxNew)
+          .then(newCountResult => {
+            console.log("Deck " + deck + " ready for NEW study session.");
+            if (newCountResult.length > deckSettingResult[0].MaxNew)
+            _new = deckSettingResult[0].MaxNew;
+          else 
+            _new = newCountResult.length;
+          })
+        }
+        
+        // Review card count, NO limit on maximum review count
+        flashcardModel.find({Deck: deck, ReviewDate: {"$lte": currDate, "$ne": new Date("1970-01-01T00:00:01.000Z")}})
+        .then(reviewCountResult => {
+          _due = reviewCountResult.length;
+
+          _dueAndNewDecks.push([deckSettingResult[0].MaxReviews, deckSettingResult[0].MaxNew]);
+          console.log(_dueAndNewDecks + "deck preference GOT!");
+  
+          if (index == array.length - 1) {
+            res.render('views/decks-main', {decks: personalDecks, _dueAndNewDecks, title: 'Kanau | Decks'});
+            console.log("RENDERED EJS");
+          }
+        });
       })
       .catch(err => console.log(err));
     })
@@ -190,7 +228,7 @@ app.get('/getStudyCards', (req, res) => {
   };
 
   let currDate = new Date();
-  console.log("Current date: " + currDate);
+  console.log("Current date: " + currDate.toISOString());
 
   console.log("GET deck AJAX Request! for " + deckName + ". Retrieving cards...");
   
@@ -249,31 +287,35 @@ app.post('/passCard', (req, res) => {
   const card = JSON.parse(req.body.card);
 
   let currReviewDate = new Date();
-  currReviewDate.setDate(currReviewDate.getDate() + 0); // template for date add
 
   if (card.ReviewInterval == null) { // new card, setup its first review date
-    let newReviewInterval, newReviewDate;
+    let newReviewInterval, newReviewDate = new Date();
     newReviewInterval = 1;
-    newReviewDate = currReviewDate.getDate() + 1;
-    flashcardModel.findByIdAndUpdate(card._id, {ReviewInterval: 1, ReviewDate: (currReviewDate.getDate + 1)})
+    newReviewDate.setDate(currReviewDate.getDate() + 1);
+
+    flashcardModel.findByIdAndUpdate(card._id, {ReviewInterval: 1, ReviewDate: newReviewDate.toISOString()})
     .then(result => {
-      console.log('GOT Query response!');
-      console.log(result);
       res.send("(Pass, NEW) Updated card review interval.");
       return;
-    });
+    })
+    .catch(err => console.log(err));
   }
 
   else if (card.ReviewInterval != null) {
-    let newReviewInterval, newReviewDate;
+    let newReviewInterval, newReviewDate = new Date();
     flashcardModel.findById(card._id)
     .then(result => {
       newReviewInterval = result.ReviewInterval * 2;
       newReviewDate = currReviewDate.setDate(currReviewDate.getDate() + newReviewInterval);
-      flashcardModel.findByIdAndUpdate(card._id, {ReviewInterval: newReviewInterval, ReviewDate: newReviewDate})
-      res.send("(Pass) Updated card review interval.");
-      return;
-    });
+      
+      flashcardModel.findByIdAndUpdate(card._id, {ReviewInterval: newReviewInterval, ReviewDate: newReviewDate.toISOString()})
+      .then(result => {
+        res.send("(Pass) Updated card review interval.");
+        return;
+      })
+      .catcH(err => console.log(err))
+    })
+    .catch(err => console.log(err));
   }
 
 });
