@@ -37,8 +37,7 @@ var getSchema = {
             MaxNew: Number,
 
             CurrentNew: Number, // keep track of new cards already studied per day
-            LastStudied: Date
-
+            LastStudied: Date // follow Date.prototype.toDateString() format
         });
 
         return DeckSettingSchema;
