@@ -33,9 +33,8 @@ var getSchema = {
         const DeckSettingSchema = new mongoose.Schema({
             Tag: String, // Deck Settings
             Deck: String,
-            MaxReviews: Number,
             MaxNew: Number,
-
+            
             CurrentNew: Number, // keep track of new cards already studied per day
             LastStudied: Date // follow Date.prototype.toDateString() format
         });
