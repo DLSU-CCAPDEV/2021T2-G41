@@ -98,10 +98,10 @@
                 <section class="modal-card-body">
                     <form action="#" id="modal-addCard-form-container">
                         <p class="title is-2 modal-deck-text">Front</p>
-                        <textarea name="modal-addCard-front-input" id="modal-addCard-front-input" class="textarea"></textarea>
+                        <textarea name="modal-addCard-front-input" id="modal-addCard-front-input" class="textarea" onkeyup="buttonCheck(this)"></textarea>
                         <p class="title is-2 modal-deck-text">Back</p>
-                        <textarea name="modal-addCard-back-input" id="modal-addCard-back-input" class="textarea"></textarea>
-                        <input type="button" value="Add" class="button is-primary" id="modal-addCard-save-btn">
+                        <textarea name="modal-addCard-back-input" id="modal-addCard-back-input" class="textarea" onkeyup="buttonCheck(this)"></textarea>
+                        <input type="button" value="Add" class="button is-primary" id="modal-addCard-save-btn" disabled>
                         <div class="select is-primary" id="add-card-select-deck-container">
                             <select name="add-card-select-deck" id="add-card-select-deck">
                                 <% for(var i = 0; i < decks.length; i++) { %>

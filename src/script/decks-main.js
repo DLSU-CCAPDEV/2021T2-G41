@@ -137,4 +137,12 @@ addCard_saveBtn.addEventListener('click', function(event) {
     };
 
     xhttp.send("front=" + addCard_frontText.value + "&back=" + addCard_backText.value + "&deck=" + addCard_selectDeck.value);
-})
+});
+    function buttonCheck(text) {
+        if(addCard_frontText.value === "" || addCard_backText.value === "") {
+            addCard_saveBtn.disabled = true;
+        }
+        else {
+            addCard_saveBtn.disabled = false;
+        }
+    }
