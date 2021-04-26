@@ -10,6 +10,11 @@ var menuNavigationContainer = document.getElementById('navigation-menu');
 var filterContainer = document.getElementById('filter-form');
 var hideNav = false;
 
+// filter fields and values
+var deckSelectFilter = document.getElementById('deck-filter');
+var newCardFilter = document.getElementById('new-cards-check');
+var reviewCardFilter = document.getElementById('review-cards-check');
+
 // Add card modal nodes
 var addCardModal = document.getElementById("modal-addCard-container");
 var addCard_onModal = document.getElementById("addCard-btn");
@@ -18,89 +23,70 @@ var addCard_offModal = document.getElementById("modal-addCard-btn-close");
 var browseTable = document.getElementById('browse-table');
 var row, front, back, deck, date; 
 
-// Card data (hardcoded for now) [Front, Back, Deck, Date]
-var tempCardData /*harcoded for now*/ = [
-    {
-        front: "切る",
-        back: "Kiru<br>To Cut",
-        deck: "Core 2K Japanese Vocabulary",
-        date: "12-May-21"
-    },
-    {
-        front: "閉める",
-        back: "Shimeru<br>To close something (intransitive verb)",
-        deck: "Core 2K Japanese Vocabulary",
-        date: "24-May-21"
-    },
-    {
-        front: "食べる",
-        back: "Taberu<br>To eat something",
-        deck: "Core 2K Japanese Vocabulary",
-        date: "24-May-21"
-    },
-    {
-        front: "閉める",
-        back: "Shimeru<br>To close something (intransitive verb)",
-        deck: "Core 2K Japanese Vocabulary",
-        date: "24-May-21"
-    },
-    {
-        front: "届ける",
-        back: "Todokeru<br>To deliver something",
-        deck: "Core 2K Japanese Vocabulary",
-        date: "24-May-21"
-    },
-    {
-        front: "慰める",
-        back: "Nagusameru<br>To comfort",
-        deck: "Core 2K Japanese Vocabulary",
-        date: "16-May-21"
-    },
-    {
-        front: "話す",
-        back: "Hanasu<br>To talk, to discourse (e.g story)",
-        deck: "Core 2K Japanese Vocabulary",
-        date: "24-May-21"
-    }
-    ];
+var cardData = [] // {FrontWord, BackWord, Deck, ReviewDate, ReviewInterval} per element
 
+function getFlashcards() {
+    return new Promise((resolve, reject) => {
+        let xhttp = new XMLHttpRequest();
 
-// fill table with all flashcard data (may be filtered)
-tempCardData.forEach(function(currCard) {
-    row = browseTable.insertRow();
-    front = row.insertCell();
-    front.classList.add("browse-table-front-data");
-    front.innerHTML = currCard.front;
-    back = row.insertCell();
-    back.classList.add("browse-table-date-data");
-    back.innerHTML = currCard.back;
-    deck = row.insertCell();
-    deck.innerHTML = currCard.deck;
-    date = row.insertCell();
-    date.innerHTML = currCard.date;
-});
+        xhttp.open('GET', '/getFlashcardData', true);
 
-// Row selected event handler
-for (var i = 1; i < browse_table.rows.length; i++) {
-    browse_table.rows[i].onclick = function() {
-        if (!isNaN(rowSelected)) {
-            browse_table.rows[rowSelected].style.animationName = "none";
+        xhttp.onload = function() {
+            console.log("GOT cards!");
+            resolve(this.responseText);
+        };
+
+        xhttp.send();
+    });
+}
+
+function addEventListeners() {
+    // Row selected event handler
+    for (var i = 1; i < browse_table.rows.length; i++) {
+        browse_table.rows[i].onclick = function() {
+            if (!isNaN(rowSelected)) {
+                browse_table.rows[rowSelected].style.animationName = "none";
+            }
+            rowSelected = this.rowIndex;
+            this.style.animationName = "box-select";
+
+            document.getElementById('browse-edit-front-input').disabled = false;
+            document.getElementById('browse-edit-back-input').disabled = false;
+            document.getElementById('browse-edit-submit-btn').disabled = false;
+            document.getElementById('browse-edit-select-deck').disabled = false;
+            document.getElementById('browse-edit-submit-btn').style.cursor = "pointer";
+            document.getElementById('browse-edit-delete-btn').disabled = false;
+            document.getElementById('browse-edit-delete-btn').style.cursor = "pointer";
+            
+            document.getElementById('browse-edit-front-input').value = this.cells[0].innerHTML;
+            document.getElementById('browse-edit-back-input').value = this.cells[1].innerHTML;
         }
-        rowSelected = this.rowIndex;
-        this.style.animationName = "box-select";
-
-        document.getElementById('browse-edit-front-input').disabled = false;
-        document.getElementById('browse-edit-back-input').disabled = false;
-        document.getElementById('browse-edit-submit-btn').disabled = false;
-        document.getElementById('browse-edit-select-deck').disabled = false;
-        document.getElementById('browse-edit-submit-btn').style.cursor = "pointer";
-        document.getElementById('browse-edit-delete-btn').disabled = false;
-        document.getElementById('browse-edit-delete-btn').style.cursor = "pointer";
-        
-        document.getElementById('browse-edit-front-input').value = this.cells[0].innerHTML;
-        document.getElementById('browse-edit-back-input').value = this.cells[1].innerHTML;
     }
 }
+
+async function loadFlashcards() {
+    let cards = await getFlashcards();
+    console.log(cardData = JSON.parse(cards));
+
+    // fill table with all flashcard data (may be filtered)
+    cardData.forEach(function(currCard) {
+        row = browseTable.insertRow();
+        front = row.insertCell();
+        front.classList.add("browse-table-front-data");
+        front.innerHTML = currCard.FrontWord;
+        back = row.insertCell();
+        back.classList.add("browse-table-date-data");
+        back.innerHTML = currCard.BackWord;
+        deck = row.insertCell();
+        deck.innerHTML = currCard.Deck;
+        date = row.insertCell();
+        date.innerHTML = currCard.ReviewDate;
+    });
+
+    addEventListeners()
+}
+
+loadFlashcards();
 
 // Deselect row event handler
 document.addEventListener('click', function(event) {
