@@ -25,7 +25,7 @@ mongoose.connect(dictionaryURI, {useNewUrlParser: true, useUnifiedTopology: true
     });
 
 // Other database connnections
-const flashcardConnection = mongoose.createConnection(flashcardURI, {useNewUrlParser: true, useUnifiedTopology: true});
+const flashcardConnection = mongoose.createConnection(flashcardURI, {useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false});
 
 // Misc nodes
 var personalDecks = null;
@@ -153,7 +153,6 @@ app.get('/decks', (req, res) => {
   // Get decks
   decksInfoModel.find({Tag: "Index"}, 'decks') // Get deck names
   .then(decksInfoResults => {
-    console.log(decksInfoResults);
     personalDecks = decksInfoResults[0].decks.slice();
     console.log("THE DECK NAMES ARE: ");
     console.log(personalDecks);
@@ -185,7 +184,8 @@ app.get('/decks', (req, res) => {
             console.log("Deck " + deck + " ready for REPEAT study session.");
             _new = newCountResult.length;
           })
-        } else { // new study session
+        } else { 
+          // new study session
           flashcardModel.find({Deck: deck, ReviewDate: new Date("1970-01-01T00:00:01.000Z")})
           .limit(deckSettingResult[0].MaxNew)
           .then(newCountResult => {
@@ -198,7 +198,7 @@ app.get('/decks', (req, res) => {
         }
 
         // track new card count per deck
-        deckSettingModel.findOneAndUpdate({Tag: "Deck settings", Deck: deck}, {CurrentNew: _new});
+        deckSettingModel.findOneAndUpdate({Tag: "Deck settings", Deck: deck}, {CurrentNew: _new}).exec();
         
         // Review card count, NO limit on maximum review count
         flashcardModel.find({Deck: deck, ReviewDate: {"$lte": currDate, "$ne": new Date("1970-01-01T00:00:01.000Z")}})
@@ -272,21 +272,23 @@ app.get('/dictionary', function(req, res) {
 });
 
 app.get('/study/:deck', (req, res) => {
-  console.log("ENTERED Study on deck: " + req.params.deck);
   let currDate = new Date(new Date().toDateString());
   let _currentNew;
 
   // new study session, update LastStudied and CurrentNew fields for tracking
-  deckSettingModel.find({Tag: "Deck settings", Deck: req.params.deck})
+  deckSettingModel.find({Tag: "Deck Settings", Deck: req.params.deck})
   .then(deckSettingResult => {
-    if (currDate.toISOString != deckSettingResult.LastStudied.toISOString()) { // new study session
-      flashcardModel.find({Deck: deckName, ReviewDate: new Date("1970-01-01T00:00:01.000Z")})
-      .limit(deckSettingResult.MaxNew)
+    if (currDate.toISOString() != deckSettingResult[0].LastStudied.toISOString()) { // new study session
+      console.log("NEW study session!");
+
+      // get "new" new count
+      flashcardModel.find({Deck: req.params.deck, ReviewDate: new Date("1970-01-01T00:00:01.000Z")})
+      .limit(deckSettingResult[0].MaxNew)
       .then(newCards => {
         _currentNew = newCards.length
-      })
 
-      deckSettingModel.findOneAndUpdate({Tag: "Deck settings", Deck: req.params.deck}, {LastStudied: currDate.toDateString(), CurrentNew: _currentNew});
+        deckSettingModel.updateOne({Tag: "Deck Settings", Deck: req.params.deck}, {CurrentNew: _currentNew, LastStudied: currDate}).exec();
+      });
     }
   });
 
@@ -294,8 +296,6 @@ app.get('/study/:deck', (req, res) => {
 });
 
 app.get('/getStudyCards', (req, res) => {
-  console.log("~~~~GET STUDY CARDS REQUEST~~~~");
-  var _new, _review;
   let deckName = req.query.deck;
   let cards = {
     newCards: [],
@@ -310,14 +310,13 @@ app.get('/getStudyCards', (req, res) => {
   // Get deck settings, then get cards
   deckSettingModel.findOne({Tag: "Deck Settings", Deck: deckName})
   .then(deckSettingResult => {
-
+    console.log(deckSettingResult);
     /* Get Review cards, limit to maximum review setting
     Condition:if card review date is 1971-01-01T00:00:01.000Z, skip (new card)
               if card review date <= current date, due for review
               if card review date > current date, skip (not due)
   */
     flashcardModel.find({Deck: deckName, ReviewDate: {"$lte": currDate, "$ne": new Date("1970-01-01T00:00:01.000Z")}})
-    .limit(_review)
     .then(reviewCards => {
       if (reviewCards.length == 0) {
         console.log("No cards due for review.");
@@ -357,27 +356,37 @@ app.get('/getStudyCards', (req, res) => {
 app.post('/passCard', (req, res) => {
   const card = JSON.parse(req.body.card);
 
-  let currReviewDate = new Date();
+  let currReviewDate = new Date(new Date().toDateString());
+  let _currentNew;
 
+  // Get current new count
+  deckSettingModel.findOne({Tag: "Deck Settings", Deck: card.Deck})
+  .then(deckSettingResults => {
+    _currentNew = deckSettingResults.CurrentNew;
+
+    // decrement new count and update
+    deckSettingModel.updateOne({Tag: "Deck Settings", Deck: card.Deck}, {CurrentNew: (_currentNew-1)}).exec();
+  })
+
+  // update card review interval and review date
   if (card.ReviewInterval == null) { // new card, setup its first review date
-    let newReviewInterval, newReviewDate = new Date();
+    let newReviewInterval, newReviewDate = new Date(new Date().toDateString());
     newReviewInterval = 1;
-    newReviewDate.setDate(currReviewDate.getDate() + 1);
+    newReviewDate.setDate(newReviewDate.getDate() + newReviewInterval);
 
     flashcardModel.findByIdAndUpdate(card._id, {ReviewInterval: 1, ReviewDate: newReviewDate.toISOString()})
     .then(result => {
       res.send("(Pass, NEW) Updated card review interval.");
-      return;
     })
     .catch(err => console.log(err));
   }
 
   else if (card.ReviewInterval != null) {
-    let newReviewInterval, newReviewDate = new Date();
+    let newReviewInterval, newReviewDate = new Date(new Date().toDateString());
     flashcardModel.findById(card._id)
     .then(result => {
       newReviewInterval = result.ReviewInterval * 2;
-      newReviewDate = currReviewDate.setDate(currReviewDate.getDate() + newReviewInterval);
+      newReviewDate.setDate(newReviewDate.getDate() + newReviewInterval);
       
       flashcardModel.findByIdAndUpdate(card._id, {ReviewInterval: newReviewInterval, ReviewDate: newReviewDate.toISOString()})
       .then(result => {
@@ -389,6 +398,16 @@ app.post('/passCard', (req, res) => {
     .catch(err => console.log(err));
   }
 
+});
+
+app.post('/failCard', (req, res) => {
+  const card = JSON.parse(req.body.card);
+
+  flashcardModel.findByIdAndUpdate(card._id, {ReviewInterval: 1})
+  .then(result => {
+    res.send("(Fail) Resetted card review interval.");
+    return;
+  })
 });
 
 app.post('/testajax', (req, res) => {
