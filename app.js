@@ -365,7 +365,8 @@ app.post('/passCard', (req, res) => {
     _currentNew = deckSettingResults.CurrentNew;
 
     // decrement new count and update
-    deckSettingModel.updateOne({Tag: "Deck Settings", Deck: card.Deck}, {CurrentNew: (_currentNew-1)}).exec();
+    if (card.ReviewDate == "1970-01-01T00:00:01.000Z")
+      deckSettingModel.updateOne({Tag: "Deck Settings", Deck: card.Deck}, {CurrentNew: (_currentNew-1)}).exec();
   })
 
   // update card review interval and review date
@@ -416,6 +417,10 @@ app.get('/getFlashcardData', (req, res) => {
     console.log(flashcardResults);
     res.send(flashcardResults);
   });
+});
+
+app.get('/getFlashcardDataFilter', (req, res) => {
+
 });
 
 app.post('/testajax', (req, res) => {
