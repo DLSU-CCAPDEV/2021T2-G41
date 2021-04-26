@@ -66,6 +66,7 @@ async function loadFlashcards() {
 		maxCards = cards.reviewCards.length;
 		currentCardSelection = cards.reviewCards;
 		currentCountSelection = reviewCount;
+		newCount.innerHTML = cards.newCards.length;
 		console.log("Review cards FOUND.");
 	}
 	
@@ -165,7 +166,7 @@ passBtn.addEventListener('click', function() {
 failBtn.addEventListener('click', function() {
 	failCardEvent(currentCardSelection[0]);
 
-	currentCardSelection.push(cards.newCards.shift());
+	currentCardSelection.push(currentCardSelection.shift());
 
 	frontWordNode.innerHTML = currentCardSelection[0].FrontWord;
 	backWordNode.innerHTML = currentCardSelection[0].FrontWord;
