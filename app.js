@@ -6,6 +6,7 @@ const path = require('path');
 const Dictionary = require('./models/dictionary');
 const Test = require('./models/test'); // TODO: add function call for specified collection name
 const Flashcard = require('./models/flashcards');
+const { DeckSettingSchema } = require('./models/flashcards');
 // set models
 var decksInfoModel = null, flashcardModel = null, deckSettingModel = null;
 
@@ -45,14 +46,66 @@ app.get('/', (req, res) => {
 });
 
 app.get('/add', (req, res) => {
-  Test.findOne({ data: "hello" })
-  .then(result => console.log(result))
-  .catch(err => console.log(err));
+  let username2 = "newuser@new.com";
+  let premadeDecksCollection = "sampleuser@test.com";
+  let chosenDecks = ["JLPT N5 Kanji Deck"] ; // Push deck names here (for Tag: Index document)
 
-  Test.updateOne({ data: "hello" }, {newData: "hey!"})
-  .then(result => console.log(result))
-  .catch(err => console.log(err));
-  res.render('views/index', { title: 'Welcome to Kanau'});
+  let flashcardSchema = Flashcard.Flashcardschema(username2);
+  let DecksInfoSchema = Flashcard.DecksInfoSchema(username2);
+  let DeckSettingSchema = Flashcard.DeckSettingSchema(username2)
+
+  // Model for accessing premade decks
+  let FlashcardCopyModel = flashcardConnection.model('flashcardCopy', flashcardSchema, premadeDecksCollection);
+
+  // destination db model, use this to create documents and access save()
+  let FlashcardDestinationModel = flashcardConnection.model('flashcardDestination', flashcardSchema, username2);
+  let DecksInfoCopyModel = flashcardConnection.model('decksInfoCopy', DecksInfoSchema, username2);
+  let DeckSettingCopyModel = flashcardConnection.model('deckSettingCopy', DeckSettingSchema, username2);
+
+  chosenDecks.forEach(chosenDeck => {
+    console.log(chosenDeck + " available!");
+    // Create Deck Setting per deck
+    let deckSettingCopyDocument = new DeckSettingCopyModel({
+      Tag: "Deck Settings",
+      Deck: chosenDeck,
+      MaxNew: 10, // default
+      CurrentNew: 0,
+      LastStudied: "1970-01-01T00:00:01.000Z"
+    })
+    deckSettingCopyDocument.save()
+    .then(() => console.log("Deck settings for " + chosenDeck + " created."));
+    
+    console.log("Adding premade flashcards for deck " + chosenDeck + "...");
+    let trackProgressDeck, i = 0;
+    // Copy Flashcards from each deck
+    FlashcardCopyModel.find({Deck: chosenDeck})
+    .then(FlashcardCopyResults => {
+      trackProgressDeck = FlashcardCopyResults.length;
+      FlashcardCopyResults.forEach(FlashcardCopyResult => {
+        // copy each premade flashcard to new document
+        let FlashcardCopyDocument = new FlashcardDestinationModel({
+          FrontWord: FlashcardCopyResult.FrontWord,
+          BackWord: FlashcardCopyResult.BackWord,
+          Deck: FlashcardCopyResult.Deck,
+          ReviewDate: FlashcardCopyResult.ReviewDate
+        });
+
+        FlashcardCopyDocument.save().then(() => {
+          i += 1;
+          console.log(i + "/" + trackProgressDeck + " duplicated.");
+        });
+      })
+    })
+    .catch(err => console.log(err));
+  });
+
+  // Create DecksInfo document
+  let decksInfoCopyDocument = new DecksInfoCopyModel({
+    Tag: "Index",
+    decks: chosenDecks
+  });
+  decksInfoCopyDocument.save();
+
 });
 
 // redirects
@@ -73,9 +126,9 @@ app.get('/browse', (req, res) => {
 });
 
 app.get('/decks', (req, res) => {
-  username = "sampleuser@test.com";
+  username = "newuser@new.com";
 
-  // Prepare models TODO: move these set statements outside
+  // Prepare models TODO: move these model init statements outside
   if (!decksInfoModel) { // check if model has already been compiled
     var decksInfoSchema = Flashcard.DecksInfoSchema(username);
     decksInfoModel = flashcardConnection.model('tag', decksInfoSchema, username);
@@ -113,6 +166,7 @@ app.get('/decks', (req, res) => {
         console.log(deckSettingResult[0]);
 
         // adjust new/review count based on actual decks returned after db query
+        // get NEW count, limit on maximum new card setting OR current new count
         if (deckSettingResult[0].LastStudied == null) { // Deck that has not been studied ever
           flashcardModel.find({Deck: deck, ReviewDate: new Date("1970-01-01T00:00:01.000Z")})
           .limit(deckSettingResult[0].MaxNew)
@@ -131,27 +185,31 @@ app.get('/decks', (req, res) => {
             console.log("Deck " + deck + " ready for REPEAT study session.");
             _new = newCountResult.length;
           })
-        } else {
+        } else { // new study session
           flashcardModel.find({Deck: deck, ReviewDate: new Date("1970-01-01T00:00:01.000Z")})
           .limit(deckSettingResult[0].MaxNew)
           .then(newCountResult => {
             console.log("Deck " + deck + " ready for NEW study session.");
             if (newCountResult.length > deckSettingResult[0].MaxNew)
-            _new = deckSettingResult[0].MaxNew;
-          else 
-            _new = newCountResult.length;
+              _new = deckSettingResult[0].MaxNew;
+             else 
+              _new = newCountResult.length;
           })
         }
+
+        // track new card count per deck
+        deckSettingModel.findOneAndUpdate({Tag: "Deck settings", Deck: deck}, {CurrentNew: _new});
         
         // Review card count, NO limit on maximum review count
         flashcardModel.find({Deck: deck, ReviewDate: {"$lte": currDate, "$ne": new Date("1970-01-01T00:00:01.000Z")}})
         .then(reviewCountResult => {
           _due = reviewCountResult.length;
 
-          _dueAndNewDecks.push([deckSettingResult[0].MaxReviews, deckSettingResult[0].MaxNew]);
-          console.log(_dueAndNewDecks + "deck preference GOT!");
+          _dueAndNewDecks.push([_due, _new]);
+          console.log(_dueAndNewDecks + " [[due, new]] deck preference GOT!");
   
           if (index == array.length - 1) {
+            console.log(_dueAndNewDecks);
             res.render('views/decks-main', {decks: personalDecks, _dueAndNewDecks, title: 'Kanau | Decks'});
             console.log("RENDERED EJS");
           }
@@ -215,6 +273,23 @@ app.get('/dictionary', function(req, res) {
 
 app.get('/study/:deck', (req, res) => {
   console.log("ENTERED Study on deck: " + req.params.deck);
+  let currDate = new Date(new Date().toDateString());
+  let _currentNew;
+
+  // new study session, update LastStudied and CurrentNew fields for tracking
+  deckSettingModel.find({Tag: "Deck settings", Deck: req.params.deck})
+  .then(deckSettingResult => {
+    if (currDate.toISOString != deckSettingResult.LastStudied.toISOString()) { // new study session
+      flashcardModel.find({Deck: deckName, ReviewDate: new Date("1970-01-01T00:00:01.000Z")})
+      .limit(deckSettingResult.MaxNew)
+      .then(newCards => {
+        _currentNew = newCards.length
+      })
+
+      deckSettingModel.findOneAndUpdate({Tag: "Deck settings", Deck: req.params.deck}, {LastStudied: currDate.toDateString(), CurrentNew: _currentNew});
+    }
+  });
+
   res.render('views/study-session', {title: 'Kanau | Decks', deckName: req.params.deck});
 });
 
@@ -227,16 +302,14 @@ app.get('/getStudyCards', (req, res) => {
     reviewCards: []
   };
 
-  let currDate = new Date();
+  let currDate = new Date(new Date().toDateString());
   console.log("Current date: " + currDate.toISOString());
 
   console.log("GET deck AJAX Request! for " + deckName + ". Retrieving cards...");
   
   // Get deck settings, then get cards
   deckSettingModel.findOne({Tag: "Deck Settings", Deck: deckName})
-  .then(result => {
-    _new = result.MaxNew;
-    _review = result.MaxReviews;
+  .then(deckSettingResult => {
 
     /* Get Review cards, limit to maximum review setting
     Condition:if card review date is 1971-01-01T00:00:01.000Z, skip (new card)
@@ -253,7 +326,6 @@ app.get('/getStudyCards', (req, res) => {
         // proceed to add review cards
         reviewCards.forEach(reviewCard => {
           cards.reviewCards.push(reviewCard);
-          // console.log("Added " + reviewCard + " to review cards.");
         });
       }
 
@@ -262,7 +334,7 @@ app.get('/getStudyCards', (req, res) => {
                 if card review date <= or > current date, skip
       */
       flashcardModel.find({Deck: deckName, ReviewDate: new Date("1970-01-01T00:00:01.000Z")})
-      .limit(_new)
+      .limit(deckSettingResult.CurrentNew)
       .then(newCards => {
         if (newCards.length == 0) {
           console.log("No New cards.");
@@ -271,7 +343,6 @@ app.get('/getStudyCards', (req, res) => {
           // proceed to add new cards
           newCards.forEach(newCard => {
             cards.newCards.push(newCard);
-            // console.log("Added " + newCard + " to new cards.");
           });
         }
         res.send(cards);
