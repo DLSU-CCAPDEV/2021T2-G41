@@ -40,6 +40,22 @@ function getFlashcards() {
     });
 }
 
+function getFlashcardsFilter() {
+    return new Promise((resolve, reject) => {
+        let xhttp = new XMLHttpRequest();
+
+        xhttp.open('GET', '/getFlashcardDataFilter', true);
+
+        xhttp.onload = function() {
+            console.log("GOT cards (filtered)");
+            resolve(this.responseText);
+        }
+
+        xhttp.send();
+    });
+}
+
+// setup click event for every row data
 function addEventListeners() {
     // Row selected event handler
     for (var i = 1; i < browse_table.rows.length; i++) {
@@ -64,6 +80,7 @@ function addEventListeners() {
     }
 }
 
+// get all flashcards from database
 async function loadFlashcards() {
     let cards = await getFlashcards();
     console.log(cardData = JSON.parse(cards));
@@ -141,6 +158,10 @@ filterContainer.addEventListener('animationend', function() {
         menuNavigationContainer.classList.add('animate__fadeIn');
         filterContainer.classList.remove('animate__fadeOutLeft');
     }
+});
+
+filterOptionsSaveBtn.addEventListener('click', function() {
+    console.log(deckSelectFilter.options[deckSelectFilter.selectedIndex].text);
 });
 
 addCard_onModal.addEventListener('click', function() {
