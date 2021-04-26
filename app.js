@@ -78,7 +78,7 @@ app.get('/add', (req, res) => {
     console.log("Adding premade flashcards for deck " + chosenDeck + "...");
     let trackProgressDeck, i = 0;
     // Copy Flashcards from each deck
-    FlashcardCopyModel.find({Deck: chosenDeck})
+    FlashcardCopyModel.find({Tag: null, Deck: chosenDeck})
     .then(FlashcardCopyResults => {
       trackProgressDeck = FlashcardCopyResults.length;
       FlashcardCopyResults.forEach(FlashcardCopyResult => {
@@ -408,6 +408,14 @@ app.post('/failCard', (req, res) => {
     res.send("(Fail) Resetted card review interval.");
     return;
   })
+});
+
+app.get('/getFlashcardData', (req, res) => {
+  flashcardModel.find({Tag: null}).then(flashcardResults => {
+    console.log("Retrieved all flashcard data [NO FILTER]. Returning to view...");
+    console.log(flashcardResults);
+    res.send(flashcardResults);
+  });
 });
 
 app.post('/testajax', (req, res) => {
