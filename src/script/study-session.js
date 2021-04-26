@@ -11,6 +11,7 @@ var finishMessage2 = document.getElementById('msg-2');
 var frontWordNode = document.getElementById("front-word");
 var backWordNode = document.getElementById("back-word");
 var backDefinitionNode = document.getElementById("back-definition");
+var newCount = document.getElementById("new-count");
 var reviewCount = document.getElementById("review-count");
 
 // Store cards for study
@@ -19,7 +20,15 @@ var cards;
 // track
 var maxCards;
 var currentCardSelection = undefined; // select review/new
+var currentCountSelection = undefined;
 var currentCardIndex = 0;
+
+// DELETE THIS (testing how to use Date() objects)
+let x = new Date();
+let y = new Date(x.toDateString());
+console.log(y.toISOString());
+console.log(new Date(new Date().toDateString()).toISOString());
+console.log(y.toISOString() == new Date(new Date().toDateString()).toISOString());
 
 // AJAX call to retrieve cards for review/new, return Promise
 function getFlashcards() {
@@ -47,6 +56,7 @@ async function loadFlashcards() {
 	if (cards.reviewCards.length == 0) { // No cards due for review
 		maxCards = cards.newCards.length;
 		currentCardSelection = cards.newCards;
+		currentCountSelection = newCount;
 		console.log("NO cards due for review.");
 	} else if (cards.newCards.length == 0 && cards.reviewCards.length == 0) { // Zero cards
 		flashcard.classList.add('is-hidden');
@@ -54,16 +64,17 @@ async function loadFlashcards() {
 		finishMessages.classList.add('animate__bounceIn');
 		btnContainer.classList.add('animate__fadeOutDown');
 	}
-	 else { // NO new cards, review cards only
+	 else { // Review cards found
 		maxCards = cards.reviewCards.length;
 		currentCardSelection = cards.reviewCards;
+		currentCountSelection = reviewCount;
 		console.log("Review cards FOUND.");
 	}
-
+	
 	frontWordNode.innerHTML = currentCardSelection[0].FrontWord;
 	backWordNode.innerHTML = currentCardSelection[0].FrontWord;
 	backDefinitionNode.innerHTML = currentCardSelection[0].BackWord;
-	reviewCount.innerHTML = maxCards - currentCardIndex;
+	currentCountSelection.innerHTML = maxCards - currentCardIndex;
 }
 
 loadFlashcards();
@@ -112,7 +123,7 @@ passBtn.addEventListener('click', function() {
 		flashcard.classList.remove('flip');
 
 		currentCardIndex += 1;
-		reviewCount.innerHTML = maxCards - currentCardIndex;
+		currentCountSelection.innerHTML = maxCards - currentCardIndex;
 		currentCardSelection.shift();
 
 		frontWordNode.innerHTML = currentCardSelection[0].FrontWord;
@@ -122,14 +133,15 @@ passBtn.addEventListener('click', function() {
 		flashcard.classList.add("animate__fadeInRight");
 		isFadeIn = true;
 	}
-	else if (currentCardIndex >= maxCards 
-		&& currentCardSelection == cards.reviewCards
+	else if (currentCardIndex >= maxCards  // review cards done,
+		&& currentCardSelection == cards.reviewCards // move to new cards
 		&& cards.newCards.length != 0) {
 			maxCards = cards.newCards.length ;
 			currentCardIndex = 0;
 			currentCardSelection = cards.newCards;
+			currentCountSelection = newCount;
 	}
-	else { // finished studies
+	else { // finished
 		flashcard.classList.add("animate__fadeOutLeft");
 		btnContainer.classList.add('animate__fadeOutDown');
 		hasFinishedStudying = true;
