@@ -25,10 +25,8 @@ var currentCardIndex = 0;
 
 // DELETE THIS (testing how to use Date() objects)
 let x = new Date();
-let y = new Date(x.toDateString());
-console.log(y.toISOString());
-console.log(new Date(new Date().toDateString()).toISOString());
-console.log(y.toISOString() == new Date(new Date().toDateString()).toISOString());
+let y = new Date(new Date().toDateString());
+console.log(y);
 
 // AJAX call to retrieve cards for review/new, return Promise
 function getFlashcards() {
@@ -99,7 +97,7 @@ flashcard.addEventListener('animationend', function() {
 	}
 });
 
-// AJAX Post request here (update card review date by *2)
+// AJAX Post request (PASS update card review date by *2)
 function passCardEvent(card) {
 	let xhttp = new XMLHttpRequest();
 
@@ -110,13 +108,27 @@ function passCardEvent(card) {
 	xhttp.onload = () => {
 		console.log("GOT Response (Pass card AJAX event).");
 	};
-	
-	xhttp.send("card=" + JSON.stringify(card));
+
+	xhttp.send("card=" + JSON.stringify(card).replaceAll("&nbsp", " "));
+}
+
+// AJAX Post request (FAIL reset review interval)
+function failCardEvent(card) {
+	let xhttp = new XMLHttpRequest();
+
+	xhttp.open('POST', '/failCard', true);
+
+	xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+
+	xhttp.onload = () => {
+		console.log("GOT Response (Fail card AJAX event).");
+	};
+
+	xhttp.send("card=" + JSON.stringify(card).replaceAll("&nbsp", " "));
 }
 
 // pass button event, replace card content with next, fade in to next card
 passBtn.addEventListener('click', function() {
-
 	passCardEvent(currentCardSelection[0]);
 
 	if (currentCardIndex < maxCards - 1) { // continue to next card
@@ -151,6 +163,8 @@ passBtn.addEventListener('click', function() {
 /* 	fail button event, replace card content with next, move card to end of review, 
  	fade to next card */
 failBtn.addEventListener('click', function() {
+	failCardEvent(currentCardSelection[0]);
+
 	currentCardSelection.push(cards.newCards.shift());
 
 	frontWordNode.innerHTML = currentCardSelection[0].FrontWord;
