@@ -425,6 +425,22 @@ app.post('/testajax', (req, res) => {
   res.status(200).send('just some random testing going on here');
 });
 
+app.post('/addCard', (req, res) => {
+  console.log("AJAX REQUEST DATA IS: ");
+  console.log(req.body);
+  res.status(200).send('just some random testing going on here');
+
+  const new_card = new flashcardModel({
+    FrontWord: req.body.front,
+    BackWord: req.body.back,
+    Deck: req.body.deck,
+    ReviewDate: "1970-01-01T00:00:01.000Z",
+  });
+
+  new_card.save();
+  console.log("new card added to deck: " + new_card);
+});
+
 // 404 page
 app.use((req, res) => {
   console.log("404 on URL: " + req.url);

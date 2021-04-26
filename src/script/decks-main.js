@@ -16,6 +16,10 @@ var originalDeckName = undefined;
 const addCardModal = document.getElementById("modal-addCard-container");
 const addCard_onModal = document.getElementById("addCard-btn");
 const addCard_offModal = document.getElementById("modal-addCard-btn-close");
+const addCard_saveBtn = document.getElementById("modal-addCard-save-btn");
+const addCard_frontText = document.getElementById("modal-addCard-front-input");
+const addCard_backText = document.getElementById("modal-addCard-back-input");
+const addCard_selectDeck = document.getElementById("add-card-select-deck");
 
 // Add new deck modal nodes
 const addDeckModal = document.getElementById("modal-addDeck-container");
@@ -117,3 +121,20 @@ addDeck_saveBtn.addEventListener('click', function(event) {
 
     xhttp.send("front=Frontie%back=Backie");
 });
+
+addCard_saveBtn.addEventListener('click', function(event) {
+    var xhttp = new XMLHttpRequest();
+    xhttp.open('POST', '/addCard', true);
+    console.log("XHTTP instance created!");
+
+    xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+
+    xhttp.onload = function() {
+        console.log("GOT transaction!");
+        console.log("STATUS" + this.status);
+        console.log(this.responseText);
+        addCardModal.style.display = "none";
+    };
+
+    xhttp.send("front=" + addCard_frontText.value + "&back=" + addCard_backText.value + "&deck=" + addCard_selectDeck.value);
+})
