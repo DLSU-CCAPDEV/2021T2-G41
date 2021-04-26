@@ -1,6 +1,6 @@
 # Kanau
-[![forthebadge](https://forthebadge.com/images/badges/powered-by-coffee.svg)](https://forthebadge.com) [![License](https://img.shields.io/badge/license-JMdict-green)](https://shields.io/) [![License](https://img.shields.io/badge/license-Tatoeba-green)](https://shields.io/) 
-[![License](https://img.shields.io/badge/status-i%20have%20no%20idea%20what%20im%20doing-yellowgreen)](https://shields.io/)
+[![forthebadge](https://forthebadge.com/images/badges/powered-by-coffee.svg)](https://forthebadge.com) [![License](https://img.shields.io/badge/license-JMdict-green)](https://www.edrdg.org/wiki/index.php/JMdict-EDICT_Dictionary_Project) [![License](https://img.shields.io/badge/license-Tatoeba-green)](https://tatoeba.org/eng/about) 
+[![License](https://img.shields.io/badge/status-i%20have%20no%20idea%20what%20im%20doing-yellowgreen)](https://www.youtube.com/watch?v=dQw4w9WgXcQ)
 <p align="center">
     <img src="https://user-images.githubusercontent.com/55874439/112708392-bda40080-8eec-11eb-9a11-e6c412980db5.png"/>
 </p>
