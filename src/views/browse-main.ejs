@@ -48,11 +48,9 @@
                     </div>
                     <div class="select is-full" id="deck-filter-container">
                         <select name="deck-filter" id="deck-filter">
-                            <option value="0001">Essential 1000 Kanji</option>
-                            <option value="0002">Core 2K Japanese Vocabulary</option>
-                            <option value="0003">Tae Kim Japanese Grammar</option>
-                            <option value="0002">JLPT N5 Tango Deck</option>
-                            <option value="0003">Personal vocabulary</option>
+                            <%decks.forEach(deck => { %>
+                                <option><%=deck%></option>
+                            <%});%>
                         </select>
                     </div>
                     <div class="column is-half">
@@ -85,12 +83,12 @@
             </div>
             <div class="browse-table-container">
                 <table id="browse-table">
-                    <tr class="browse-table-row-th">
+                    <!-- <tr class="browse-table-row-th">
                         <th>Front</th>
                         <th>Back</th>
                         <th>Deck</th>
                         <th class="browse-table-date-th">Due</th>
-                    </tr>
+                    </tr> -->
                     <!-- <tr>
                         <td class="browse-table-front-data">叶う</td>
                         <td>Kanau<br>[to come true (of a wish, prayer, etc.); to be realized; to be fulfilled]</td>
@@ -113,11 +111,9 @@
                 <div id="browse-edit-buttons">
                     <div class="select is-primary">
                         <select form="browse-edit-form" id="browse-edit-select-deck" disabled>
-                            <option value="0001">Essential 1000 Kanji</option>
-                            <option value="0002">Core 2K Japanese Vocabulary</option>
-                            <option value="0003">Tae Kim Japanese Grammar</option>
-                            <option value="0002">JLPT N5 Tango Deck</option>
-                            <option value="0003">Personal vocabulary</option>
+                            <%decks.forEach(deck => { %>
+                                <option><%=deck%></option>
+                            <%});%>
                         </select>
                     </div>
                         <button form="browse-edit-form" id="browse-edit-submit-btn" class="button is-primary" disabled>Save</button>
