@@ -184,14 +184,13 @@ tr:not(.browse-table-row-th) {
 }
 
 div#browse-edit-buttons div.select {
-    margin-top: 25px;
+    margin-top: 2.5%;
 }
 
 #browse-edit-select-deck {
     color: black;
     align-self: flex-start;
-    border: 1px solid grey;
-    border: none;
+    border: 1px solid #00d1b2;
     font-family: 'Roboto', sans-serif;
     font-size: 1em;
 }

@@ -113,11 +113,9 @@
                 <div id="browse-edit-buttons">
                     <div class="select is-primary">
                         <select form="browse-edit-form" id="browse-edit-select-deck" disabled>
-                            <option value="0001">Essential 1000 Kanji</option>
-                            <option value="0002">Core 2K Japanese Vocabulary</option>
-                            <option value="0003">Tae Kim Japanese Grammar</option>
-                            <option value="0002">JLPT N5 Tango Deck</option>
-                            <option value="0003">Personal vocabulary</option>
+                            <% for(var i = 0; i < decks.length; i++) { %>
+                                <option value="<%= decks[i] %>"> <%= decks[i] %> </option>
+                            <% }%>  
                         </select>
                     </div>
                         <button form="browse-edit-form" id="browse-edit-submit-btn" class="button is-primary" disabled>Save</button>
