@@ -35,9 +35,26 @@
                <li><a href="/browse">Browse</a></li>
                <li><a href="/dictionary">Dictionary</a></li>
                <br>
-               <li><a href="#" class="subaction">Add card</a></li>
-               <li><a href="#" class="subaction">Create deck</a></li>
+               <li><a href="#" class="subaction" id="addCard-btn">Add card</a></li>
+               <li><a href="#" class="subaction" id="createDeck-btn">Create deck</a></li>
             </ul>
+        </div>
+        <div id="modal-addCard-container" class="modal">
+            <div class="modal-card">
+                <header class="modal-card-head">
+                    <p class="modal-card-title">Add card to <%= deckName%></p>
+                    <button class="delete is-large" aria-label="close" id="modal-addCard-btn-close"></button>
+                </header>
+                <section class="modal-card-body">
+                    <form action="#" id="modal-addCard-form-container">
+                        <p class="title is-2 modal-deck-text">Front</p>
+                        <textarea name="modal-addCard-front-input" id="modal-addCard-front-input" class="textarea" onkeyup="buttonCheck(this)"></textarea>
+                        <p class="title is-2 modal-deck-text">Back</p>
+                        <textarea name="modal-addCard-back-input" id="modal-addCard-back-input" class="textarea" onkeyup="buttonCheck(this)"></textarea>
+                        <input type="button" value="Add" class="button is-primary" id="modal-addCard-save-btn" disabled>
+                    </form>
+                </section>
+            </div>
         </div>
         <div class="subcontent-container">
         	<div class="name-container">

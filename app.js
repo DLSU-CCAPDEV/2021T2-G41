@@ -122,7 +122,7 @@ app.get('/about', (req, res) => {
 });
 
 app.get('/browse', (req, res) => {
-  res.render('views/browse-main', { title: 'Kanau | Browse'});
+  res.render('views/browse-main', {decks: personalDecks, title: 'Kanau | Browse'});
 });
 
 app.get('/decks', (req, res) => {
