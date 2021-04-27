@@ -44,25 +44,10 @@ function getFlashcards() {
     });
 }
 
-function getFlashcardsFilter() {
-    return new Promise((resolve, reject) => {
-        let xhttp = new XMLHttpRequest();
-
-        xhttp.open('GET', '/getFlashcardDataFilter', true);
-
-        xhttp.onload = function() {
-            console.log("GOT cards (filtered)");
-            resolve(this.responseText);
-        }
-
-        xhttp.send();
-    });
-}
-
 // setup click event for every row data
 function addEventListeners() {
     // Row selected event handler
-    for (var i = 1; i < browse_table.rows.length; i++) {
+    for (var i = 0; i < browse_table.rows.length; i++) {
         browse_table.rows[i].onclick = function() {
             if (!isNaN(rowSelected)) {
                 browse_table.rows[rowSelected].style.animationName = "none";
@@ -84,10 +69,40 @@ function addEventListeners() {
     }
 }
 
+function getFlashcardsFilter(deckSelected, newCardCheck, reviewCardCheck) {
+    return new Promise((resolve, reject) => {
+        let xhttp = new XMLHttpRequest();
+        let params = "deck=" + deckSelected;
+        params = params.concat("&newCard=" + newCardCheck);
+        params = params.concat("&reviewCard=" + reviewCardCheck);
+
+        xhttp.open('GET', '/getFlashcardDataFilter?' + params, true);
+
+        xhttp.onload = function() {
+            console.log("GOT cards (filtered)");
+            resolve(this.responseText);
+        }
+
+        xhttp.send();
+    });
+}
+
 // get all flashcards from database
 async function loadFlashcards() {
     let cards = await getFlashcards();
     console.log(cardData = JSON.parse(cards));
+
+    let row = browseTable.insertRow();
+    row.classList.add("browse-table-row-th");
+    let label = row.insertCell();
+    label.innerHTML = "Front";
+    label = row.insertCell();
+    label.innerHTML = "Back";
+    label = row.insertCell();
+    label.innerHTML = "Deck";
+    label = row.insertCell();
+    label.classList.add("browse-table-date-th");
+    label.innerHTML = "Due";
 
     // fill table with all flashcard data (may be filtered)
     cardData.forEach(function(currCard) {
@@ -104,7 +119,46 @@ async function loadFlashcards() {
         date.innerHTML = currCard.ReviewDate;
     });
 
-    addEventListeners()
+    addEventListeners();
+}
+
+// get all flashcards from database (filtered)
+async function loadFlashcardsFiltered(deckSelected, newCardCheck, reviewCardCheck) {
+    let cards = await getFlashcardsFilter(deckSelected, newCardCheck, reviewCardCheck);
+    if (cards == "")
+        return;
+
+    console.log(cards);
+    console.log(cardData = JSON.parse(cards));
+
+    let row = browseTable.insertRow();
+    row.classList.add("browse-table-row-th");
+    let label = row.insertCell();
+    label.innerHTML = "Front";
+    label = row.insertCell();
+    label.innerHTML = "Back";
+    label = row.insertCell();
+    label.innerHTML = "Deck";
+    label = row.insertCell();
+    label.classList.add("browse-table-date-th");
+    label.innerHTML = "Due";
+
+    // fill table with all flashcard data (may be filtered)
+    cardData.forEach(function(currCard) {
+        row = browseTable.insertRow();
+        front = row.insertCell();
+        front.classList.add("browse-table-front-data");
+        front.innerHTML = currCard.FrontWord;
+        back = row.insertCell();
+        back.classList.add("browse-table-date-data");
+        back.innerHTML = currCard.BackWord;
+        deck = row.insertCell();
+        deck.innerHTML = currCard.Deck;
+        date = row.insertCell();
+        date.innerHTML = currCard.ReviewDate;
+    });
+
+    addEventListeners();
 }
 
 loadFlashcards();
@@ -165,7 +219,16 @@ filterContainer.addEventListener('animationend', function() {
 });
 
 filterOptionsSaveBtn.addEventListener('click', function() {
-    console.log(deckSelectFilter.options[deckSelectFilter.selectedIndex].text);
+    // console.log(deckSelectFilter.options[deckSelectFilter.selectedIndex].text);
+    // console.log(newCardFilter.checked);
+
+    // delete all rows
+    browseTable.innerHTML = "";
+
+    // call async function to get cards
+    loadFlashcardsFiltered(deckSelectFilter.options[deckSelectFilter.selectedIndex].text, 
+        newCardFilter.checked, 
+        reviewCardFilter.checked);
 });
 
 addCard_onModal.addEventListener('click', function() {
