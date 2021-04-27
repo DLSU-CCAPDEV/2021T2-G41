@@ -131,11 +131,11 @@ function failCardEvent(card) {
 // pass button event, replace card content with next, fade in to next card
 passBtn.addEventListener('click', function() {
 	passCardEvent(currentCardSelection[0]);
+	currentCardIndex += 1;
 
-	if (currentCardIndex < maxCards - 1) { // continue to next card
+	if (currentCardIndex < maxCards) { // continue to next card
 		flashcard.classList.remove('flip');
 
-		currentCardIndex += 1;
 		currentCountSelection.innerHTML = maxCards - currentCardIndex;
 		currentCardSelection.shift();
 
@@ -149,16 +149,30 @@ passBtn.addEventListener('click', function() {
 	else if (currentCardIndex >= maxCards  // review cards done,
 		&& currentCardSelection == cards.reviewCards // move to new cards
 		&& cards.newCards.length != 0) {
+			// update review count (one last time)
+			currentCountSelection.innerHTML = maxCards - currentCardIndex;
+			currentCardSelection.shift();
+
+			// shift to new cards
 			maxCards = cards.newCards.length ;
 			currentCardIndex = 0;
 			currentCardSelection = cards.newCards;
 			currentCountSelection = newCount;
+
+			// show first new card
+			frontWordNode.innerHTML = currentCardSelection[0].FrontWord;
+			backWordNode.innerHTML = currentCardSelection[0].FrontWord;
+			backDefinitionNode.innerHTML = currentCardSelection[0].BackWord;
+
+			flashcard.classList.add("animate__fadeInRight");
+			isFadeIn = true;
 	}
 	else { // finished
 		flashcard.classList.add("animate__fadeOutLeft");
 		btnContainer.classList.add('animate__fadeOutDown');
 		hasFinishedStudying = true;
 	}
+	console.log(currentCardIndex);
 });
 
 /* 	fail button event, replace card content with next, move card to end of review, 
