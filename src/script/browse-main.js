@@ -1,6 +1,14 @@
 // Card selection
 var browse_table = document.getElementById('browse-table');
 var rowSelected = NaN;
+var changeRowSelected = true;
+
+// Edit card field nodes
+const frontEditField = document.getElementById('browse-edit-front-input');
+const backEditField = document.getElementById('browse-edit-back-input');
+const deckSelectField = document.getElementById('browse-edit-select-deck');
+const saveBtn = document.getElementById('browse-edit-submit-btn');
+const deleteBtn = document.getElementById('browse-edit-delete-btn');
 
 // Filter option nodes
 var filterOptionsOnBtn = document.getElementById('filter-options-btn');
@@ -47,12 +55,13 @@ function getFlashcards() {
 // setup click event for every row data
 function addEventListeners() {
     // Row selected event handler
-    for (var i = 0; i < browse_table.rows.length; i++) {
+    for (var i = 1; i < browse_table.rows.length; i++) {
         browse_table.rows[i].onclick = function() {
             if (!isNaN(rowSelected)) {
                 browse_table.rows[rowSelected].style.animationName = "none";
             }
             rowSelected = this.rowIndex;
+            console.log("Selected row: " + rowSelected);
             this.style.animationName = "box-select";
 
             document.getElementById('browse-edit-front-input').disabled = false;
@@ -84,6 +93,46 @@ function getFlashcardsFilter(deckSelected, newCardCheck, reviewCardCheck) {
         }
 
         xhttp.send();
+    });
+}
+
+function postFlashcardEdit(card, newFront, newBack, newDeck) {
+    return new Promise((resolve, reject) => {
+        let xhttp = new XMLHttpRequest();
+        let params = "&";
+        params = params.concat("front=" + newFront);
+        params = params.concat("&back=" + newBack);
+        params = params.concat("&deck=" + newDeck);
+
+        xhttp.open('POST', 'editCard', true);
+
+        xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+
+        xhttp.onload = () => {
+            console.log("Saved to database.");
+            resolve("Done.") // return edited card
+        };
+
+        xhttp.send("card=" + JSON.stringify(card).replaceAll("&nbsp", " ") + params);
+
+    });
+}
+
+function postFlashcardDelete(card) {
+    return new Promise((resolve, reject) => {
+        let xhttp = new XMLHttpRequest();
+
+        xhttp.open('POST', '/deleteCard', true);
+
+        xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+
+        xhttp.onload = function() {
+            console.log("Deleted successfully.");
+            resolve("Delete done.");
+        }
+
+        xhttp.send("card=" + JSON.stringify(card).replaceAll("&nbsp", " "));
+        
     });
 }
 
@@ -161,6 +210,32 @@ async function loadFlashcardsFiltered(deckSelected, newCardCheck, reviewCardChec
     addEventListeners();
 }
 
+// save card edit to database
+async function saveFlashcardEdit(card, newFront, newBack, newDeck) {
+    changeRowSelected = false;
+    await postFlashcardEdit(card, newFront, newBack, newDeck);
+
+    // Update selected row data (front view)
+    browseTable.rows[rowSelected].cells[0].innerHTML = newFront;
+    browseTable.rows[rowSelected].cells[1].innerHTML = newBack;
+    browseTable.rows[rowSelected].cells[2].innerHTML = newDeck;
+
+    changeRowSelected = true;
+    rowSelected = NaN;
+}
+
+async function deleteFlashcard(card) {
+    changeRowSelected = false;
+
+    await postFlashcardDelete(card);
+
+    // Delete selected row data (front view)
+    browseTable.rows[rowSelected].innerHTML = "";
+
+    changeRowSelected = true;
+    rowSelected = NaN;
+}
+
 loadFlashcards();
 
 // Deselect row event handler
@@ -171,7 +246,8 @@ document.addEventListener('click', function(event) {
 
     if ((!isClickedRow && !isClickedInput && !isClickedSelect) && !isNaN(rowSelected)) {
         browse_table.rows[rowSelected].style.animationName = "none";
-        rowSelected = NaN;
+        if (changeRowSelected)
+            rowSelected = NaN;
 
         document.getElementById('browse-edit-front-input').disabled = true;
         document.getElementById('browse-edit-back-input').disabled = true;
@@ -184,6 +260,20 @@ document.addEventListener('click', function(event) {
         document.getElementById('browse-edit-front-input').value = "";
         document.getElementById('browse-edit-back-input').value = "";
     }
+});
+
+// Save new card to database event
+saveBtn.addEventListener('click', function() {
+    let frontEdit = frontEditField.value;
+    let backEdit = backEditField.value;
+    let deckSelected = deckSelectFilter.options[deckSelectFilter.selectedIndex].text;
+
+    saveFlashcardEdit(cardData[rowSelected - 1], frontEdit, backEdit, deckSelected);
+});
+
+// Delete card from database event
+deleteBtn.addEventListener('click', function() {
+    deleteFlashcard(cardData[rowSelected - 1]);
 });
 
 filterOptionsOnBtn.addEventListener('click', function() {
@@ -219,9 +309,6 @@ filterContainer.addEventListener('animationend', function() {
 });
 
 filterOptionsSaveBtn.addEventListener('click', function() {
-    // console.log(deckSelectFilter.options[deckSelectFilter.selectedIndex].text);
-    // console.log(newCardFilter.checked);
-
     // delete all rows
     browseTable.innerHTML = "";
 
@@ -255,11 +342,12 @@ addCard_saveBtn.addEventListener('click', function(event) {
 
     xhttp.send("front=" + addCard_frontText.value + "&back=" + addCard_backText.value + "&deck=" + addCard_selectDeck.value);
 });
-    function buttonCheck(text) {
-        if(addCard_frontText.value === "" || addCard_backText.value === "") {
-            addCard_saveBtn.disabled = true;
-        }
-        else {
-            addCard_saveBtn.disabled = false;
-        }
+
+function buttonCheck(text) {
+    if(addCard_frontText.value === "" || addCard_backText.value === "") {
+        addCard_saveBtn.disabled = true;
     }
+    else {
+        addCard_saveBtn.disabled = false;
+    }
+}
