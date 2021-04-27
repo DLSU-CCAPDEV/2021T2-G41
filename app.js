@@ -434,7 +434,6 @@ app.post('/testajax', (req, res) => {
 app.post('/addCard', (req, res) => {
   console.log("AJAX REQUEST DATA IS: ");
   console.log(req.body);
-  res.status(200).send('just some random testing going on here');
 
   const new_card = new flashcardModel({
     FrontWord: req.body.front,
@@ -445,6 +444,7 @@ app.post('/addCard', (req, res) => {
 
   new_card.save();
   console.log("new card added to deck: " + new_card);
+  res.status(200).send('just some random testing going on here');
 });
 
 // 404 page
