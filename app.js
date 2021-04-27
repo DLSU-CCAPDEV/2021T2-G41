@@ -494,6 +494,28 @@ app.post('/addCard', (req, res) => {
   res.status(200).send('just some random testing going on here');
 });
 
+app.post('/editCard', (req, res) => {
+  let editCard = JSON.parse(req.body.card);
+  let newFront = req.body.front;
+  let newBack = req.body.back;
+  let newDeck = req.body.deck;
+
+  console.log(req.body);
+
+  flashcardModel.findByIdAndUpdate(editCard._id, {FrontWord: newFront, BackWord: newBack, Deck: newDeck}).exec();
+
+  res.send();
+});
+
+app.post('/deleteCard', (req, res) => {
+  let deleteCard = JSON.parse(req.body.card);
+
+  flashcardModel.findByIdAndDelete(deleteCard._id)
+  .then(console.log("Deleted successfully."));
+
+  res.send();
+});
+
 // 404 page
 app.use((req, res) => {
   console.log("404 on URL: " + req.url);
