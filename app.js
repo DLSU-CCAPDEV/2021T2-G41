@@ -122,7 +122,15 @@ app.get('/about', (req, res) => {
 });
 
 app.get('/browse', (req, res) => {
-  res.render('views/browse-main', {decks: personalDecks, title: 'Kanau | Browse'});
+  let deckNames;
+
+  // get all deck names
+  decksInfoModel.findOne({Tag: "Index"})
+  .then(deckInfoResult => {
+    deckNames = deckInfoResult.decks.slice();
+    console.log(deckNames);
+    res.render('views/browse-main', {title: 'Kanau | Browse', decks: deckNames});
+  });
 });
 
 app.get('/decks', (req, res) => {
@@ -132,13 +140,13 @@ app.get('/decks', (req, res) => {
   if (!decksInfoModel) { // check if model has already been compiled
     var decksInfoSchema = Flashcard.DecksInfoSchema(username);
     decksInfoModel = flashcardConnection.model('tag', decksInfoSchema, username);
-    console.log("created flashcardInfo model");
+    console.log("Created flashcardInfo model.");
   }
 
   if (!flashcardModel) {
     var flashcardSchema = Flashcard.Flashcardschema(username);
     flashcardModel = flashcardConnection.model('flashcard', flashcardSchema, username);
-    console.log("created flashcard model");
+    console.log("Created flashcard model.");
   }
 
   if (!deckSettingModel) {
@@ -151,6 +159,7 @@ app.get('/decks', (req, res) => {
   let currDate = new Date(new Date().toDateString());
 
   // Get decks
+  console.log("Connecting...");
   decksInfoModel.find({Tag: "Index"}, 'decks') // Get deck names
   .then(decksInfoResults => {
     personalDecks = decksInfoResults[0].decks.slice();
@@ -415,12 +424,50 @@ app.post('/failCard', (req, res) => {
 app.get('/getFlashcardData', (req, res) => {
   flashcardModel.find({Tag: null}).then(flashcardResults => {
     console.log("Retrieved all flashcard data [NO FILTER]. Returning to view...");
-    console.log(flashcardResults);
     res.send(flashcardResults);
   });
 });
 
 app.get('/getFlashcardDataFilter', (req, res) => {
+  // deckSelected, newCardCheck, reviewCardCheck
+
+  let newCardCheck = (req.query.newCard == "true");
+  let reviewCardCheck = (req.query.reviewCard == "true");
+
+  if (newCardCheck && reviewCardCheck) { // both checked
+    flashcardModel.find({Deck : req.query.deck, Tag: null})
+    .then(flashcardResults => {
+      console.log("Filtered ALL.");
+      res.send(flashcardResults);
+      return;
+    })
+    .catch(err => console.log(err));
+  }
+
+  else if (newCardCheck && !reviewCardCheck) {// new card CHECKED
+    flashcardModel.find({Deck : req.query.deck, ReviewDate: new Date("1970-01-01T00:00:01.000Z"), Tag: null})
+    .then(flashcardResults => {
+      console.log("Filtered to NEW cards.");
+      res.send(flashcardResults);
+      return;
+    })
+    .catch(err => console.log(err));
+  }
+
+  else if (reviewCardCheck && !newCardCheck) {// review card CHECKED
+    flashcardModel.find({Deck : req.query.deck, ReviewDate: {"$ne": new Date("1970-01-01T00:00:01.000Z")}, Tag: null})
+    .then(flashcardResults => {
+      console.log("Filtered to REVIEW cards.");
+      res.send(flashcardResults);
+      return;
+    })
+    .catch(err => console.log(err));
+  }
+
+  else {
+    console.log("Filtered to NONE (return empty).");
+    res.send(null); // neither are checked
+  }
 
 });
 
