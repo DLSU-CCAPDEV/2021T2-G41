@@ -69,7 +69,7 @@ app.get('/add', (req, res) => {
       Tag: "Deck Settings",
       Deck: chosenDeck,
       MaxNew: 10, // default
-      CurrentNew: 0,
+      CurrentNew: 10,
       LastStudied: "1970-01-01T00:00:01.000Z"
     })
     deckSettingCopyDocument.save()
@@ -278,7 +278,8 @@ app.get('/study/:deck', (req, res) => {
   // new study session, update LastStudied and CurrentNew fields for tracking
   deckSettingModel.find({Tag: "Deck Settings", Deck: req.params.deck})
   .then(deckSettingResult => {
-    if (currDate.toISOString() != deckSettingResult[0].LastStudied.toISOString()) { // new study session
+    // new study session
+    if (currDate.toISOString() != deckSettingResult[0].LastStudied.toISOString()) {
       console.log("NEW study session!");
 
       // get "new" new count
@@ -286,13 +287,12 @@ app.get('/study/:deck', (req, res) => {
       .limit(deckSettingResult[0].MaxNew)
       .then(newCards => {
         _currentNew = newCards.length
-
         deckSettingModel.updateOne({Tag: "Deck Settings", Deck: req.params.deck}, {CurrentNew: _currentNew, LastStudied: currDate}).exec();
       });
     }
+    res.render('views/study-session', {title: 'Kanau | Decks', deckName: req.params.deck});
   });
 
-  res.render('views/study-session', {title: 'Kanau | Decks', deckName: req.params.deck});
 });
 
 app.get('/getStudyCards', (req, res) => {
@@ -339,6 +339,7 @@ app.get('/getStudyCards', (req, res) => {
           console.log("No New cards.");
         }
         else {
+          console.log("GET New setting:" + deckSettingResult.CurrentNew);
           // proceed to add new cards
           newCards.forEach(newCard => {
             cards.newCards.push(newCard);
