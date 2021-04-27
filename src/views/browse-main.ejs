@@ -111,9 +111,9 @@
                 <div id="browse-edit-buttons">
                     <div class="select is-primary">
                         <select form="browse-edit-form" id="browse-edit-select-deck" disabled>
-                            <%decks.forEach(deck => { %>
-                                <option><%=deck%></option>
-                            <%});%>
+                            <% for(var i = 0; i < decks.length; i++) { %>
+                                <option value="<%= decks[i] %>"> <%= decks[i] %> </option>
+                            <% }%>  
                         </select>
                     </div>
                         <button form="browse-edit-form" id="browse-edit-submit-btn" class="button is-primary" disabled>Save</button>
