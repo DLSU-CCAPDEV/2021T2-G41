@@ -14,6 +14,14 @@ var backDefinitionNode = document.getElementById("back-definition");
 var newCount = document.getElementById("new-count");
 var reviewCount = document.getElementById("review-count");
 
+// Add card modal nodes
+var addCardModal = document.getElementById("modal-addCard-container");
+var addCard_onModal = document.getElementById("addCard-btn");
+var addCard_offModal = document.getElementById("modal-addCard-btn-close");
+var addCard_saveBtn = document.getElementById("modal-addCard-save-btn");
+var addCard_frontText = document.getElementById("modal-addCard-front-input");
+var addCard_backText = document.getElementById("modal-addCard-back-input");
+
 // Store cards for study
 var cards;
 
@@ -189,3 +197,36 @@ failBtn.addEventListener('click', function() {
 	flashcard.classList.add("animate__fadeInRight");
 	isFadeIn = true;
 });
+
+addCard_onModal.addEventListener('click', function() {
+    addCardModal.style.display = "block";
+});
+
+addCard_offModal.addEventListener('click', function() {
+    addCardModal.style.display = "none";
+});
+
+addCard_saveBtn.addEventListener('click', function(event) {
+    var xhttp = new XMLHttpRequest();
+    xhttp.open('POST', '/addCard', true);
+    console.log("XHTTP instance created!");
+
+    xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+
+    xhttp.onload = function() {
+        console.log("GOT transaction!");
+        console.log("STATUS" + this.status);
+        console.log(this.responseText);
+        addCardModal.style.display = "none";
+    };
+	
+    xhttp.send("front=" + addCard_frontText.value + "&back=" + addCard_backText.value + "&deck=" + deckName);
+});
+    function buttonCheck(text) {
+        if(addCard_frontText.value === "" || addCard_backText.value === "") {
+            addCard_saveBtn.disabled = true;
+        }
+        else {
+            addCard_saveBtn.disabled = false;
+        }
+    }
