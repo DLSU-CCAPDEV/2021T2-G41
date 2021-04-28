@@ -55,6 +55,11 @@
         					<button class="add-icon"> + </button>
         					<div class="japanese-sentence">夢は叶った</div>
         				</div>
+                        <br>
+                        <div class="japanese-sentence-example">
+        					<button class="add-icon"> + </button>
+        					<div class="japanese-sentence">夢は叶った</div>
+        				</div>
         			</div>
         			<div class="english-sentence-example">Dreams came true.</div>
         		</ul>
@@ -62,18 +67,32 @@
             <% if (!isSearch) { %>
                 <h2 class="keyword-enter-message">Enter an English/Japanese keyword on the search box above!</h2>
             <% } else if (Dictionary.Kanjis.length > 0) { %>
-                <%Dictionary.Kanjis.forEach((kanji, index) => {%>
+                <%Dictionary.Kanjis.forEach((kanji, indexKanji) => {%>
                     <div class="content-header">
                         <div id="content-word"><%=kanji%></div>
-                        <div id="japanese-def"><%=Dictionary.Kanas[index]%></div>
+                        <div id="japanese-def"><%=Dictionary.Kanas[indexKanji]%></div>
                     </div>
                     <div class="content-body">
                         <div class="content-definition">
-                            <% Dictionary.Meanings[index].forEach(meaning => { %>
+                            <% Dictionary.Meanings[indexKanji].forEach(meaning => { %>
                                 <div class="english-def"><%=meaning%></div>
                                 <br>
                             <%});%>
                         </div>
+                    </div>
+                    <div class="content-footer">
+                        <ul>
+                            <div class="japanese-sentence-container">
+                            <%Sentence[indexKanji].forEach((sentence, index) => { %>
+                                        <div class="japanese-sentence-example">
+                                            <button class="add-icon"> + </button>
+                                            <div class="japanese-sentence"><%=sentence.Text%></div>
+                                        </div>
+                                    <div class="english-sentence-example" hidden="true">Loading...</div>
+                                    <br>
+                            <%}); %>
+                            </div>
+                        </ul>
                     </div>
                 <%})%>
             <%};%>
