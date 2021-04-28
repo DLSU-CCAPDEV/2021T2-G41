@@ -64,7 +64,6 @@
 }
 
 .japanese-sentence-container {
-	margin-left: 200px;
 	color: black;
 	font-family: 'Roboto', sans-serif;
     font-size: 2em;
@@ -82,7 +81,7 @@
     padding: 10px 20px;
     border-radius: 50%;
     font-weight: 900;
-
+	max-height: 58px;
 }
 
 .add-icon:hover {
@@ -96,7 +95,7 @@
 .japanese-sentence-example {
 	display: flex;
 	flex-direction: row;
-	justify-content: center;
+	justify-content: flex-start;
 	
 }
 
@@ -105,9 +104,9 @@
 }	
 
 .english-sentence-example {
-	margin-left: 300px;
 	margin-top: 5px;
 	color: black;
+	text-indent: 7%;
 	font-family: 'Roboto', sans-serif;
     font-size: 1.5em;
 }
