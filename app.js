@@ -4,12 +4,13 @@ const path = require('path');
 
 // get schemas
 const Dictionary = require('./models/dictionary');
-const Test = require('./models/test'); // TODO: add function call for specified collection name
 const Flashcard = require('./models/flashcards');
+const Sentence = require('./models/sentence');
+const SentenceTranslation = require('./models/sentence_translation');
 
 // set models
 var decksInfoModel = null, flashcardModel = null, deckSettingModel = null;
-var dictionaryModel = null, sentenceModel = null;
+var dictionaryModel = null, sentenceModel = null, sentenceTranslationModel = null;
 
 // express app & MongoDB URIs
 const app = express();
@@ -242,37 +243,50 @@ app.get('/dictionary', function(req, res) {
     if (dictionaryModel == null) {
       let dictionarySchema = Dictionary;
       dictionaryModel = dictionaryConnection.model('dictionary', dictionarySchema, "Term Bank");
-      console.log("Created dictionary model.");
+      console.log("Created Dictionary model.");
     }
 
+    if (sentenceModel == null) {
+      let sentenceSchema = Sentence;
+      sentenceModel = dictionaryConnection.model('sentence', sentenceSchema, "Sentence Bank");
+      console.log("Created Sentence model.")
+    }
+
+    if (sentenceTranslationModel = null) {
+      let sentenceTranslationSchema = SentenceTranslation;
+      sentenceTranslationModel = dictionaryConnection.model('sentence translation', sentenceTranslationSchema, "Sentence Translation Bank");
+      console.log("Created Sentence translation model.");
+    }
+
+    // no term searched
     if (!req.query.termQuery) {
         res.render('views/dictionary.ejs', {Dictionary: null, isSearch: false, title: 'Kanau | About us'});
         res.end();
         return;
     }
 
-    dictionaryModel.find({Kanji: {"$regex": req.query.termQuery, "$options": "i"} }).sort({TermID: 'asc'}).limit(2)
-    .then(result => {
-        console.log(result);
-        let termKanji = [];
-        let termKana = [];
-        let termMeaning = []; // 2D Array containing multiple meanings per term
+    let termKanji = [];
+    let termKana = [];
+    let termMeaning = []; // 2D Array containing multiple meanings per term
 
-        let tempMeanings = []
-        let trackTermID = -1;
-        result.forEach(term => {
-            if (term.TermID != trackTermID) { // new term found
+    let tempMeanings = []
+    let trackTermID = -1;
+
+    dictionaryModel.find({Kanji: {"$regex": req.query.termQuery, "$options": "i"} }).sort({TermID: 'asc'}).limit(4)
+    .then(termResults => {
+        termResults.forEach(termResult => {
+            if (termResult.TermID != trackTermID) { // new term found
                 if (trackTermID != -1) { // append all recorded meanings
-                    termMeaning.push(tempMeanings.slice());
+                    termMeaning.push(tempMeanings.slice()); // save all meanings from previous term
                     tempMeanings.length = 0;
                 }
-                trackTermID = term.TermID;
-                termKanji.push(term.Kanji);
-                termKana.push(term.Kana);
-                tempMeanings.push(term.Meaning);
+                trackTermID = termResult.TermID;
+                termKanji.push(termResult.Kanji);
+                termKana.push(termResult.Kana);
+                tempMeanings.push(termResult.Meaning);
             }
             else { // continue on to other meanings
-                tempMeanings.push(term.Meaning);
+                tempMeanings.push(termResult.Meaning);
             }
         });
         termMeaning.push(tempMeanings.slice());
@@ -286,7 +300,25 @@ app.get('/dictionary', function(req, res) {
         
         console.log("==== AFTER PARSING to readable object format ====");
         console.log(DictionaryResults);
-        res.render('views/dictionary.ejs', {Dictionary: DictionaryResults, isSearch: true, title: 'Kanau | About us'});
+    })
+    .then(termResults => {
+      // Get sentences
+      let sentences = [] // 2D Array containing multiple Japanese sentences per term
+
+      termKanji.forEach((kanji, index) => {
+        // find sentences for each term
+        sentenceModel.find({Text: {"$regex": kanji, "$options": "i"}}).limit(4)
+        .then(sentenceResults => {
+          sentences.push(sentenceResults);
+          
+          if (index == termKanji.length - 1) {
+            console.log("Sentences:");
+            res.render('views/dictionary.ejs', {Dictionary: DictionaryResults, isSearch: true, Sentence: sentences, title: 'Kanau | About us'});
+          }
+        });
+
+      });
+
     })
     .catch(error =>
         console.log(error));
