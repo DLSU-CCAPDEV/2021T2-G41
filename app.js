@@ -6,19 +6,21 @@ const path = require('path');
 const Dictionary = require('./models/dictionary');
 const Test = require('./models/test'); // TODO: add function call for specified collection name
 const Flashcard = require('./models/flashcards');
-const { DeckSettingSchema } = require('./models/flashcards');
+
 // set models
 var decksInfoModel = null, flashcardModel = null, deckSettingModel = null;
+var dictionaryModel = null;
 
 // express app & MongoDB URIs
 const app = express();
 const dictionaryURI = "mongodb+srv://dbAdmin:admin123@kanaugcp.tm0gd.mongodb.net/Dictionary?retryWrites=true&w=majority";
 const flashcardURI = "mongodb+srv://dbAdmin:admin123@kanaugcp.tm0gd.mongodb.net/Flashcards?retryWrites=true&w=majority";
+const accountURI = "mongodb+srv://dbAdmin:admin123@kanaugcp.tm0gd.mongodb.net/Accounts?retryWrites=true&w=majority";
 
 var username = null; // Current user (based on email)
 
 // connect to Dictionary database (default connection)
-mongoose.connect(dictionaryURI, {useNewUrlParser: true, useUnifiedTopology: true})
+mongoose.connect(accountURI, {useNewUrlParser: true, useUnifiedTopology: true})
     .then(app.listen(3000))
     .catch(function(error) {
         console.log(error);
@@ -26,6 +28,7 @@ mongoose.connect(dictionaryURI, {useNewUrlParser: true, useUnifiedTopology: true
 
 // Other database connnections
 const flashcardConnection = mongoose.createConnection(flashcardURI, {useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false});
+const dictionaryConnection = mongoose.createConnection(dictionaryURI, {useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false});
 
 // Misc nodes
 var personalDecks = null;
@@ -234,12 +237,23 @@ app.get('/decks', (req, res) => {
 
 app.get('/dictionary', function(req, res) {
     console.log("Requested term: " + req.query.termQuery);
+
+    // setup modal
+    if (dictionaryModel == null) {
+      let dictionarySchema = Dictionary;
+      dictionaryModel = dictionaryConnection.model('dictionary', dictionarySchema, "Term Bank");
+      console.log("Created dictionary model.");
+    }
+
     if (!req.query.termQuery) {
         res.render('views/dictionary.ejs', {Dictionary: null, isSearch: false, title: 'Kanau | About us'});
         res.end();
         return;
     }
-    Dictionary.find({Kanji: {"$regex": req.query.termQuery, "$options": "i"} }).sort({TermID: 'asc'}).limit(2)
+
+    dictionaryModel.find().then(r => console.log(r));
+
+    dictionaryModel.find({Kanji: {"$regex": req.query.termQuery, "$options": "i"} }).sort({TermID: 'asc'}).limit(2)
     .then(result => {
         console.log(result);
         let termKanji = [];
