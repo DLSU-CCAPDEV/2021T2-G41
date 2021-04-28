@@ -9,5 +9,4 @@ const DictionarySchema = new mongoose.Schema({
     Meaning: String
 });
 
-const Dictionary = mongoose.model('Term Bank', DictionarySchema);
-module.exports = Dictionary;
+module.exports = DictionarySchema;
