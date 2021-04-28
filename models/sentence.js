@@ -3,7 +3,8 @@ mongoose.pluralize(null);
 
 const SentenceSchema = new mongoose.Schema({
     SentenceID: Number,
-    MeaningID: Number
+    MeaningID: Number,
+    Text: String
 });
 
-return SentenceSchema;
+module.exports = SentenceSchema;

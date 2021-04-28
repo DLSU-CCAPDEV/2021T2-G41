@@ -6,4 +6,4 @@ const SentenceTranslationSchema = new mongoose.Schema({
     Text: String
 });
 
-return SentenceTranslationSchema;
+module.exports = SentenceTranslationSchema;
