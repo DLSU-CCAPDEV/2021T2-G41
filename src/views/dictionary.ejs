@@ -27,6 +27,7 @@
         </div>
     </section>
     <div class="content-container"> <!-- content-container: Everything below the top header menu | main-menu.css -->
+        
         <div class="menu-container">
             <p>Study</p>
             <ul>
@@ -35,8 +36,9 @@
                 <li><a href="dictionary"><strong>Dictionary</strong></a></li>
             </ul>
         </div>
+
         <div class="subcontent-container">
-        	<!-- <div class="content-header">
+        	<div class="content-header">
         		<div id="content-word">叶う</div>
         		<div id="japanese-def">かなう</div>
         	</div>
@@ -54,6 +56,7 @@
         				<div class="japanese-sentence-example">
         					<button class="add-icon"> + </button>
         					<div class="japanese-sentence">夢は叶った</div>
+                            <div class="english-sentence-example">Dreams came true.</div>
         				</div>
                         <br>
                         <div class="japanese-sentence-example">
@@ -63,7 +66,8 @@
         			</div>
         			<div class="english-sentence-example">Dreams came true.</div>
         		</ul>
-        	</div> -->
+        	</div>
+
             <% if (!isSearch) { %>
                 <h2 class="keyword-enter-message">Enter an English/Japanese keyword on the search box above!</h2>
             <% } else if (Dictionary.Kanjis.length > 0) { %>
@@ -96,8 +100,61 @@
                     </div>
                 <%})%>
             <%};%>
+
+            <div class="modal is-active" id="add-sentence-modal">
+                <div class="modal-background"></div>
+                <div class="modal-card">
+
+                    <header class="modal-card-head">
+                        <p class="modal-card-title">Add sentence to deck</p>
+                        <button class="delete" aria-label="close" id="modal-close"></button>
+                    </header>
+
+                    <section class="modal-card-body">
+                        <form action="#" method="POST" id="add-sentence-form">
+                            <div class="columns">
+                                <div class="column">
+                                    <label for="frontWord" class="title is-4">Front</label>
+                                    <div class="columns">
+                                        <div class="column">
+                                            <textarea class="textarea" rows="8" name="frontWord" id="frontWord"></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="column">
+                                    <label for="backWord" class="title is-4">Back</label>
+                                    <div class="columns">
+                                        <div class="column">
+                                            <textarea class="textarea" rows="8" name="backWord" id="backWord"></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="columns">
+                                <div class="column">
+                                    <label for="deckSelect" class="title is-4" id="deck-label">Deck:</label>
+                                    <div class="select">
+                                        <select name="deckSelect" name="deckSelect" id="deckSelect">
+                                            <option>Deck 1</option>
+                                            <option>Deck 2</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </section>
+
+                    <footer class="modal-card-foot">
+                        <button class="button is-success" id="save-btn">Add to deck</button>
+                        <button class="button" id="cancel-btn">Cancel</button>
+                    </footer>
+
+                </div>
+            </div>
+
         </div>
     </div>
     <script src="../script/index.js"></script>
+    <script src="../script/dictionary-main.js"></script>
 </body>
 </html>
