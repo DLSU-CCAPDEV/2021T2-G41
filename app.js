@@ -9,7 +9,7 @@ const Flashcard = require('./models/flashcards');
 
 // set models
 var decksInfoModel = null, flashcardModel = null, deckSettingModel = null;
-var dictionaryModel = null;
+var dictionaryModel = null, sentenceModel = null;
 
 // express app & MongoDB URIs
 const app = express();
@@ -250,8 +250,6 @@ app.get('/dictionary', function(req, res) {
         res.end();
         return;
     }
-
-    dictionaryModel.find().then(r => console.log(r));
 
     dictionaryModel.find({Kanji: {"$regex": req.query.termQuery, "$options": "i"} }).sort({TermID: 'asc'}).limit(2)
     .then(result => {
