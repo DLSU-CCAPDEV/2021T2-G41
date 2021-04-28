@@ -100,6 +100,7 @@
 }
 
 .japanese-sentence {
+	cursor: pointer;
 	margin-left: 20px;
 }	
 
@@ -115,4 +116,13 @@
 	text-align: center;
 	margin-top: 20%;
 	font-size: 2em;
+}
+
+textarea {
+	resize: none !important;
+}
+
+#deck-label {
+    position: relative;
+    top: 5px;
 }
