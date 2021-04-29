@@ -252,7 +252,7 @@ app.get('/dictionary', function(req, res) {
       console.log("Created Sentence model.")
     }
 
-    if (sentenceTranslationModel = null) {
+    if (sentenceTranslationModel == null) {
       let sentenceTranslationSchema = SentenceTranslation;
       sentenceTranslationModel = dictionaryConnection.model('sentence translation', sentenceTranslationSchema, "Sentence Translation Bank");
       console.log("Created Sentence translation model.");
@@ -265,6 +265,15 @@ app.get('/dictionary', function(req, res) {
         return;
     }
 
+    // Store deck names
+    let deckNames;
+
+    // Get deck names
+    decksInfoModel.findOne({Tag: "Index"})
+    .then(decksInfoResult => {
+      deckNames = decksInfoResult.decks.splice();
+    });
+
     let termKanji = [];
     let termKana = [];
     let termMeaning = []; // 2D Array containing multiple meanings per term
@@ -272,7 +281,7 @@ app.get('/dictionary', function(req, res) {
     let tempMeanings = []
     let trackTermID = -1;
 
-    dictionaryModel.find({Kanji: {"$regex": req.query.termQuery, "$options": "i"} }).sort({TermID: 'asc'}).limit(4)
+    dictionaryModel.find({Kanji: req.query.termQuery}).sort({TermID: 'asc'}).limit(2)
     .then(termResults => {
         termResults.forEach(termResult => {
             if (termResult.TermID != trackTermID) { // new term found
@@ -307,12 +316,11 @@ app.get('/dictionary', function(req, res) {
 
       termKanji.forEach((kanji, index) => {
         // find sentences for each term
-        sentenceModel.find({Text: {"$regex": kanji, "$options": "i"}}).limit(4)
+        sentenceModel.find({Text: {"$regex": kanji, "$options": "i"}}).limit(2)
         .then(sentenceResults => {
           sentences.push(sentenceResults);
           
           if (index == termKanji.length - 1) {
-            console.log("Sentences:");
             res.render('views/dictionary.ejs', {Dictionary: DictionaryResults, isSearch: true, Sentence: sentences, title: 'Kanau | About us'});
           }
         });
@@ -558,6 +566,25 @@ app.post('/deleteCard', (req, res) => {
   .then(console.log("Deleted successfully."));
 
   res.send();
+});
+
+app.get('/getEngTranslation', (req, res) => {
+  let sentence = req.query.sentence;
+  let meaningID;
+
+  // Get meaning ID of the Japanese sentence
+  sentenceModel.findOne({Text: sentence})
+  .then(sentenceResult => {
+    meaningID = sentenceResult.MeaningID;
+  })
+  .then(() => {
+    // Get English translation
+    sentenceTranslationModel.findOne({SentenceID: meaningID})
+    .then(sentenceTranslationResult => {
+      res.send(sentenceTranslationResult.Text);
+    })
+  })
+  .catch(err => console.log(err));
 });
 
 // 404 page
