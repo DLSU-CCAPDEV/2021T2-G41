@@ -38,7 +38,7 @@
         </div>
 
         <div class="subcontent-container">
-        	<div class="content-header">
+        	<!-- <div class="content-header">
         		<div id="content-word">叶う</div>
         		<div id="japanese-def">かなう</div>
         	</div>
@@ -56,17 +56,17 @@
         				<div class="japanese-sentence-example">
         					<button class="add-icon"> + </button>
         					<div class="japanese-sentence">夢は叶った</div>
-                            <div class="english-sentence-example">Dreams came true.</div>
         				</div>
+                        <div class="english-sentence-example">Dreams came true.</div>
                         <br>
                         <div class="japanese-sentence-example">
         					<button class="add-icon"> + </button>
         					<div class="japanese-sentence">夢は叶った</div>
         				</div>
+                        <div class="english-sentence-example">Loading...</div>
         			</div>
-        			<div class="english-sentence-example">Dreams came true.</div>
         		</ul>
-        	</div>
+        	</div> -->
 
             <% if (!isSearch) { %>
                 <h2 class="keyword-enter-message">Enter an English/Japanese keyword on the search box above!</h2>
@@ -92,7 +92,7 @@
                                             <button class="add-icon"> + </button>
                                             <div class="japanese-sentence"><%=sentence.Text%></div>
                                         </div>
-                                    <div class="english-sentence-example" hidden="true">Loading...</div>
+                                    <div class="english-sentence-example" hidden="false">Loading...</div>
                                     <br>
                             <%}); %>
                             </div>
@@ -101,7 +101,7 @@
                 <%})%>
             <%};%>
 
-            <div class="modal is-active" id="add-sentence-modal">
+            <div class="modal" id="add-sentence-modal">
                 <div class="modal-background"></div>
                 <div class="modal-card">
 
@@ -154,7 +154,6 @@
 
         </div>
     </div>
-    <script src="../script/index.js"></script>
     <script src="../script/dictionary-main.js"></script>
 </body>
 </html>
