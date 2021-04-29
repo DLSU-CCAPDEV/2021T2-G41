@@ -50,7 +50,7 @@ app.get('/', (req, res) => {
 });
 
 app.get('/add', (req, res) => {
-  let username2 = "newuser@new.com";
+  let username2 = "newuser@new.com"; // NEW ACCOUNT email here!!!!
   let premadeDecksCollection = "sampleuser@test.com";
   let chosenDecks = ["JLPT N5 Kanji Deck"] ; // Push deck names here (for Tag: Index document)
 
