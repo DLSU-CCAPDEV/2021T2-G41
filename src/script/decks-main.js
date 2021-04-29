@@ -11,6 +11,9 @@ const changeNameBtn = document.getElementById("modal-changeName-btn");
 const seeAllCards = document.getElementById("modal-seeAllCards-btn");
 var modalDeckTitle = document.getElementById("modal-deck-title");
 var originalDeckName = undefined;
+const newCardCountInput = document.getElementById('modal-deck-input-newCardsPerDay');
+const modal_saveBtn = document.getElementById('modal-deck-save-btn');
+const modal_deleteBtn = document.getElementById('modal-deck-delete-btn');
 
 // Add card modal nodes
 const addCardModal = document.getElementById("modal-addCard-container");
@@ -26,6 +29,22 @@ const addDeckModal = document.getElementById("modal-addDeck-container");
 const addDeck_onModal = document.getElementById("createDeck-btn");
 const addDeck_offModal = document.getElementById("modal-addDeck-btn-close");
 const addDeck_saveBtn = document.getElementById("modal-addDeck-save-btn");
+
+function postEditedDeckInfo(deckName, newCardCount) {
+    return new Promise((resolve, reject) => {
+        let xhttp = new XMLHttpRequest();
+
+        xhttp.open('POST', '/editDeck', true);
+
+        xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+
+        xhttp.onload = () => {
+          console.log("New deck settings saved.");
+        };
+        
+        xhttp.send("deck=" + deckName + "&newCardCount=" + newCardCount);
+    });
+}
 
 // Direct to study page event when a deck title is clicked
 deck_titles.forEach(title => {
@@ -44,14 +63,11 @@ for (var i = 0; i < deck_onModal.length; i++) {
     // Show modal
     deck_onModal[i].addEventListener('click', function() {
         deck_modal.style.display = "block";
-    });
-    // Update modal information
-    deck_onModal[i].onclick = function() {
-        let selectedRowNCol = getDeckRowAndCol(this); // no need?
+
         // Show deck name
         originalDeckName = this.parentElement.cells[0].childNodes[0].innerText;
         document.getElementById("modal-deck-title").textContent = originalDeckName;
-    };
+    });
 }
 
 /* DECK MODAL events */
@@ -67,6 +83,13 @@ window.onclick = function(event) {
         
     }
 }
+
+modal_saveBtn.addEventListener('click', async (e) => {
+    let newDeckName = modalDeckTitle.innerText;
+    let newCount = newCardCountInput.value;
+
+    await postEditedDeckInfo(newDeckName, newCount);
+});
 
 // Exit modal on X click
 deck_offModal.onclick = function() {
@@ -140,11 +163,12 @@ addCard_saveBtn.addEventListener('click', function(event) {
 
     xhttp.send("front=" + addCard_frontText.value + "&back=" + addCard_backText.value + "&deck=" + deckSelected);
 });
-    function buttonCheck(text) {
-        if(addCard_frontText.value === "" || addCard_backText.value === "") {
-            addCard_saveBtn.disabled = true;
-        }
-        else {
-            addCard_saveBtn.disabled = false;
-        }
+
+function buttonCheck(text) {
+    if(addCard_frontText.value === "" || addCard_backText.value === "") {
+        addCard_saveBtn.disabled = true;
     }
+    else {
+        addCard_saveBtn.disabled = false;
+    }
+}
