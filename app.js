@@ -258,21 +258,21 @@ app.get('/dictionary', function(req, res) {
       console.log("Created Sentence translation model.");
     }
 
-    // no term searched
-    if (!req.query.termQuery) {
-        res.render('views/dictionary.ejs', {Dictionary: null, isSearch: false, title: 'Kanau | About us'});
-        res.end();
-        return;
-    }
-
     // Store deck names
     let deckNames;
 
     // Get deck names
     decksInfoModel.findOne({Tag: "Index"})
     .then(decksInfoResult => {
-      deckNames = decksInfoResult.decks.splice();
+      deckNames = decksInfoResult.decks.slice();
     });
+
+    // no term searched
+    if (!req.query.termQuery) {
+        res.render('views/dictionary.ejs', {Dictionary: null, isSearch: false, title: 'Kanau | About us'});
+        res.end();
+        return;
+    }
 
     let termKanji = [];
     let termKana = [];
@@ -321,7 +321,7 @@ app.get('/dictionary', function(req, res) {
           sentences.push(sentenceResults);
           
           if (index == termKanji.length - 1) {
-            res.render('views/dictionary.ejs', {Dictionary: DictionaryResults, isSearch: true, Sentence: sentences, title: 'Kanau | About us'});
+            res.render('views/dictionary.ejs', {Dictionary: DictionaryResults, isSearch: true, Sentence: sentences, decks: deckNames, title: 'Kanau | About us'});
           }
         });
 
@@ -542,8 +542,8 @@ app.post('/addCard', (req, res) => {
   });
 
   new_card.save();
-  console.log("new card added to deck: " + new_card);
-  res.status(200).send('just some random testing going on here');
+  console.log("New card added to deck: " + new_card);
+  res.status(200).send();
 });
 
 app.post('/editCard', (req, res) => {
