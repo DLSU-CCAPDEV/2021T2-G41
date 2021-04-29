@@ -49,10 +49,11 @@ app.get('/', (req, res) => {
   res.render('views/index', { title: 'Welcome to Kanau'});
 });
 
+// Add premade decks to a newly registered account
 app.get('/add', (req, res) => {
   let username2 = "newuser@new.com"; // NEW ACCOUNT email here!!!!
   let premadeDecksCollection = "sampleuser@test.com";
-  let chosenDecks = ["JLPT N5 Kanji Deck"] ; // Push deck names here (for Tag: Index document)
+  let chosenDecks = ["JLPT N5 Kanji Deck"] ; // Chosen premade decks (decided for now...)
 
   let flashcardSchema = Flashcard.Flashcardschema(username2);
   let DecksInfoSchema = Flashcard.DecksInfoSchema(username2);
