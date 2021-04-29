@@ -60,7 +60,6 @@
 .content-footer {
 	padding: 30px;
 	padding-left: 8%;
-	display: flex;
 }
 
 .japanese-sentence-container {
@@ -107,9 +106,9 @@
 .english-sentence-example {
 	margin-top: 5px;
 	color: black;
-	text-indent: 7%;
+	text-indent: 78px;
 	font-family: 'Roboto', sans-serif;
-    font-size: 1.5em;
+    font-size: 0.8em;
 }
 
 .keyword-enter-message {
