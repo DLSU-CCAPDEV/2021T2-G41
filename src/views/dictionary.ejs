@@ -133,12 +133,15 @@
                             <div class="columns">
                                 <div class="column">
                                     <label for="deckSelect" class="title is-4" id="deck-label">Deck:</label>
+                                    <%if (isSearch) {%>
                                     <div class="select">
                                         <select name="deckSelect" name="deckSelect" id="deckSelect">
-                                            <option>Deck 1</option>
-                                            <option>Deck 2</option>
+                                            <% for(var i = 0; i < decks.length; i++) { %>
+                                                <option value="<%= decks[i] %>"> <%= decks[i] %> </option>
+                                            <% }%>    
                                         </select>
                                     </div>
+                                    <%}%>
                                 </div>
                             </div>
                         </form>
