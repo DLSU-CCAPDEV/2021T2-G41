@@ -340,7 +340,9 @@ addCard_saveBtn.addEventListener('click', function(event) {
         addCardModal.style.display = "none";
     };
 
-    xhttp.send("front=" + addCard_frontText.value + "&back=" + addCard_backText.value + "&deck=" + addCard_selectDeck.value);
+    let deckSelected = addCard_selectDeck.options[addCard_selectDeck.selectedIndex].text;
+
+    xhttp.send("front=" + addCard_frontText.value + "&back=" + addCard_backText.value + "&deck=" + deckSelected);
 });
 
 function buttonCheck(text) {
