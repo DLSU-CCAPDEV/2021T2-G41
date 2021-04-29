@@ -531,6 +531,22 @@ app.post('/testajax', (req, res) => {
   res.status(200).send('just some random testing going on here');
 });
 
+app.post('/editDeck', (req, res) => {
+  console.log("AJAX REQUEST DATA IS: ");
+  console.log(req.body);
+
+  let deck = req.body.deck;
+  let newCount = parseInt(req.body.newCardCount);
+
+  /*TODO save new deckname to:
+    Flashcard: update every card to new deck name
+    DecksInfo: update one array element (of decks) with new name
+    DeckSettingSchema: update one with new deck name
+  */
+
+  res.status(200).send("");
+});
+
 app.post('/addCard', (req, res) => {
   console.log("AJAX REQUEST DATA IS: ");
   console.log(req.body);
