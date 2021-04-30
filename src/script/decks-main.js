@@ -30,7 +30,7 @@ const addDeck_onModal = document.getElementById("createDeck-btn");
 const addDeck_offModal = document.getElementById("modal-addDeck-btn-close");
 const addDeck_saveBtn = document.getElementById("modal-addDeck-save-btn");
 
-function postEditedDeckInfo(deckName, newCardCount) {
+function postEditedDeckInfo(newDeckName, oldDeckName, newCardCount) {
     return new Promise((resolve, reject) => {
         let xhttp = new XMLHttpRequest();
 
@@ -42,7 +42,7 @@ function postEditedDeckInfo(deckName, newCardCount) {
           console.log("New deck settings saved.");
         };
         
-        xhttp.send("deck=" + deckName + "&newCardCount=" + newCardCount);
+        xhttp.send("newDeck=" + newDeckName + "&oldDeck=" + oldDeckName + "&newCardCount=" + newCardCount);
     });
 }
 
@@ -84,13 +84,6 @@ window.onclick = function(event) {
     }
 }
 
-modal_saveBtn.addEventListener('click', async (e) => {
-    let newDeckName = modalDeckTitle.innerText;
-    let newCount = newCardCountInput.value;
-
-    await postEditedDeckInfo(newDeckName, newCount);
-});
-
 // Exit modal on X click
 deck_offModal.onclick = function() {
     deck_modal.style.display = "none";
@@ -99,6 +92,16 @@ deck_offModal.onclick = function() {
     modalDeckTitle.style.border = "unset";
     originalDeckName = undefined;
 }
+
+modal_saveBtn.addEventListener('click', async (e) => {
+    let newDeckName = modalDeckTitle.innerText;
+    let oldDeckName = originalDeckName;
+    let newCount = newCardCountInput.value;
+
+    await postEditedDeckInfo(newDeckName, oldDeckName,newCount);
+
+    // use for loop to change deck name (front view)
+});
 
 // In modal, change deck name
 changeNameBtn.addEventListener('click', function() {
