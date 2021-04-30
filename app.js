@@ -4,6 +4,7 @@ const path = require('path');
 
 // get schemas
 const Dictionary = require('./models/dictionary');
+const { DecksInfoSchema } = require('./models/flashcards');
 const Flashcard = require('./models/flashcards');
 const Sentence = require('./models/sentence');
 const SentenceTranslation = require('./models/sentence_translation');
@@ -535,16 +536,34 @@ app.post('/editDeck', (req, res) => {
   console.log("AJAX REQUEST DATA IS: ");
   console.log(req.body);
 
-  let deck = req.body.deck;
+  let newDeckName = req.body.newDeck;
+  let oldDeckName = req.body.oldDeck;
   let newCount = parseInt(req.body.newCardCount);
 
   /*TODO save new deckname to:
     Flashcard: update every card to new deck name
     DecksInfo: update one array element (of decks) with new name
-    DeckSettingSchema: update one with new deck name
+    DeckSettingSchema: update one with new deck name & MAX new card count
   */
 
-  res.status(200).send("");
+  // [DecksInfo] Update decks info
+  let decks = []; // store retrieved deck names
+
+  decksInfoModel.findOne({Tag: "Index"})
+  .then(decksInfoResult => {
+    decks = decksInfoResult.decks.slice();
+    
+    // update with new name
+    decks.some((deck, index) => {
+      if (deck == oldDeckName) return decks[index] = newDeckName;
+    });
+
+    // TODO update new "decks" object to decksInfo document via .updateOne()
+
+    res.status(200).send("");
+  })
+  .catch(err => console.log(err)); 
+
 });
 
 app.post('/addCard', (req, res) => {
