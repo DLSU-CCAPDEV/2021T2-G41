@@ -52,22 +52,23 @@ app.get('/', (req, res) => {
 
 // Add premade decks to a newly registered account
 app.get('/add', (req, res) => {
-  let username2 = "newuser@new.com"; // NEW ACCOUNT email here!!!!
+  let newUser = "newuser@new.com"; // NEW ACCOUNT email here!!!!
   let premadeDecksCollection = "sampleuser@test.com";
   let chosenDecks = ["JLPT N5 Kanji Deck"] ; // Chosen premade decks (decided for now...)
 
-  let flashcardSchema = Flashcard.Flashcardschema(username2);
-  let DecksInfoSchema = Flashcard.DecksInfoSchema(username2);
-  let DeckSettingSchema = Flashcard.DeckSettingSchema(username2)
+  let flashcardSchema = Flashcard.Flashcardschema(newUser);
+  let DecksInfoSchema = Flashcard.DecksInfoSchema(newUser);
+  let DeckSettingSchema = Flashcard.DeckSettingSchema(newUser)
 
   // Model for accessing premade decks
   let FlashcardCopyModel = flashcardConnection.model('flashcardCopy', flashcardSchema, premadeDecksCollection);
 
   // destination db model, use this to create documents and access save()
-  let FlashcardDestinationModel = flashcardConnection.model('flashcardDestination', flashcardSchema, username2);
-  let DecksInfoCopyModel = flashcardConnection.model('decksInfoCopy', DecksInfoSchema, username2);
-  let DeckSettingCopyModel = flashcardConnection.model('deckSettingCopy', DeckSettingSchema, username2);
+  let FlashcardDestinationModel = flashcardConnection.model('flashcardDestination', flashcardSchema, newUser);
+  let DecksInfoCopyModel = flashcardConnection.model('decksInfoCopy', DecksInfoSchema, newUser);
+  let DeckSettingCopyModel = flashcardConnection.model('deckSettingCopy', DeckSettingSchema, newUser);
 
+  // PROCEED TO DUPLICATE DECKS!!!
   chosenDecks.forEach(chosenDeck => {
     console.log(chosenDeck + " available!");
     // Create Deck Setting per deck
