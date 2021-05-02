@@ -15,7 +15,7 @@ $(document).ready(function () {
 
         var login_email_ = validator.trim($('#login_email_input').val());
         var isValidEmail_ = validator.isEmail(login_email_);
-        console.log(login_email_ + "-----------" + isValidEmail_);
+        
         if(isValidEmail_) {
             if(field.is($('#login_email_input')))
                 $('#login_email_input_error').text('');
