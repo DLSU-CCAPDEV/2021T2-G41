@@ -376,11 +376,11 @@ form[id="login-form"] .container {
     display: flex;
 }
 
-#login-submit {
+#login-submit, #register-submit {
     margin-top: 10px;
 }
 
-#login-google {
+#login-google, #register-google {
     margin-top: 10px;
     margin-left: 10px;
     background-image: url("../../img/nav-buttons/google_sign_in.png");
@@ -391,6 +391,12 @@ form[id="login-form"] .container {
     background-position: 1px 0px;
 }
 
+
+
 #login-google:hover {
     background-image: url("../../img/nav-buttons/google_sign_in-hover.png");
+}
+
+.error {
+    color: red;
 }
