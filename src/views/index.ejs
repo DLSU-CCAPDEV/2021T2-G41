@@ -5,6 +5,8 @@
         <%- include('./partials/links.ejs') %>
         <link rel="stylesheet" href="../styles/styles.css">
         <link rel="stylesheet" href="../styles/index-style-buttons.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <script src="/script/validator.min.js"></script>
     </head>
     <body>
         <div class="modal" id="login-modal">
@@ -15,13 +17,17 @@
                     <button class="delete is-large" id="login-close-btn" aria-label="close"></button>
                 </header>
                 <section class="modal-card-body">
-                    <form id="login-form" action="decks">
-                        <label for="login-email-input" class="content is-medium">Enter Email</label>
-                        <input type="text" class="input" id="login-email-input">
-                        <label for="login-password-input" class="content is-medium">Password</label>
-                        <input type="password" class="input" id="login-password-input">
+                    <form id="login-form" action="login" method="post">
+                        <label for="login_email_input" class="content is-medium">Enter Email</label>
+                        <input type="text" class="input" id="login_email_input" name="login_email_input">
+                         <p id="login_email_input_error" class="error"><%= details.login_email_input_error %></p>
+
+                        <label for="login_password_input" class="content is-medium">Password</label>
+                        <input type="password" class="input" id="login_password_input" name="login_password_input">
+                          <p id="login_password_input_error" class="error"><%= details.login_password_input_error %></p>
+
                         <div class="container">
-                            <input class="button is-primary" id="login-submit" type="submit" value="Sign in">
+                            <input class="button is-primary" id="login-submit" type="submit" value="Sign in" disabled>
                             <button class="button" id="login-google"></button>
                         </div>
                     </form>
@@ -36,16 +42,21 @@
                     <button class="delete is-large" id="register-close-btn" aria-label="close"></button>
                 </header>
                 <section class="modal-card-body">
-                    <form id="register-form" action="decks">
-                        <label for="register-email-input" class="content is-medium">Enter new Email</label>
-                        <input type="text" class="input" id="register-email-input">
-                        <label for="register-password-input" class="content is-medium">Password</label>
-                        <input type="password" class="input" id="register-password-input">
-                        <label for="register-password-input" class="content is-medium">Confirm Password</label>
-                        <input type="password" class="input" id="register-password-confirm-input">
+                    <form id="register-form" action="register" method="post">
+                        <label for="register_email_input" class="content is-medium">Enter new Email</label>
+                        <input type="text" class="input" id="register_email_input" name="register_email_input" placeholder="Email">
+                         <p id="register_email_input_error" class="error"><%= details.register_email_input_error %></p>
+
+                        <label for="register_password_input" class="content is-medium">Password</label>
+                        <input type="password" class="input" id="register_password_input" name="register_password_input" placeholder="Password">
+                         <p id="register_password_input_error" class="error"><%= details.register_password_input_error %></p>
+
+                        <label for="register_password_confirm_input" class="content is-medium">Confirm Password</label>
+                        <input type="password" class="input" id="register_password_confirm_input" name="register_password_confirm_input" placeholder="Confirm Password">
+                         <p id="register_password_confirm_input_error" class="error"><%= details.register_password_confirm_input_error %></p>
                         <div class="container">
-                            <input class="button is-primary" id="login-submit" type="submit" value="Create">
-                            <button class="button" id="login-google"></button>
+                            <input class="button is-primary" id="register-submit" type="submit" value="Create" disabled>
+                            <button class="button" id="register-google"></button>
                         </div>
                     </form>
                 </section>
@@ -115,5 +126,7 @@
             <br><br>Example sentences come from the Tatoeba project and are licensed under Creative Commons CC-BY. All rights reserved.</p>
         </div>
         <script src="../script/index.js"></script>
+        <script src="../script/register.js"></script>
+        <script src="../script/login.js"></script>
     </body>
 </html>

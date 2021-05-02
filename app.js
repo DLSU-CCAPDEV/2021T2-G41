@@ -7,10 +7,17 @@ const Dictionary = require('./models/dictionary');
 const Flashcard = require('./models/flashcards');
 const Sentence = require('./models/sentence');
 const SentenceTranslation = require('./models/sentence_translation');
+const User = require('./models/user');
+
+// import module `validationResult` from `express-validator`
+const { validationResult } = require('express-validator');
+// import module `validation`
+const validation = require('./helpers/validation.js');
 
 // set models
 var decksInfoModel = null, flashcardModel = null, deckSettingModel = null;
 var dictionaryModel = null, sentenceModel = null, sentenceTranslationModel = null;
+var userModel = null;
 
 // express app & MongoDB URIs
 const app = express();
@@ -46,11 +53,105 @@ app.set('views', 'src');
 app.use(express.urlencoded({extended: true}));
 
 app.get('/', (req, res) => {
-  res.render('views/index', { title: 'Welcome to Kanau'});
+
+  if (!userModel) { // check if model has already been compiled
+    userModel = mongoose.model('Client', User);
+    console.log("Created User model.");
+  }
+
+  var details = {
+    register_email_input_error: '',
+    register_password_input_error: '',
+    register_password_confirm_input_error: '',
+    login_email_input_error: '',
+    login_password_input_error: '',
+  };
+
+  res.render('views/index', { title: 'Welcome to Kanau', details});
 });
 
+app.get('/register-check', function (req, res) {
+
+  var email = req.query.Email;
+
+  userModel.findOne({Email: email}) //looks for the same email that the user input in register form
+    .then(result => {
+      console.log(result);
+      res.send(result);
+    });
+});
+
+//reg
+app.post('/register', validation.registerValidation(), (req, res) => {
+
+  var errors = validationResult(req);
+
+  if (!errors.isEmpty()) {
+    errors = errors.errors;
+    var details = {};
+      for(i = 0; i < errors.length; i++)
+        details[errors[i].param + '_error'] = errors[i].msg;
+
+      res.render('views/index', { title: 'Welcome to Kanau', details});            
+  }
+  else {
+    //stores the values from the register form
+    var newUser = new userModel({
+      "Email": req.body.register_email_input,
+      "Password": req.body.register_password_input
+    });
+
+    username = newUser.Email;
+
+    console.log("username: " + username);
+    
+    //save new user to db
+    newUser.save()
+      .then((result) => {
+          res.redirect('/add');
+       })
+  }
+});
+
+app.post('/login', validation.loginValidation(), (req, res) => {
+
+  var errors = validationResult(req);
+
+  if (!errors.isEmpty()) {
+    errors = errors.errors;
+    var details = {};
+
+    for(i = 0; i < errors.length; i++)
+      details[errors[i].param + '_error'] = errors[i].msg;
+      
+      res.render('views/index', { title: 'Welcome to Kanau', details});            
+  }
+  else {
+    //get values from login form
+    var tempEmail = req.body.login_email_input;
+    var tempPassword = req.body.login_password_input;
+
+    userModel.findOne({Email: tempEmail, Password: tempPassword})
+      .then(result => {
+        if(result) {
+          //check if email and password has a match in db
+          if(result.Email == tempEmail && result.Password == tempPassword) {
+            username = tempEmail;
+            console.log("Successfully logged in as " + username);
+            res.redirect('/decks');
+          }
+        }
+        else {//not yet done
+          console.log("Failed to log in");
+        }
+      });
+  };
+});
+
+
 app.get('/add', (req, res) => {
-  let username2 = "newuser@new.com";
+ // let username2 = "newuser@new.com";
+  let username2 = username;
   let premadeDecksCollection = "sampleuser@test.com";
   let chosenDecks = ["JLPT N5 Kanji Deck"] ; // Push deck names here (for Tag: Index document)
 
@@ -110,6 +211,7 @@ app.get('/add', (req, res) => {
   });
   decksInfoCopyDocument.save();
 
+  res.redirect('/decks');
 });
 
 // redirects
@@ -138,7 +240,7 @@ app.get('/browse', (req, res) => {
 });
 
 app.get('/decks', (req, res) => {
-  username = "newuser@new.com";
+//  username = "newuser@new.com";
 
   // Prepare models TODO: move these model init statements outside
   if (!decksInfoModel) { // check if model has already been compiled
