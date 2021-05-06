@@ -3,8 +3,8 @@
 <html lang="en">
     <head>
         <%- include('./partials/links.ejs') %>
-        <link rel="stylesheet" href="../styles/styles.css">
-        <link rel="stylesheet" href="../styles/index-style-buttons.css">
+        <link rel="stylesheet" href="/styles/styles.css">
+        <link rel="stylesheet" href="/styles/index-style-buttons.css">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
         <script src="/script/validator.min.js"></script>
     </head>
@@ -19,11 +19,11 @@
                 <section class="modal-card-body">
                     <form id="login-form" action="login" method="post">
                         <label for="login_email_input" class="content is-medium">Enter Email</label>
-                        <input type="text" class="input" id="login_email_input" name="login_email_input">
+                        <input type="text" class="input" id="login_email_input" name="login_email_input" placeholder="Email">
                          <p id="login_email_input_error" class="error"><%= details.login_email_input_error %></p>
 
                         <label for="login_password_input" class="content is-medium">Password</label>
-                        <input type="password" class="input" id="login_password_input" name="login_password_input">
+                        <input type="password" class="input" id="login_password_input" name="login_password_input" placeholder="Password">
                           <p id="login_password_input_error" class="error"><%= details.login_password_input_error %></p>
 
                         <div class="container">
@@ -65,7 +65,7 @@
         <div class="menu-container">
             <div class="menu">
                 <p class="brand-name">Kanau</p>
-                <img src="../../img/logo-transparent-dark.png" alt="brand logo" id="brand-logo" class="animate__animated animate__faster is-hidden">
+                <img src="/img/logo-transparent-dark.png" alt="brand logo" id="brand-logo" class="animate__animated animate__faster is-hidden">
                 <a href="#" class="btn from-left" id="register-button">Register</a>
                 <a href="#" class="btn from-right" id="login-button">Login</a>
             </div>
@@ -73,7 +73,7 @@
         <div class="animate__animated welcome-container">
             <div class="welcome">
                 <div class="welcome-geisha">
-                    <img src="../../img/logo-transparent.png" alt="Japanese geisha" id="welcome-geisha-img">
+                    <img src="/img/logo-transparent.png" alt="Japanese geisha" id="welcome-geisha-img">
                 </div>
                 <div class="welcome-msg1">
                     <h2 id="welcome-msg1-txt">Your Own Study Companion</p>
@@ -89,13 +89,13 @@
             </div>
         </div>
         <div class="animate__animated animate__bounceInUp arrow-container">
-            <img src="../../img/nav-buttons/keyboard_arrow_down-white-48dp.svg" alt="arrow down">
+            <img src="/img/nav-buttons/keyboard_arrow_down-white-48dp.svg" alt="arrow down">
         </div>
         <div class="features-info-container">
             <div class="features-info-box">
                 <div class="animate__animated feature1-container">
                     <div class="feature1-header-box">
-                        <img src="../../img/card.png" alt="flashcard" id="card-img">
+                        <img src="/img/card.png" alt="flashcard" id="card-img">
                         <p id="feature1-txt">Flashcard</p>
                     </div>
                     <div class="feature1-text">
@@ -108,7 +108,7 @@
                 </div>
                 <div class="animate__animated feature2-container">
                     <div class="feature2-header-box">
-                        <img src="../../img/book.png" alt="dictionary" id="book-img">
+                        <img src="/img/book.png" alt="dictionary" id="book-img">
                         <p id="feature2-txt">Dictionary</p>
                     </div>
                     <div class="feature2-text">
@@ -125,8 +125,8 @@
             uses JMdict for dictionary functionality. These files are the property of the Electronic Dictionary Research and Development Group, and are used in conformance with the Group's licence.
             <br><br>Example sentences come from the Tatoeba project and are licensed under Creative Commons CC-BY. All rights reserved.</p>
         </div>
-        <script src="../script/index.js"></script>
-        <script src="../script/register.js"></script>
-        <script src="../script/login.js"></script>
+        <script src="/script/index.js"></script>
+        <script src="/script/register.js"></script>
+        <script src="/script/login.js"></script>
     </body>
 </html>
