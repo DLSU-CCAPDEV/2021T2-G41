@@ -202,7 +202,11 @@ const controller = {
     },
 
     getAccountSettings: (req, res) => {
-        res.render('account-settings', { title: 'Kanau | Account'});
+        var info = {
+          email: username,
+          deckCount: personalDecks.length
+        }
+        res.render('account-settings', { title: 'Kanau | Account', info});
     },
 
     getAboutKanau: (req, res) => {

@@ -33,14 +33,14 @@
     	<p class="text-details">Current email:</p>
     	<br>
     	<div class="email-container">
-    		<div class="current-email">test_123@dlsu.edu.ph	
+    		<div class="current-email"><%= info.email%>
     			<button class="button is-primary" id="change-email-btn">Change Email</button>
     			<button class="button is-primary" id="change-password-btn">Change Password</button>
     		</div>
     	</div>
     	<br>
     	<br>
-    	<p class="text-details">You have created 3 decks and 123 cards so far.</p>	
+    	<p class="text-details">You have created <%= info.deckCount%> deck/s and 123 card/s so far.</p>	
     	<br>
     	<button class="button is-danger">Delete All Flashcards</button>
     	<br>
