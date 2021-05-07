@@ -4,10 +4,13 @@
   "description": "<p align=\"center\">\r     <img src=\"https://user-images.githubusercontent.com/55874439/112708392-bda40080-8eec-11eb-9a11-e6c412980db5.png\"/>\r </p>",
   "main": "test.js",
   "dependencies": {
+    "connect-mongo": "^4.4.1",
     "ejs": "^3.1.6",
     "express": "^4.17.1",
+    "express-session": "^1.17.1",
     "express-validator": "^6.10.1",
     "mongoose": "^5.12.3",
+    "serve-favicon": "^2.5.0",
     "validator": "^13.6.0"
   },
   "devDependencies": {},
