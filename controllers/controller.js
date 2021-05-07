@@ -13,15 +13,8 @@ const SentenceTranslation = require('../models/sentence_translation');
 const User = require('../models/user');
 
 // set models
-var decksInfoModel = null, flashcardModel = null, deckSettingModel = null;
 var dictionaryModel = null, sentenceModel = null, sentenceTranslationModel = null;
 var userModel = null;
-
-// Current user (based on email)
-var username = null; 
-
-// Misc nodes
-var personalDecks = null;
 
 // express app & MongoDB URIs
 const dictionaryURI = "mongodb+srv://dbAdmin:admin123@kanaugcp.tm0gd.mongodb.net/Dictionary?retryWrites=true&w=majority";
@@ -37,12 +30,18 @@ mongoose.connect(accountURI, {useNewUrlParser: true, useUnifiedTopology: true})
 // Other database connnections
 const flashcardConnection = mongoose.createConnection(flashcardURI, {useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false});
 const dictionaryConnection = mongoose.createConnection(dictionaryURI, {useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false});
-
+const accountConnection = mongoose.createConnection(accountURI, {useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false});
 
 const controller = {
 
     getIndex: (req, res) => {
-        
+
+		// check session if valid, redirect to decks
+		if (req.session.email != null) {
+			console.log("Valid session. Redirecting to decks...");
+			res.redirect('/decks');
+		}
+
         if (!userModel) { // check if model has already been compiled
           userModel = mongoose.model('Client', User);
           console.log("Created User model.");
@@ -73,7 +72,8 @@ const controller = {
     postRegister: (req, res) => {
 
         var errors = validationResult(req);
-      
+
+        // server-side validation
         if (!errors.isEmpty()) {
           errors = errors.errors;
           var details = {};
@@ -83,13 +83,16 @@ const controller = {
             res.render('index', { title: 'Welcome to Kanau', details});            
         }
         else {
-          //stores the values from the register form
+          // stores the values from the register form
           var newUser = new userModel({
             "Email": req.body.register_email_input,
             "Password": req.body.register_password_input
           });
       
-          username = newUser.Email;
+          let username = newUser.Email;
+
+          // add email to sessions, bind to cookie
+          req.session.email = username;
       
           console.log("username: " + username);
           
@@ -124,8 +127,9 @@ const controller = {
               if(result) {
                 //check if email and password has a match in db
                 if(result.Email == tempEmail && result.Password == tempPassword) {
-                  username = tempEmail;
+                  let username = tempEmail;
                   console.log("Successfully logged in as " + username);
+				  req.session.email = username;
                   res.redirect('/decks');
                 }
               }
@@ -137,7 +141,7 @@ const controller = {
       },
 
     addPremadeDecks: (req, res) => {
-        let newUser = username; // NEW ACCOUNT email here!!!!
+        let newUser = req.session.email; // NEW ACCOUNT email here!!!!
         let premadeDecksCollection = "sampleuser@test.com";
         let chosenDecks = ["JLPT N5 Kanji Deck"] ; // Chosen premade decks (decided for now...)
       
@@ -202,129 +206,161 @@ const controller = {
     },
 
     getAccountSettings: (req, res) => {
+		// check if session expired (unauthorized access)
+		if (req.session.email == null) {
+			console.log("Session expired.");
+			res.redirect('/');
+		}
+
+		var flashcardSchema = Flashcard.Flashcardschema(req.session.email);
+		let flashcardModel = flashcardConnection.model('flashcard', flashcardSchema, req.session.email);
+
+		let deckLength;
+
+		flashcardModel.find()
+		.then(flashcardResults => {
+			deckLength = flashcardResults.length;
+		})
+
         var info = {
-          email: username,
-          deckCount: personalDecks.length
+          email: req.session.email,
+          deckCount: deckLength // TODO
         }
         res.render('account-settings', { title: 'Kanau | Account', info});
     },
 
     getAboutKanau: (req, res) => {
+		// check if session expired (unauthorized access)
+		if (req.session.email == null) {
+			console.log("Session expired.");
+			res.redirect('/');
+		}
+      
         res.render('about-kanau', { title: 'Kanau | About us'});
     },
 
     getBrowse: (req, res) => {
+		var decksInfoSchema = Flashcard.DecksInfoSchema(req.session.email);
+		let decksInfoModel = flashcardConnection.model('tag', decksInfoSchema, req.session.email);
+
+		// check if session expired (unauthorized access)
+		if (req.session.email == null) {
+			console.log("Session expired.");
+			res.redirect('/');
+		}
+
         let deckNames;
       
         // get all deck names
         decksInfoModel.findOne({Tag: "Index"})
         .then(deckInfoResult => {
-          deckNames = deckInfoResult.decks.slice();
-          console.log(deckNames);
-          res.render('browse-main', {title: 'Kanau | Browse', decks: deckNames});
+			deckNames = deckInfoResult.decks.slice();
+			console.log(deckNames);
+			res.render('browse-main', {title: 'Kanau | Browse', decks: deckNames});
         });
     },
     
     getDecks: (req, res) => {
-        //  username = "newuser@new.com";
+		// check if session expired (unauthorized access)
+		if (req.session.email == null) {
+			console.log("Session expired.");
+			res.redirect('/');
+		}
+
+		// Prepare models
+		var decksInfoSchema = Flashcard.DecksInfoSchema(req.session.email);
+		let decksInfoModel = flashcardConnection.model('tag', decksInfoSchema, req.session.email);
+	
+		var flashcardSchema = Flashcard.Flashcardschema(req.session.email);
+		let flashcardModel = flashcardConnection.model('flashcard', flashcardSchema, req.session.email);
+	
+		var deckSettingSchema = Flashcard.DeckSettingSchema(req.session.email);
+		let deckSettingModel = flashcardConnection.model('deck settings', deckSettingSchema, req.session.email);
         
-          // Prepare models TODO: move these model init statements outside
-          if (!decksInfoModel) { // check if model has already been compiled
-            var decksInfoSchema = Flashcard.DecksInfoSchema(username);
-            decksInfoModel = flashcardConnection.model('tag', decksInfoSchema, username);
-            console.log("Created flashcardInfo model.");
-          }
+		let _dueAndNewDecks = [] // 2D Array for storing new/review count [[due,new]]
+		let _due, _new; // track new/review count for each deck
+		let currDate = new Date(new Date().toDateString());
         
-          if (!flashcardModel) {
-            var flashcardSchema = Flashcard.Flashcardschema(username);
-            flashcardModel = flashcardConnection.model('flashcard', flashcardSchema, username);
-            console.log("Created flashcard model.");
-          }
-        
-          if (!deckSettingModel) {
-            var deckSettingSchema = Flashcard.DeckSettingSchema(username);
-            deckSettingModel = flashcardConnection.model('deck settings', deckSettingSchema, username);
-          }
-        
-          let _dueAndNewDecks = [] // 2D Array for storing new/review count [[due,new]]
-          let _due, _new; // track new/review count for each deck
-          let currDate = new Date(new Date().toDateString());
-        
-          // Get decks
-          console.log("Connecting...");
-          decksInfoModel.find({Tag: "Index"}, 'decks') // Get deck names
-          .then(decksInfoResults => {
-            personalDecks = decksInfoResults[0].decks.slice();
-            console.log("THE DECK NAMES ARE: ");
-            console.log(personalDecks);
-        
-            personalDecks.forEach((deck, index, array) => {
-              // Get deck settings (max reviews/new)
-              deckSettingModel.find({Tag: "Deck Settings", Deck: deck})
-              .then(deckSettingResult => {
-                console.log("GET Deck preferences for " + deck);
-                console.log(deckSettingResult[0]);
-        
-                // adjust new/review count based on actual decks returned after db query
-                // get NEW count, limit on maximum new card setting OR current new count
-                if (deckSettingResult[0].LastStudied == null) { // Deck that has not been studied ever
-                  flashcardModel.find({Deck: deck, ReviewDate: new Date("1970-01-01T00:00:01.000Z")})
-                  .limit(deckSettingResult[0].MaxNew)
-                  .then(newCountResult => {
-                    console.log("Deck - " + deck + " NOT studied.");
-                    if (newCountResult.length > deckSettingResult[0].MaxNew)
-                      _new = deckSettingResult[0].MaxNew;
-                    else 
-                      _new = newCountResult.length;
-                  })
-                }
-                else if (deckSettingResult[0].LastStudied.toISOString() == currDate.toISOString()) { // Deck studied on the same current day
-                  flashcardModel.find({Deck: deck, ReviewDate: new Date("1970-01-01T00:00:01.000Z")})
-                  .limit(deckSettingResult[0].CurrentNew)
-                  .then(newCountResult => {
-                    console.log("Deck " + deck + " ready for REPEAT study session.");
-                    _new = newCountResult.length;
-                  })
-                } else { 
-                  // new study session
-                  flashcardModel.find({Deck: deck, ReviewDate: new Date("1970-01-01T00:00:01.000Z")})
-                  .limit(deckSettingResult[0].MaxNew)
-                  .then(newCountResult => {
-                    console.log("Deck " + deck + " ready for NEW study session.");
-                    if (newCountResult.length > deckSettingResult[0].MaxNew)
-                      _new = deckSettingResult[0].MaxNew;
-                     else 
-                      _new = newCountResult.length;
-                  })
-                }
-        
-                // track new card count per deck
-                deckSettingModel.findOneAndUpdate({Tag: "Deck settings", Deck: deck}, {CurrentNew: _new}).exec();
-                
-                // Review card count, NO limit on maximum review count
-                flashcardModel.find({Deck: deck, ReviewDate: {"$lte": currDate, "$ne": new Date("1970-01-01T00:00:01.000Z")}})
-                .then(reviewCountResult => {
-                  _due = reviewCountResult.length;
-        
-                  _dueAndNewDecks.push([_due, _new]);
-                  console.log(_dueAndNewDecks + " [[due, new]] deck preference GOT!");
-          
-                  if (index == array.length - 1) {
-                    console.log(_dueAndNewDecks);
-                    res.render('decks-main', {decks: personalDecks, _dueAndNewDecks, title: 'Kanau | Decks'});
-                    console.log("RENDERED EJS");
-                  }
-                });
-              })
-              .catch(err => console.log(err));
-            })
-            // TODO: No decks available
-            // res.render('decks-main', {decks: personalDecks, _dueAndNewDecks: null, title: 'Kanau | Decks'});
-          })
-          .catch(err => console.log(err));
+		// Get decks
+		console.log("Connecting...");
+		decksInfoModel.find({Tag: "Index"}, 'decks') // Get deck names
+		.then(decksInfoResults => {
+		let personalDecks = decksInfoResults[0].decks.slice();
+		console.log("THE DECK NAMES ARE: ");
+		console.log(personalDecks);
+	
+		personalDecks.forEach((deck, index, array) => {
+			// Get deck settings (max reviews/new)
+			deckSettingModel.find({Tag: "Deck Settings", Deck: deck})
+			.then(deckSettingResult => {
+			console.log("GET Deck preferences for " + deck);
+			console.log(deckSettingResult[0]);
+	
+			// adjust new/review count based on actual decks returned after db query
+			// get NEW count, limit on maximum new card setting OR current new count
+			if (deckSettingResult[0].LastStudied == null) { // Deck that has not been studied ever
+				flashcardModel.find({Deck: deck, ReviewDate: new Date("1970-01-01T00:00:01.000Z")})
+				.limit(deckSettingResult[0].MaxNew)
+				.then(newCountResult => {
+				console.log("Deck - " + deck + " NOT studied.");
+				if (newCountResult.length > deckSettingResult[0].MaxNew)
+					_new = deckSettingResult[0].MaxNew;
+				else 
+					_new = newCountResult.length;
+				})
+			}
+			else if (deckSettingResult[0].LastStudied.toISOString() == currDate.toISOString()) { // Deck studied on the same current day
+				flashcardModel.find({Deck: deck, ReviewDate: new Date("1970-01-01T00:00:01.000Z")})
+				.limit(deckSettingResult[0].CurrentNew)
+				.then(newCountResult => {
+				console.log("Deck " + deck + " ready for REPEAT study session.");
+				_new = newCountResult.length;
+				})
+			} else { 
+				// new study session
+				flashcardModel.find({Deck: deck, ReviewDate: new Date("1970-01-01T00:00:01.000Z")})
+				.limit(deckSettingResult[0].MaxNew)
+				.then(newCountResult => {
+				console.log("Deck " + deck + " ready for NEW study session.");
+				if (newCountResult.length > deckSettingResult[0].MaxNew)
+					_new = deckSettingResult[0].MaxNew;
+					else 
+					_new = newCountResult.length;
+				})
+			}
+	
+			// track new card count per deck
+			deckSettingModel.findOneAndUpdate({Tag: "Deck settings", Deck: deck}, {CurrentNew: _new}).exec();
+			
+			// Review card count, NO limit on maximum review count
+			flashcardModel.find({Deck: deck, ReviewDate: {"$lte": currDate, "$ne": new Date("1970-01-01T00:00:01.000Z")}})
+			.then(reviewCountResult => {
+				_due = reviewCountResult.length;
+	
+				_dueAndNewDecks.push([_due, _new]);
+				console.log(_dueAndNewDecks + " [[due, new]] deck preference GOT!");
+		
+				if (index == array.length - 1) {
+				console.log(_dueAndNewDecks);
+				res.render('decks-main', {decks: personalDecks, _dueAndNewDecks, title: 'Kanau | Decks'});
+				console.log("RENDERED EJS");
+				}
+			});
+			})
+			.catch(err => console.log(err));
+		})
+		// TODO: No decks available
+		// res.render('decks-main', {decks: personalDecks, _dueAndNewDecks: null, title: 'Kanau | Decks'});
+		})
+		.catch(err => console.log(err));
     },
 
     getDictionary: (req, res) => {
+		// check if session expired (unauthorized access)
+		if (req.session.email == null) {
+			console.log("Session expired.");
+			res.redirect('/');
+		}
         console.log("Requested term: " + req.query.termQuery);
     
         // setup modal
@@ -346,6 +382,9 @@ const controller = {
           console.log("Created Sentence translation model.");
         }
     
+		var decksInfoSchema = Flashcard.DecksInfoSchema(req.session.email);
+		let decksInfoModel = flashcardConnection.model('tag', decksInfoSchema, req.session.email);
+
         // Store deck names
         let deckNames;
     
@@ -423,6 +462,12 @@ const controller = {
     getStudyDeck: (req, res) => {
         let currDate = new Date(new Date().toDateString());
         let _currentNew;
+	
+		var flashcardSchema = Flashcard.Flashcardschema(req.session.email);
+		let flashcardModel = flashcardConnection.model('flashcard', flashcardSchema, req.session.email);
+	
+		var deckSettingSchema = Flashcard.DeckSettingSchema(req.session.email);
+		let deckSettingModel = flashcardConnection.model('deck settings', deckSettingSchema, req.session.email);
       
         // new study session, update LastStudied and CurrentNew fields for tracking
         deckSettingModel.find({Tag: "Deck Settings", Deck: req.params.deck})
@@ -453,8 +498,12 @@ const controller = {
       
         let currDate = new Date(new Date().toDateString());
         console.log("Current date: " + currDate.toISOString());
-      
-        console.log("GET deck AJAX Request! for " + deckName + ". Retrieving cards...");
+	
+		var flashcardSchema = Flashcard.Flashcardschema(req.session.email);
+		let flashcardModel = flashcardConnection.model('flashcard', flashcardSchema, req.session.email);
+	
+		var deckSettingSchema = Flashcard.DeckSettingSchema(req.session.email);
+		let deckSettingModel = flashcardConnection.model('deck settings', deckSettingSchema, req.session.email);
         
         // Get deck settings, then get cards
         deckSettingModel.findOne({Tag: "Deck Settings", Deck: deckName})
@@ -508,6 +557,12 @@ const controller = {
       
         let currReviewDate = new Date(new Date().toDateString());
         let _currentNew;
+	
+		var flashcardSchema = Flashcard.Flashcardschema(req.session.email);
+		let flashcardModel = flashcardConnection.model('flashcard', flashcardSchema, req.session.email);
+	
+		var deckSettingSchema = Flashcard.DeckSettingSchema(req.session.email);
+		let deckSettingModel = flashcardConnection.model('deck settings', deckSettingSchema, req.session.email);
       
         // Get current new count
         deckSettingModel.findOne({Tag: "Deck Settings", Deck: card.Deck})
@@ -553,6 +608,9 @@ const controller = {
 
     postFailCard: (req, res) => {
         const card = JSON.parse(req.body.card);
+	
+		var flashcardSchema = Flashcard.Flashcardschema(req.session.email);
+		let flashcardModel = flashcardConnection.model('flashcard', flashcardSchema, req.session.email);
       
         flashcardModel.findByIdAndUpdate(card._id, {ReviewInterval: 1})
         .then(result => {
@@ -562,6 +620,9 @@ const controller = {
     },
 
     getFlashcardData: (req, res) => {
+		var flashcardSchema = Flashcard.Flashcardschema(req.session.email);
+		let flashcardModel = flashcardConnection.model('flashcard', flashcardSchema, req.session.email);
+
         flashcardModel.find({Tag: null}).then(flashcardResults => {
           console.log("Retrieved all flashcard data [NO FILTER]. Returning to view...");
           res.send(flashcardResults);
@@ -569,8 +630,9 @@ const controller = {
     },
 
     getFlashcardDataFilter: (req, res) => {
-        // deckSelected, newCardCheck, reviewCardCheck
-      
+		var flashcardSchema = Flashcard.Flashcardschema(req.session.email);
+		let flashcardModel = flashcardConnection.model('flashcard', flashcardSchema, req.session.email);
+
         let newCardCheck = (req.query.newCard == "true");
         let reviewCardCheck = (req.query.reviewCard == "true");
       
@@ -612,12 +674,12 @@ const controller = {
     },
 
     postEditDeck: (req, res) => {
-        console.log("AJAX REQUEST DATA IS: ");
-        console.log(req.body);
+		// prepare modal
+		var decksInfoSchema = Flashcard.DecksInfoSchema(req.session.email);
+		let decksInfoModel = flashcardConnection.model('tag', decksInfoSchema, req.session.email);
       
         let newDeckName = req.body.newDeck;
         let oldDeckName = req.body.oldDeck;
-        let newCount = parseInt(req.body.newCardCount);
       
         /*TODO save new deckname to:
           Flashcard: update every card to new deck name
@@ -646,8 +708,8 @@ const controller = {
     },
 
     postAddCard: (req, res) => {
-        console.log("AJAX REQUEST DATA IS: ");
-        console.log(req.body);
+		var flashcardSchema = Flashcard.Flashcardschema(req.session.email);
+		let flashcardModel = flashcardConnection.model('flashcard', flashcardSchema, req.session.email);
       
         const new_card = new flashcardModel({
           FrontWord: req.body.front,
@@ -662,6 +724,9 @@ const controller = {
     },
 
     postEditCard: (req, res) => {
+		var flashcardSchema = Flashcard.Flashcardschema(req.session.email);
+		let flashcardModel = flashcardConnection.model('flashcard', flashcardSchema, req.session.email);
+
         let editCard = JSON.parse(req.body.card);
         let newFront = req.body.front;
         let newBack = req.body.back;
@@ -675,6 +740,9 @@ const controller = {
     },
 
     postDeleteCard: (req, res) => {
+		var flashcardSchema = Flashcard.Flashcardschema(req.session.email);
+		let flashcardModel = flashcardConnection.model('flashcard', flashcardSchema, req.session.email);
+
         let deleteCard = JSON.parse(req.body.card);
       
         flashcardModel.findByIdAndDelete(deleteCard._id)
@@ -700,7 +768,14 @@ const controller = {
           })
         })
         .catch(err => console.log(err));
-    }
+    },
+
+	getLogout: async (req, res) => {
+		await req.session.destroy(); // Deletes the session in the database.
+		req.session = null // Deletes the cookie.
+
+		res.redirect('/');
+	}
 
 }
 
