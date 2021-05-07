@@ -61,4 +61,6 @@ router.post('/deleteCard', controller.postDeleteCard);
 
 router.get('/getEngTranslation', controller.getEnglishTranslation);
 
+router.get('/logout', controller.getLogout);
+
 module.exports = router;
