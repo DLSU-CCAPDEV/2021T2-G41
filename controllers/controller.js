@@ -4,6 +4,8 @@ const path = require('path');
 // import module `validationResult` from `express-validator`
 const { validationResult } = require('express-validator');
 
+const bcrypt = require('bcrypt');
+
 // get schemas
 const Dictionary = require('../models/dictionary');
 const { DecksInfoSchema } = require('../models/flashcards');
@@ -21,7 +23,7 @@ const dictionaryURI = "mongodb+srv://dbAdmin:admin123@kanaugcp.tm0gd.mongodb.net
 const flashcardURI = "mongodb+srv://dbAdmin:admin123@kanaugcp.tm0gd.mongodb.net/Flashcards?retryWrites=true&w=majority";
 const accountURI = "mongodb+srv://dbAdmin:admin123@kanaugcp.tm0gd.mongodb.net/Accounts?retryWrites=true&w=majority";
 
-// connect to Dictionary database (default connection)
+// connect to Account database (default connection)
 mongoose.connect(accountURI, {useNewUrlParser: true, useUnifiedTopology: true})
      .catch(function(error) {
          console.log(error);
@@ -83,24 +85,28 @@ const controller = {
             res.render('index', { title: 'Welcome to Kanau', details});            
         }
         else {
-          // stores the values from the register form
-          var newUser = new userModel({
-            "Email": req.body.register_email_input,
-            "Password": req.body.register_password_input
-          });
-      
-          let username = newUser.Email;
-
-          // add email to sessions, bind to cookie
-          req.session.email = username;
-      
-          console.log("username: " + username);
           
-          //save new user to db
-          newUser.save()
-            .then((result) => {
-                res.redirect('/add');
-             })
+          //hash password
+          bcrypt.hash(req.body.register_password_input, 10, function(err, hash){
+
+            // stores the values from the register form
+            var newUser = new userModel({
+              Email: req.body.register_email_input,
+              Password: hash
+            });
+
+            let username = newUser.Email;
+
+            // add email to sessions, bind to cookie
+            req.session.email = username;
+            console.log("username: " + username);
+
+            //save new user to db
+            newUser.save()
+              .then((result) => {
+                 res.redirect('/add');
+              })
+          })
         }
     },
 
@@ -122,23 +128,22 @@ const controller = {
           var tempEmail = req.body.login_email_input;
           var tempPassword = req.body.login_password_input;
       
-          userModel.findOne({Email: tempEmail, Password: tempPassword})
+          userModel.findOne({Email: tempEmail})
             .then(result => {
               if(result) {
-                //check if email and password has a match in db
-                if(result.Email == tempEmail && result.Password == tempPassword) {
-                  let username = tempEmail;
-                  console.log("Successfully logged in as " + username);
-				  req.session.email = username;
-                  res.redirect('/decks');
-                }
+                let username = tempEmail;
+                console.log("Successfully logged in as " + username);
+                req.session.email = username;
+                res.redirect('/decks');
+                bcrypt.compare(tempPassword, result.Password)
               }
-              else {//not yet done
+              else {
                 console.log("Failed to log in");
               }
-            });
-        };
-      },
+            })
+          
+        }
+    },
 
     addPremadeDecks: (req, res) => {
         let newUser = req.session.email; // NEW ACCOUNT email here!!!!
@@ -773,7 +778,7 @@ const controller = {
 	getLogout: async (req, res) => {
 		await req.session.destroy(); // Deletes the session in the database.
 		req.session = null // Deletes the cookie.
-
+    console.log('Successfully logged out');
 		res.redirect('/');
 	}
 

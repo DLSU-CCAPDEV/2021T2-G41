@@ -4,6 +4,7 @@
   "description": "<p align=\"center\">\r     <img src=\"https://user-images.githubusercontent.com/55874439/112708392-bda40080-8eec-11eb-9a11-e6c412980db5.png\"/>\r </p>",
   "main": "test.js",
   "dependencies": {
+    "bcrypt": "^5.0.1",
     "connect-mongo": "^4.4.1",
     "ejs": "^3.1.6",
     "express": "^4.17.1",
