@@ -130,6 +130,7 @@ const controller = {
       
           userModel.findOne({Email: tempEmail})
             .then(result => {
+              //if a match is found
               if(result) {
                 let username = tempEmail;
                 console.log("Successfully logged in as " + username);
@@ -137,7 +138,7 @@ const controller = {
                 res.redirect('/decks');
                 bcrypt.compare(tempPassword, result.Password)
               }
-              else {
+              else {//not yet done
                 console.log("Failed to log in");
               }
             })

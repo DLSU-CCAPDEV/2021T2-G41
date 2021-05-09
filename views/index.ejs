@@ -17,7 +17,7 @@
                     <button class="delete is-large" id="login-close-btn" aria-label="close"></button>
                 </header>
                 <section class="modal-card-body">
-                    <form id="login-form" action="login" method="post">
+                    <form id="login-form" action="/login" method="post">
                         <label for="login_email_input" class="content is-medium">Enter Email</label>
                         <input type="text" class="input" id="login_email_input" name="login_email_input" placeholder="Email">
                          <p id="login_email_input_error" class="error"><%= details.login_email_input_error %></p>
@@ -42,7 +42,7 @@
                     <button class="delete is-large" id="register-close-btn" aria-label="close"></button>
                 </header>
                 <section class="modal-card-body">
-                    <form id="register-form" action="register" method="post">
+                    <form id="register-form" action="/register" method="post">
                         <label for="register_email_input" class="content is-medium">Enter new Email</label>
                         <input type="text" class="input" id="register_email_input" name="register_email_input" placeholder="Email">
                          <p id="register_email_input_error" class="error"><%= details.register_email_input_error %></p>

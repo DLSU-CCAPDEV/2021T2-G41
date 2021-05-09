@@ -11,17 +11,13 @@
 	<section class="header-container"> <!-- header-container: Contains everything on the top bar | main-header.css -->
         <div class="header">
             <div class="brand-container">
-                <a href="decks" class="brand-name">Kanau</p><img src="/img/logo-transparent-dark.png" class="brand-icon"></a>
+                <a href="/decks" class="brand-name">Kanau</p><img src="/img/logo-transparent-dark.png" class="brand-icon"></a>
             </div>
-            <form action="#" class="dictionary-container"> 
-                <input type="text" name="dictionary-query" id="dictionary-query" placeholder="English, Japanese word">
-                <input type="submit" value="" id="dictionary-search-button">
-            </form>
             <div class="dropdown-container">
                 <button class="header-more-button"></button>
                 <div class="dropdown-content">
-                    <a href="decks">Return to decks</a>
-                    <a href="about">About Kanau</a>
+                    <a href="/decks">Return to decks</a>
+                    <a href="/about">About Kanau</a>
                     <a href="/logout">Logout</a>
                 </div>
             </div>
@@ -45,7 +41,7 @@
     	<button class="button is-danger">Delete All Flashcards</button>
     	<br>
     		<br>
-    	<a href="index" class="button is-danger">Delete Account</a>
+    	<a href="/index" class="button is-danger">Delete Account</a>
     </div>
     <div class="modal" id="change-email-modal">
     	<div class="modal-background"></div>
@@ -55,7 +51,7 @@
                     <button class="delete is-large" aria-label="close" id="email-close-btn"></button>
                 </header>
                 <section class="modal-card-body">
-                   <form id="register-form" action="account">
+                   <form id="register-form" action="/account">
                         <label for="old-email-input" class="content is-medium">Enter old Email</label>
                         <input type="email" class="input" id="old-email-input">
                         <label for="new-email-input" class="content is-medium">Enter new Email</label>
@@ -78,7 +74,7 @@
                     <button class="delete is-large" aria-label="close" id="password-close-btn"></button>
                 </header>
                 <section class="modal-card-body">
-                   <form id="register-form" action="account">
+                   <form id="register-form" action="/account">
                         <label for="old-password-input" class="content is-medium">Enter old Password</label>
                         <input type="password" class="input" id="old-password-input">
                         <label for="new-password-input" class="content is-medium">Enter new Password</label>
