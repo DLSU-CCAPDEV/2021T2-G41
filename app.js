@@ -46,5 +46,5 @@ app.use(router);
 // 404 page
 app.use((req, res) => {
   console.log("404 on URL: " + req.url);
-  res.status(404).render('404');
+  res.status(404).render('404', {title: "Error 404 (Not Found)", error: req.url});
 });

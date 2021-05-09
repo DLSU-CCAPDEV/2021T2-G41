@@ -130,7 +130,7 @@ const controller = {
       
           userModel.findOne({Email: tempEmail})
             .then(result => {
-              //if a match is found
+              //if a match is foundkp
               if(result) {
                 let username = tempEmail;
                 console.log("Successfully logged in as " + username);
