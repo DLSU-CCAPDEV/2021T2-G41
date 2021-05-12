@@ -338,6 +338,8 @@ addCard_saveBtn.addEventListener('click', function(event) {
         console.log("STATUS" + this.status);
         console.log(this.responseText);
         addCardModal.style.display = "none";
+        browseTable.innerHTML = "";
+        loadFlashcards();
     };
 
     let deckSelected = addCard_selectDeck.options[addCard_selectDeck.selectedIndex].text;
