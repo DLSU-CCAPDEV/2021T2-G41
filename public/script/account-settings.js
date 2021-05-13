@@ -1,4 +1,3 @@
-
 var changeEmailBtn = document.getElementById('change-email-btn');
 changeEmailBtn.addEventListener('click', function() {
 	document.getElementById('change-email-modal').classList.add('is-active');
