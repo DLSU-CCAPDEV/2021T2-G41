@@ -40,6 +40,7 @@ function postEditedDeckInfo(newDeckName, oldDeckName, newCardCount) {
 
         xhttp.onload = () => {
           console.log("New deck settings saved.");
+          resolve();
         };
         
         xhttp.send("newDeck=" + newDeckName + "&oldDeck=" + oldDeckName + "&newCardCount=" + newCardCount);
@@ -99,6 +100,14 @@ modal_saveBtn.addEventListener('click', async (e) => {
     let newCount = newCardCountInput.value;
 
     await postEditedDeckInfo(newDeckName, oldDeckName,newCount);
+
+    // exit modal
+    console.log("EXIT MODAL NOW!!");
+    deck_modal.style.display = "none";
+    changeNameBtn.disabled = false;
+    modalDeckTitle.contentEditable = false;
+    modalDeckTitle.style.border = "unset";
+    originalDeckName = undefined;
 
     // use for loop to change deck name (front view)
 });
