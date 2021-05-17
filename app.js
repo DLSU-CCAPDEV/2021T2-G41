@@ -1,5 +1,12 @@
 const express = require('express');
 const router = require('./routes/routes');
+const dotenv = require('dotenv');
+
+dotenv.config();
+const _Port = process.env.PORT;
+const _Hostname = process.env.HOSTNAME;
+const _Secret_Email = process.env.SECRET_EMAIL;
+const _Account_URL = process.env.ACCOUNT_URL;
 
 // express app
 const app = express();
@@ -10,17 +17,18 @@ const path = require('path');
 // sessions app and mongoDB store
 const session = require('express-session');
 const MongoStore = require('connect-mongo');
+const { hostname } = require('os');
 
 // setup favicon
 app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 
 // setup session and cookies
 app.use(session({
-  secret: 'secret email', // also store this on an evironment variable
+  secret: _Secret_Email, // also store this on an evironment variable
   resave: true,
   saveUninitialized: true,
   store: MongoStore.create({
-    mongoUrl: "mongodb+srv://dbAdmin:admin123@kanaugcp.tm0gd.mongodb.net/Accounts?retryWrites=true&w=majority",
+    mongoUrl: _Account_URL,
     collectionName: 'Sessions'
   }),
   cookie: {
@@ -37,8 +45,8 @@ app.use(express.urlencoded({extended: true}));
 // register view engine
 app.set('view engine','ejs');
 
-app.listen(3000, function () {
-  console.log('app listening at port ' + 3000);
+app.listen(_Port, _Hostname, function () {
+  console.log('Server is running at http://' + _Hostname + ':' + _Port);
 });
 
 app.use(router);

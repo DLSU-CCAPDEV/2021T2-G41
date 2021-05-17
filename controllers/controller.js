@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const path = require('path');
+const dotenv = require('dotenv');
 
 // import module `validationResult` from `express-validator`
 const { validationResult } = require('express-validator');
@@ -19,9 +20,10 @@ var dictionaryModel = null, sentenceModel = null, sentenceTranslationModel = nul
 var userModel = null;
 
 // express app & MongoDB URIs
-const dictionaryURI = "mongodb+srv://dbAdmin:admin123@kanaugcp.tm0gd.mongodb.net/Dictionary?retryWrites=true&w=majority";
-const flashcardURI = "mongodb+srv://dbAdmin:admin123@kanaugcp.tm0gd.mongodb.net/Flashcards?retryWrites=true&w=majority";
-const accountURI = "mongodb+srv://dbAdmin:admin123@kanaugcp.tm0gd.mongodb.net/Accounts?retryWrites=true&w=majority";
+dotenv.config();
+const dictionaryURI = process.env.DICTIONARY_URL;
+const flashcardURI = process.env.FLASHCARD_URL;
+const accountURI = process.env.ACCOUNT_URL;
 
 // connect to Account database (default connection)
 mongoose.connect(accountURI, {useNewUrlParser: true, useUnifiedTopology: true})
