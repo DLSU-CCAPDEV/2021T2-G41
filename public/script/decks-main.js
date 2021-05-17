@@ -1,5 +1,6 @@
 // Deck title node (for directing to study page)
 var deck_titles = document.querySelectorAll(".deck-name-td");
+var new_counts = document.querySelectorAll(".new-count");
 
 // Deck main modal nodes
 const deck_modal = document.getElementById("modal-deck-container");
@@ -39,8 +40,8 @@ function postEditedDeckInfo(newDeckName, oldDeckName, newCardCount) {
         xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 
         xhttp.onload = () => {
-          console.log("New deck settings saved.");
-          resolve();
+          console.log("New deck settings saved Updated name and newcount.");
+          resolve(xhttp.responseText);
         };
         
         xhttp.send("newDeck=" + newDeckName + "&oldDeck=" + oldDeckName + "&newCardCount=" + newCardCount);
@@ -99,7 +100,15 @@ modal_saveBtn.addEventListener('click', async (e) => {
     let oldDeckName = originalDeckName;
     let newCount = newCardCountInput.value;
 
-    await postEditedDeckInfo(newDeckName, oldDeckName,newCount);
+    let updatedNewCount = await postEditedDeckInfo(newDeckName, oldDeckName,newCount);
+
+    // use for loop to change deck name and new maximum count (front view)
+    (Array.prototype.slice.call(deck_titles)).some((deck_title, index) => {
+        if (deck_title.innerText == oldDeckName) {
+            deck_titles[index].innerText = newDeckName
+            new_counts[index].innerText = updatedNewCount;
+        }
+    });
 
     // exit modal
     console.log("EXIT MODAL NOW!!");
@@ -108,8 +117,6 @@ modal_saveBtn.addEventListener('click', async (e) => {
     modalDeckTitle.contentEditable = false;
     modalDeckTitle.style.border = "unset";
     originalDeckName = undefined;
-
-    // use for loop to change deck name (front view)
 });
 
 // In modal, change deck name
