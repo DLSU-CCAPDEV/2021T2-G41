@@ -703,37 +703,56 @@ const controller = {
       
     },
 
-    postEditDeck: (req, res) => {
-		// prepare modal
-		var decksInfoSchema = Flashcard.DecksInfoSchema(req.session.email);
-		let decksInfoModel = flashcardConnection.model('tag', decksInfoSchema, req.session.email);
+    postEditDeck: async (req, res) => {
+      // prepare modal
+      var decksInfoSchema = Flashcard.DecksInfoSchema(req.session.email);
+      let decksInfoModel = flashcardConnection.model('tag', decksInfoSchema, req.session.email);
+
+      var flashcardSchema = Flashcard.Flashcardschema(req.session.email);
+      let flashcardModel = flashcardConnection.model('flashcard', flashcardSchema, req.session.email);
+    
+      var deckSettingSchema = Flashcard.DeckSettingSchema(req.session.email);
+      let deckSettingModel = flashcardConnection.model('deck settings', deckSettingSchema, req.session.email);
       
-        let newDeckName = req.body.newDeck;
-        let oldDeckName = req.body.oldDeck;
-      
-        /*TODO save new deckname to:
-          Flashcard: update every card to new deck name
-          DecksInfo: update one array element (of decks) with new name
-          DeckSettingSchema: update one with new deck name & MAX new card count
-        */
-      
-        // [DecksInfo] Update decks info
-        let decks = []; // store retrieved deck names
-      
-        decksInfoModel.findOne({Tag: "Index"})
-        .then(decksInfoResult => {
-          decks = decksInfoResult.decks.slice();
-          
-          // update with new name
-          decks.some((deck, index) => {
-            if (deck == oldDeckName) return decks[index] = newDeckName;
-          });
-      
-          // TODO update new "decks" object to decksInfo document via .updateOne()
-      
-          res.status(200).send("");
-        })
-        .catch(err => console.log(err)); 
+      let newDeckName = req.body.newDeck;
+      let oldDeckName = req.body.oldDeck;
+      let newCount = req.body.newCardCount;
+    
+      /*TODO save new deckname to:
+        Flashcard: update every card to new deck name
+        DecksInfo: update one array element (of decks) with new name
+        DeckSettingSchema: update one with new deck name & MAX new card count
+      */
+    
+      // [DecksInfo] Update decks info
+      let decks = []; // store retrieved deck names, then update this
+    
+      await decksInfoModel.findOne({Tag: "Index"})
+      .then(async decksInfoResult => {
+        decks = decksInfoResult.decks.slice();
+        
+        // update with new name
+        decks.some((deck, index) => {
+          if (deck == oldDeckName) return decks[index] = newDeckName;
+        });
+    
+        await decksInfoModel.updateOne({Tag: "Index"}, {decks: decks}).exec();
+      })
+      .catch(err => console.log(err)); 
+
+      // [DeckSetting] Update deck settings
+      let updatedCurrentNew;
+      await deckSettingModel.findOne({Tag: "Deck Settings", Deck: oldDeckName})
+      .then(deckSettingResult => {
+        let CurrentNew = deckSettingResult.CurrentNew;
+        updatedCurrentNew = (newCount < CurrentNew) ? newCount : CurrentNew
+      });
+      await deckSettingModel.updateOne({Tag: "Deck Settings", Deck: oldDeckName}, {Deck: newDeckName, MaxNew: newCount, CurrentNew: updatedCurrentNew}).exec()
+
+      // [Flashcards] Update all flashcards associated with the original deckname
+      await flashcardModel.updateMany({Tag: null, Deck: oldDeckName}, {Deck: newDeckName}).exec();
+      console.log("Updated deck settings!");
+      res.send(updatedCurrentNew.toString());
       
     },
 
