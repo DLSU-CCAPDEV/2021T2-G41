@@ -14,6 +14,8 @@ router.get('/register-check', controller.checkRegister);
 //reg
 router.post('/register', validation.registerValidation(), controller.postRegister);
 
+router.get('/chooseDeck', controller.chooseDecks);
+
 router.post('/login', validation.loginValidation(), controller.postLogin);
 
 // Add premade decks to a newly registered account
@@ -48,7 +50,7 @@ router.post('/testajax', (req, res) => {
   console.log("AJAX REQUEST DATA IS: ");
   console.log(req.body);
 
-  res.status(200).send('just some random testing going on here');
+//  res.status(200).send('just some random testing going on here');
 });
 
 router.post('/editDeck', controller.postEditDeck);
