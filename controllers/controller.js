@@ -15,10 +15,6 @@ const Sentence = require('../models/sentence');
 const SentenceTranslation = require('../models/sentence_translation');
 const User = require('../models/user');
 
-// set models
-var dictionaryModel = null, sentenceModel = null, sentenceTranslationModel = null;
-var userModel = null;
-
 // express app & MongoDB URIs
 dotenv.config();
 const dictionaryURI = process.env.DICTIONARY_URL;
@@ -45,11 +41,6 @@ const controller = {
 			console.log("Valid session. Redirecting to decks...");
 			res.redirect('/decks');
 		}
-
-        if (!userModel) { // check if model has already been compiled
-          userModel = mongoose.model('Client', User);
-          console.log("Created User model.");
-        }
       
         var details = {
           register_email_input_error: '',
@@ -63,7 +54,8 @@ const controller = {
     },
 
     checkRegister: (req, res) => {
-
+      userModel = mongoose.model('Client', User);
+      
         var email = req.query.Email;
       
         userModel.findOne({Email: email}) //looks for the same email that the user input in register form
@@ -76,6 +68,8 @@ const controller = {
     postRegister: (req, res) => {
 
         var errors = validationResult(req);
+
+        userModel = mongoose.model('Client', User);
 
         // server-side validation
         if (!errors.isEmpty()) {
@@ -106,7 +100,7 @@ const controller = {
             //save new user to db
             newUser.save()
               .then((result) => {
-                 res.redirect('/add');
+                 res.redirect('/chooseDeck');
               })
           })
         }
@@ -126,6 +120,8 @@ const controller = {
             res.render('index', { title: 'Welcome to Kanau', details});            
         }
         else {
+            userModel = mongoose.model('Client', User);
+
           //get values from login form
           var tempEmail = req.body.login_email_input;
           var tempPassword = req.body.login_password_input;
@@ -148,10 +144,14 @@ const controller = {
         }
     },
 
+    chooseDecks: (req, res) => {
+      res.render('deck-choose');
+    },
+
     addPremadeDecks: (req, res) => {
         let newUser = req.session.email; // NEW ACCOUNT email here!!!!
         let premadeDecksCollection = "sampleuser@test.com";
-        let chosenDecks = ["JLPT N5 Kanji Deck"] ; // Chosen premade decks (decided for now...)
+        let chosenDecks = JSON.parse("[" + req.query.selectedDecks + "]"); // Chosen premade decks (decided for now...)
       
         let flashcardSchema = Flashcard.Flashcardschema(newUser);
         let DecksInfoSchema = Flashcard.DecksInfoSchema(newUser);
@@ -167,7 +167,7 @@ const controller = {
       
         // PROCEED TO DUPLICATE DECKS!!!
         chosenDecks.forEach(chosenDeck => {
-          console.log(chosenDeck + " available!");
+          console.log(chosenDeck + " adding...!");
           // Create Deck Setting per deck
           let deckSettingCopyDocument = new DeckSettingCopyModel({
             Tag: "Deck Settings",
@@ -196,7 +196,7 @@ const controller = {
       
               FlashcardCopyDocument.save().then(() => {
                 i += 1;
-                console.log(i + "/" + trackProgressDeck + " duplicated.");
+                console.log(chosenDeck + ": " + i + "/" + trackProgressDeck + " duplicated.");
               });
             })
           })
@@ -210,7 +210,7 @@ const controller = {
         });
         decksInfoCopyDocument.save();
       
-        res.redirect('/decks');
+        res.send();
     },
 
     getAccountSettings: (req, res) => {
@@ -284,6 +284,13 @@ const controller = {
 	
 		var deckSettingSchema = Flashcard.DeckSettingSchema(req.session.email);
 		let deckSettingModel = flashcardConnection.model('deck settings', deckSettingSchema, req.session.email);
+
+    // No premade decks selected and has accessed decks page | All decks deleted
+    decksInfoModel.findOne({Tag: "Index"})
+    .then(decksInfoResult => {
+      if (decksInfoResult == null || decksInfoResult.Deck.length == 0)
+        res.redirect('/chooseDeck');
+    });
         
 		let _dueAndNewDecks = [] // 2D Array for storing new/review count [[due,new]]
     let trackDecks = []
@@ -821,12 +828,12 @@ const controller = {
         .catch(err => console.log(err));
     },
 
-	getLogout: async (req, res) => {
+	  getLogout: async (req, res) => {
 		await req.session.destroy(); // Deletes the session in the database.
 		req.session = null // Deletes the cookie.
     console.log('Successfully logged out');
 		res.redirect('/');
-	}
+	  }
 
 }
 
