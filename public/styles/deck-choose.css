@@ -1,0 +1,61 @@
+body {
+    background: rgb(255,225,225);
+    background: linear-gradient(90deg, rgba(255,225,225,1) 14%, rgba(221,234,255,1) 34%, rgba(255,250,203,1) 63%, rgba(255,210,130,1) 90%);
+    background-size: 400% 400%;
+    animation: unset;
+  }
+
+.card {
+    cursor: pointer;
+    animation: none;
+    border-bottom: 2px solid rgb(0, 0, 0, 0.2) !important;
+    border-right: 2px solid rgb(0, 0, 0, 0.2) !important;
+}
+
+.deck-title {
+    margin-top: 25px !important;
+}
+
+#choose-deck-title {
+    margin-top: 20px;
+}
+
+#wait-message {
+    margin-top: 50%;
+}
+
+@media only screen and (min-width: 600px) {
+    #wait-message {
+        margin-top: 15%;
+    }
+}
+
+@keyframes box-select {
+    from {
+        box-shadow: 2px 2px white;
+    }
+    to {
+        box-shadow: 5px 10px green;
+    }
+}
+
+@keyframes box-deselect {
+    from {
+        box-shadow: 5px 10px green;
+    }
+    to {
+        box-shadow: 2px 2px white;
+    }
+}
+
+@keyframes gradient {
+    0% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+    100% {
+      background-position: 0% 50%;
+    }
+}
