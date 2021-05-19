@@ -146,6 +146,7 @@ const controller = {
               }
               else {//not yet done
                 console.log("Email is not registered");
+                res.redirect('/logout');
               }
             })
           
