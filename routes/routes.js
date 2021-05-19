@@ -63,6 +63,12 @@ router.post('/deleteCard', controller.postDeleteCard);
 
 router.get('/getEngTranslation', controller.getEnglishTranslation);
 
+router.get('/checkCurrentEmail', controller.getCheckCurrentEmail);
+
+router.post('/changeEmail', validation.changeEmailValidation(), controller.postChangeEmail);
+
+router.post('/changePassword', validation.changePasswordValidation(), controller.postChangePassword);
+
 router.get('/logout', controller.getLogout);
 
 module.exports = router;

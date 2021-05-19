@@ -29,3 +29,7 @@
 .button.is-primary {
 	background-color: #00d1b2;
 }
+
+.error {
+    color: red;
+}

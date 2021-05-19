@@ -6,6 +6,8 @@
     <link rel="stylesheet" href="/styles/main-menu.css">
     <link rel="stylesheet" href="/styles/main-header.css">
     <link rel="stylesheet" href="/styles/account-settings.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="/script/validator.min.js"></script>
 </head>
 <body>
 	<section class="header-container"> <!-- header-container: Contains everything on the top bar | main-header.css -->
@@ -51,16 +53,27 @@
                     <button class="delete is-large" aria-label="close" id="email-close-btn"></button>
                 </header>
                 <section class="modal-card-body">
-                   <form id="register-form" action="/account">
-                        <label for="old-email-input" class="content is-medium">Enter old Email</label>
-                        <input type="email" class="input" id="old-email-input">
-                        <label for="new-email-input" class="content is-medium">Enter new Email</label>
-                        <input type="email" class="input" id="new-email-input">
-                        <label for="confirm-email-input" class="content is-medium">Confirm new Email</label>
-                        <input type="email" class="input" id="confirm-email-input">
+                   <form id="change_email_form" action="/changeEmail" method="post">
+
+                        <label for="old_email_input" class="content is-medium" >Enter Old Email</label>
+                        <input type="email" class="input" id="old_email_input" name="old_email_input" placeholder="Old Email">
+                        <p id="old_email_input_error" class="error"><%= details.old_email_input_error %></p>
+                       
+                        <label for="new_email_input" class="content is-medium" >Enter New Email</label>
+                        <input type="email" class="input" id="new_email_input" name="new_email_input" placeholder="New Email">
+                        <p id="new_email_input_error" class="error"><%= details.new_email_input_error %></p>
+
+                        <label for="new_email_confirm_input" class="content is-medium" >Confirm New Email</label>
+                        <input type="email" class="input" id="new_email_confirm_input" name="new_email_confirm_input" placeholder="Confirm New Email">
+                        <p id="new_email_confirm_input_error" class="error"><%= details.new_email_confirm_input_error %></p>
+
+                        <label for="password_input" class="content is-medium" >Password</label>
+                        <input type="password" class="input" id="password_input" name="password_input" placeholder="Password">
+                        <p id="password_input_error" class="error"><%= details.password_input_error %></p>
+
                         <div class="container">
                         	<br>
-                         <input class="button is-primary" id="login-submit" type="submit" value="Change">
+                         <input class="button is-primary" id="change_email_submit" type="submit" value="Change" disabled>
                         </div>
                     </form>
                 </section>
@@ -74,21 +87,30 @@
                     <button class="delete is-large" aria-label="close" id="password-close-btn"></button>
                 </header>
                 <section class="modal-card-body">
-                   <form id="register-form" action="/account">
-                        <label for="old-password-input" class="content is-medium">Enter old Password</label>
-                        <input type="password" class="input" id="old-password-input">
-                        <label for="new-password-input" class="content is-medium">Enter new Password</label>
-                        <input type="password" class="input" id="new-password-input">
-                        <label for="confirm-password-input" class="content is-medium">Confirm new Password</label>
-                        <input type="password" class="input" id="confirm-password-input">
+                   <form id="change_password_form" action="/changePassword" method="post">
+
+                        <label for="old_password_input" class="content is-medium" >Enter Old Password</label>
+                        <input type="password" class="input" id="old_password_input" name="old_password_input" placeholder="Old Password">
+                        <p id="old_password_input_error" class="error"><%= details.old_password_input_error %></p>
+
+                        <label for="new_password_input" class="content is-medium" >Enter New Password</label>
+                        <input type="password" class="input" id="new_password_input" name="new_password_input" placeholder="New Password">
+                        <p id="new_password_input_error" class="error"><%= details.new_password_input_error %></p>
+
+                        <label for="new_password_confirm_input" class="content is-medium" >Confirm New Password</label>
+                        <input type="password" class="input" id="new_password_confirm_input" name="new_password_confirm_input" placeholder="Confirm New Password">
+                        <p id="new_password_confirm_input_error" class="error"><%= details.new_password_confirm_input_error %></p>
+
                         <div class="container">
                         	<br>
-                         <input class="button is-primary" id="login-submit" type="submit" value="Change">
+                         <input class="button is-primary" id="change_password_submit" type="submit" value="Change" disabled>
                         </div>
                     </form>
                 </section>
             </div>	
     </div>
     <script src="/script/account-settings.js"></script>
+    <script src="/script/change-email.js"></script>
+    <script src="/script/change-password.js"></script>
 </body>
 </html>

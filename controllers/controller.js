@@ -54,13 +54,13 @@ const controller = {
     },
 
     checkRegister: (req, res) => {
-      userModel = mongoose.model('Client', User);
-      
+        userModel = mongoose.model('Client', User);
         var email = req.query.Email;
       
         userModel.findOne({Email: email}) //looks for the same email that the user input in register form
           .then(result => {
-            console.log(result);
+            if(result)
+              console.log(result);
             res.send(result);
           });
     },
@@ -130,14 +130,22 @@ const controller = {
             .then(result => {
               //if a match is found
               if(result) {
-                let username = tempEmail;
-                console.log("Successfully logged in as " + username);
-                req.session.email = username;
-                res.redirect('/decks');
-                bcrypt.compare(tempPassword, result.Password)
+                
+                bcrypt.compare(tempPassword, result.Password, function(err, result) {
+                  if(result) {
+                    let username = tempEmail;
+                    console.log("Successfully logged in as " + username);
+                    req.session.email = username;
+                    res.redirect('/decks');
+                  }
+                  else {
+                    console.log("invalid password");
+                    res.redirect('/');
+                  }
+                })
               }
               else {//not yet done
-                console.log("Failed to log in");
+                console.log("Email is not registered");
               }
             })
           
@@ -234,7 +242,17 @@ const controller = {
           email: req.session.email,
           deckCount: deckLength // TODO
         }
-        res.render('account-settings', { title: 'Kanau | Account', info});
+
+        var details = {
+          old_email_input_error: '',
+          new_email_input_error: '',
+          new_email_confirm_input_error: '',
+          password_input_error: '',
+          old_password_input_error: '',
+          new_password_input_error: '',
+          new_password_confirm_input_error: ''
+        };
+        res.render('account-settings', { title: 'Kanau | Account', info, details});
     },
 
     getAboutKanau: (req, res) => {
@@ -826,6 +844,137 @@ const controller = {
           })
         })
         .catch(err => console.log(err));
+    },
+
+    getCheckCurrentEmail: (req,res) => {
+
+      res.send(req.session.email);
+    },
+    postChangeEmail: (req, res) => {
+
+      var errors = validationResult(req);
+      var curr_email = req.session.email;
+      var new_email = req.body.new_email_input;
+      var curr_password = req.body.password_input;
+
+      var flashcardSchema = Flashcard.Flashcardschema(req.session.email);
+      let flashcardModel = flashcardConnection.model('flashcard', flashcardSchema, req.session.email);
+
+      let deckLength;
+
+      var info = {
+        email: curr_email,
+        deckCount: deckLength // TODO
+      }
+
+      flashcardModel.find()
+      .then(flashcardResults => {
+        deckLength = flashcardResults.length;
+      })
+
+
+      if (!errors.isEmpty()) {
+        errors = errors.errors;
+        var details = {};
+        
+        for(i = 0; i < errors.length; i++) {
+          details[errors[i].param + '_error'] = errors[i].msg;
+          console.log(errors[i].param + '_error = ' + errors[i].msg);
+        }
+          res.render('account-settings', { title: 'Kanau | Account', info, details});            
+      }
+      else {
+
+        userModel = mongoose.model('Client', User);
+        userModel.findOne({Email: curr_email})
+            .then(result => {
+              //if a match is found
+              if(result) {
+                bcrypt.compare(curr_password, result.Password, function(err, result) {
+                    if(result == true) {
+                      userModel.updateOne({Email: curr_email}, {Email: new_email}).exec(); 
+                      flashcardConnection.collection(curr_email).rename(new_email);
+                      console.log("Email changed from: " + curr_email + " to: " + new_email);
+                      res.redirect('/logout'); 
+                    }
+                    else {
+                      console.log("invalid password");
+                      res.redirect('/account'); 
+                    }
+                });
+              }
+              else {//not yet done
+                console.log("Email is not registered");
+              }
+            });  
+      }
+    },
+
+    postChangePassword: (req, res) => {
+
+      var errors = validationResult(req);
+      var curr_email = req.session.email;
+      var old_password = req.body.old_password_input;
+      var new_password = req.body.new_password_input;
+      
+      var flashcardSchema = Flashcard.Flashcardschema(req.session.email);
+      let flashcardModel = flashcardConnection.model('flashcard', flashcardSchema, req.session.email);
+
+      let deckLength;
+
+      var info = {
+        email: curr_email,
+        deckCount: deckLength // TODO
+      }
+
+      flashcardModel.find()
+      .then(flashcardResults => {
+        deckLength = flashcardResults.length;
+      })
+
+
+      if (!errors.isEmpty()) {
+        errors = errors.errors;
+        var details = {};
+        
+        for(i = 0; i < errors.length; i++) {
+          details[errors[i].param + '_error'] = errors[i].msg;
+          console.log(errors[i].param + '_error = ' + errors[i].msg);
+        }
+          res.render('account-settings', { title: 'Kanau | Account', info, details});            
+      }
+      else {
+
+        userModel = mongoose.model('Client', User);
+        userModel.findOne({Email: curr_email})
+            .then(result => {
+              //if a match is found
+              if(result) {
+
+                bcrypt.compare(old_password, result.Password, function(err, result) {
+                  if(result) {
+                    
+                    bcrypt.hash(new_password, 10, function(err, hash){
+                      userModel.updateOne({Email: curr_email}, {Password: hash}).exec(); 
+                      console.log("Password changed.");
+                      res.redirect('/logout'); 
+                    });
+
+                  }
+                  else {
+                    console.log("invalid password");
+                    res.redirect('/account'); 
+                  }
+
+                });
+
+              }
+              else {//not yet done
+                console.log("Email is not registered");
+              }
+            });  
+      }
+
     },
 
 	  getLogout: async (req, res) => {
