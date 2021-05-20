@@ -932,6 +932,7 @@ const controller = {
 
       res.send(req.session.email);
     },
+
     postChangeEmail: (req, res) => {
 
       var errors = validationResult(req);
@@ -1056,9 +1057,24 @@ const controller = {
 
     },
 
+    getDeleteAccount: async (req, res) => {
+      // Prepare modal
+      userModel = mongoose.model('Client', User);
+
+      // Drop collection
+      await flashcardConnection.dropCollection(req.session.email);
+
+      // Delete account from database
+      await userModel.deleteOne({Email: req.session.email});
+
+      console.log("Dropped " + req.session.email + " from service. Logging out...");
+      res.send();
+    },
+
 	  getLogout: async (req, res) => {
 		await req.session.destroy(); // Deletes the session in the database.
 		req.session = null // Deletes the cookie.
+    
     console.log('Successfully logged out');
 		res.redirect('/');
 	  }
