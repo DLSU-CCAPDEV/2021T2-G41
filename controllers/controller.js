@@ -223,48 +223,62 @@ const controller = {
         res.send();
     },
 
-    getAccountSettings: (req, res) => {
-		// check if session expired (unauthorized access)
-		if (req.session.email == null) {
-			console.log("Session expired.");
-			res.redirect('/');
-		}
+    getAccountSettings: async (req, res) => {
+      // check if session expired (unauthorized access)
+      if (req.session.email == null) {
+        console.log("Session expired.");
+        res.redirect('/');
+      }
 
-		var flashcardSchema = Flashcard.Flashcardschema(req.session.email);
-		let flashcardModel = flashcardConnection.model('flashcard', flashcardSchema, req.session.email);
+      var flashcardSchema = Flashcard.Flashcardschema(req.session.email);
+      let flashcardModel = flashcardConnection.model('flashcard', flashcardSchema, req.session.email);
 
-		let deckLength;
+      let DecksInfoSchema = Flashcard.DecksInfoSchema(req.session.email);
+      let DecksInfoCopyModel = flashcardConnection.model('decksInfoCopy', DecksInfoSchema, req.session.email);
 
-		flashcardModel.find()
-		.then(flashcardResults => {
-			deckLength = flashcardResults.length;
-		})
+      let deckLength, allCardsLength;
 
-        var info = {
-          email: req.session.email,
-          deckCount: deckLength // TODO
-        }
+      // Get count of all flashcards
+      await flashcardModel.find({Tag: null})
+      .then(flashcardResults => {
+        allCardsLength = flashcardResults.length;
+      })
 
-        var details = {
-          old_email_input_error: '',
-          new_email_input_error: '',
-          new_email_confirm_input_error: '',
-          password_input_error: '',
-          old_password_input_error: '',
-          new_password_input_error: '',
-          new_password_confirm_input_error: ''
-        };
-        res.render('account-settings', { title: 'Kanau | Account', info, details});
-    },
+      // Get number of decks
+      await DecksInfoCopyModel.findOne({Tag : "Index"})
+      .then(flashcardResult => {
+        console.log(req.session.email);
+        console.log(flashcardResult.decks);
+        deckLength = flashcardResult.decks.length;
+      });
+
+      var info = {
+        email: req.session.email,
+        deckCount: deckLength,
+        allCardsCount: allCardsLength
+      }
+
+      var details = {
+        old_email_input_error: '',
+        new_email_input_error: '',
+        new_email_confirm_input_error: '',
+        password_input_error: '',
+        old_password_input_error: '',
+        new_password_input_error: '',
+        new_password_confirm_input_error: ''
+      };
+      
+      res.render('account-settings', { title: 'Kanau | Account', info, details});
+      },
 
     getAboutKanau: (req, res) => {
-		// check if session expired (unauthorized access)
-		if (req.session.email == null) {
-			console.log("Session expired.");
-			res.redirect('/');
+      // check if session expired (unauthorized access)
+      if (req.session.email == null) {
+        console.log("Session expired.");
+        res.redirect('/');
 		}
       
-        res.render('about-kanau', { title: 'Kanau | About us'});
+      res.render('about-kanau', { title: 'Kanau | About us'});
     },
 
     getBrowse: (req, res) => {
