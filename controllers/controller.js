@@ -432,34 +432,28 @@ const controller = {
     },
 
     getDictionary: (req, res) => {
-		// check if session expired (unauthorized access)
-		if (req.session.email == null) {
-			console.log("Session expired.");
-			res.redirect('/');
-		}
+        // check if session expired (unauthorized access)
+        if (req.session.email == null) {
+          console.log("Session expired.");
+          res.redirect('/');
+        }
         console.log("Requested term: " + req.query.termQuery);
-    
+        
         // setup modal
-        if (dictionaryModel == null) {
-          let dictionarySchema = Dictionary;
-          dictionaryModel = dictionaryConnection.model('dictionary', dictionarySchema, "Term Bank");
-          console.log("Created Dictionary model.");
-        }
-    
-        if (sentenceModel == null) {
-          let sentenceSchema = Sentence;
-          sentenceModel = dictionaryConnection.model('sentence', sentenceSchema, "Sentence Bank");
-          console.log("Created Sentence model.")
-        }
-    
-        if (sentenceTranslationModel == null) {
-          let sentenceTranslationSchema = SentenceTranslation;
-          sentenceTranslationModel = dictionaryConnection.model('sentence translation', sentenceTranslationSchema, "Sentence Translation Bank");
-          console.log("Created Sentence translation model.");
-        }
-    
-		var decksInfoSchema = Flashcard.DecksInfoSchema(req.session.email);
-		let decksInfoModel = flashcardConnection.model('tag', decksInfoSchema, req.session.email);
+        let dictionarySchema = Dictionary;
+        let dictionaryModel = dictionaryConnection.model('dictionary', dictionarySchema, "Term Bank");
+        console.log("Created Dictionary model.");
+
+        let sentenceSchema = Sentence;
+        let sentenceModel = dictionaryConnection.model('sentence', sentenceSchema, "Sentence Bank");
+        console.log("Created Sentence model.")
+
+        let sentenceTranslationSchema = SentenceTranslation;
+        let sentenceTranslationModel = dictionaryConnection.model('sentence translation', sentenceTranslationSchema, "Sentence Translation Bank");
+        console.log("Created Sentence translation model.");
+      
+        var decksInfoSchema = Flashcard.DecksInfoSchema(req.session.email);
+        let decksInfoModel = flashcardConnection.model('tag', decksInfoSchema, req.session.email);
 
         // Store deck names
         let deckNames;
