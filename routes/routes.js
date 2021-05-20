@@ -50,7 +50,7 @@ router.post('/testajax', (req, res) => {
   console.log("AJAX REQUEST DATA IS: ");
   console.log(req.body);
 
-//  res.status(200).send('just some random testing going on here');
+  res.status(200).send('just some random testing going on here');
 });
 
 router.post('/editDeck', controller.postEditDeck);
@@ -60,6 +60,8 @@ router.post('/addCard', controller.postAddCard);
 router.post('/editCard', controller.postEditCard);
 
 router.post('/deleteCard', controller.postDeleteCard);
+
+router.post('/deleteDeck', controller.postDeleteDeck);
 
 router.get('/getEngTranslation', controller.getEnglishTranslation);
 
