@@ -1,3 +1,4 @@
 node_modules/
+misc/
 models/test.js
 .env
