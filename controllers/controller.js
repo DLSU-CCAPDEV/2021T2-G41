@@ -302,7 +302,7 @@ const controller = {
         });
     },
     
-    getDecks: (req, res) => {
+    getDecks: async (req, res) => {
 		// check if session expired (unauthorized access)
 		if (req.session.email == null) {
 			console.log("Session expired.");
@@ -333,11 +333,15 @@ const controller = {
         
 		// Get decks
 		console.log("Connecting...");
-		decksInfoModel.find({Tag: "Index"}, 'decks') // Get deck names
+		await decksInfoModel.find({Tag: "Index"}, 'decks') // Get deck names
 		.then(decksInfoResults => {
 		let personalDecks = decksInfoResults[0].decks.slice();
 		console.log("THE DECK NAMES ARE: ");
 		console.log(personalDecks);
+
+    // No decks available
+    if (personalDecks.length == 0)
+        res.render('decks-main', {decks: personalDecks, _dueAndNewDecks: null, title: 'Kanau | Decks'});
 
     for (let i = 0; i < personalDecks.length; i++) {
       trackDecks.push(false);
@@ -351,81 +355,80 @@ const controller = {
 			// Get deck settings (max reviews/new)
 			await deckSettingModel.find({Tag: "Deck Settings", Deck: deck})
 			.then(async deckSettingResult => {
-			console.log("GET Deck preferences for " + deck);
-			console.log(deckSettingResult[0]);
-			
-
-			// adjust new/review count based on actual decks returned after db query
-			// get NEW count, limit on maximum new card setting OR current new count
-			if (deckSettingResult[0].LastStudied == null) { // Deck that has not been studied ever
-        let findFlashcards = async () => {
-          flashcardModel.find({Deck: deck, ReviewDate: new Date("1970-01-01T00:00:01.000Z")})
-          .limit(deckSettingResult[0].MaxNew)
-          .then(newCountResult => {
-          console.log("Deck - " + deck + " NOT studied.");
-          if (newCountResult.length > deckSettingResult[0].MaxNew)
-            _new = deckSettingResult[0].MaxNew;
-          else 
-            _new = newCountResult.length;
-          })
-        };
-
-        findFlashcards();
-			}
-			else if (deckSettingResult[0].LastStudied.toISOString() == currDate.toISOString()) { // Deck studied on the same current day
-        let findFlashcards = async () => {
-          await flashcardModel.find({Deck: deck, ReviewDate: new Date("1970-01-01T00:00:01.000Z")})
-          .limit(deckSettingResult[0].CurrentNew)
-          .then(newCountResult => {
-          console.log("Deck " + deck + " ready for REPEAT study session.");
-          _new = newCountResult.length;
-          })
-        };
-
-        findFlashcards();
-			} else { // New Deck review day
-        let findFlashcards = async () => {
-          // new study session
-          await flashcardModel.find({Deck: deck, ReviewDate: new Date("1970-01-01T00:00:01.000Z")})
-          .limit(deckSettingResult[0].MaxNew)
-          .then(newCountResult => {
-          console.log("Deck " + deck + " ready for NEW study session.");
-          if (newCountResult.length > deckSettingResult[0].MaxNew)
-            _new = deckSettingResult[0].MaxNew;
-            else 
-            _new = newCountResult.length;
-          })
-        };
-
-        findFlashcards();
-			}
-	
-			// track new card count per deck
-			await deckSettingModel.findOneAndUpdate({Tag: "Deck settings", Deck: deck}, {CurrentNew: _new}).exec();
-			
-			// Review card count, NO limit on maximum review count
-			await flashcardModel.find({Deck: deck, ReviewDate: {"$lte": currDate, "$ne": new Date("1970-01-01T00:00:01.000Z")}})
-			.then(reviewCountResult => {
-				_due = reviewCountResult.length;
-	
-				_dueAndNewDecks[index] = [_due, _new];
-        trackDecks[index] = true
-        console.log("On deck: " + deck + "and index: " + index)
-				console.log(_dueAndNewDecks + " [[due, new]] deck preference GOT!");
+        console.log("GET Deck preferences for " + deck);
+        console.log(deckSettingResult[0]);
         
-				if (trackDecks.every((trackDeck) => {return trackDeck == true})) {
-          console.log(_dueAndNewDecks);
-          res.render('decks-main', {decks: personalDecks, _dueAndNewDecks, title: 'Kanau | Decks'});
-          console.log("RENDERED EJS");
-				}
-			});
-			})
-			.catch(err => console.log(err));
-		})
-		// TODO: No decks available
-		// res.render('decks-main', {decks: personalDecks, _dueAndNewDecks: null, title: 'Kanau | Decks'});
+
+        // adjust new/review count based on actual decks returned after db query
+        // get NEW count, limit on maximum new card setting OR current new count
+        if (deckSettingResult[0].LastStudied == null) { // Deck that has not been studied ever
+          let findFlashcards = async () => {
+            flashcardModel.find({Deck: deck, ReviewDate: new Date("1970-01-01T00:00:01.000Z")})
+            .limit(deckSettingResult[0].MaxNew)
+            .then(newCountResult => {
+            console.log("Deck - " + deck + " NOT studied.");
+            if (newCountResult.length > deckSettingResult[0].MaxNew)
+              _new = deckSettingResult[0].MaxNew;
+            else 
+              _new = newCountResult.length;
+            })
+          };
+
+          findFlashcards();
+        }
+        else if (deckSettingResult[0].LastStudied.toISOString() == currDate.toISOString()) { // Deck studied on the same current day
+          let findFlashcards = async () => {
+            await flashcardModel.find({Deck: deck, ReviewDate: new Date("1970-01-01T00:00:01.000Z")})
+            .limit(deckSettingResult[0].CurrentNew)
+            .then(newCountResult => {
+            console.log("Deck " + deck + " ready for REPEAT study session.");
+            _new = newCountResult.length;
+            })
+          };
+
+          findFlashcards();
+        } else { // New Deck review day
+          let findFlashcards = async () => {
+            // new study session
+            await flashcardModel.find({Deck: deck, ReviewDate: new Date("1970-01-01T00:00:01.000Z")})
+            .limit(deckSettingResult[0].MaxNew)
+            .then(newCountResult => {
+            console.log("Deck " + deck + " ready for NEW study session.");
+            if (newCountResult.length > deckSettingResult[0].MaxNew)
+              _new = deckSettingResult[0].MaxNew;
+              else 
+              _new = newCountResult.length;
+            })
+          };
+
+          findFlashcards();
+        }
+    
+        // track new card count per deck
+        await deckSettingModel.findOneAndUpdate({Tag: "Deck settings", Deck: deck}, {CurrentNew: _new}).exec();
+        
+        // Review card count, NO limit on maximum review count
+        await flashcardModel.find({Deck: deck, ReviewDate: {"$lte": currDate, "$ne": new Date("1970-01-01T00:00:01.000Z")}})
+        .then(reviewCountResult => {
+          _due = reviewCountResult.length;
+    
+          _dueAndNewDecks[index] = [_due, _new];
+          trackDecks[index] = true
+          console.log("On deck: " + deck + "and index: " + index)
+          console.log(_dueAndNewDecks + " [[due, new]] deck preference GOT!");
+          
+          if (trackDecks.every((trackDeck) => {return trackDeck == true})) {
+            console.log(_dueAndNewDecks);
+            res.render('decks-main', {decks: personalDecks, _dueAndNewDecks, title: 'Kanau | Decks'});
+            console.log("RENDERED EJS");
+          }
+        });
+        })
+        .catch(err => console.log(err));
+      })
 		})
 		.catch(err => console.log(err));
+
     },
 
     getDictionary: (req, res) => {
@@ -761,7 +764,7 @@ const controller = {
       let oldDeckName = req.body.oldDeck;
       let newCount = req.body.newCardCount;
     
-      /*TODO save new deckname to:
+      /*Saves new deck settings to:
         Flashcard: update every card to new deck name
         DecksInfo: update one array element (of decks) with new name
         DeckSettingSchema: update one with new deck name & MAX new card count
@@ -843,8 +846,39 @@ const controller = {
         res.send();
     },
 
-    postDeleteDeck : (req, res) => {
+    postDeleteDeck : async (req, res) => {
+      const deleteDeck = req.body.deckName;
 
+      // Prepare models
+      var decksInfoSchema = Flashcard.DecksInfoSchema(req.session.email);
+      let decksInfoModel = flashcardConnection.model('tag', decksInfoSchema, req.session.email);
+    
+      var flashcardSchema = Flashcard.Flashcardschema(req.session.email);
+      let flashcardModel = flashcardConnection.model('flashcard', flashcardSchema, req.session.email);
+    
+      var deckSettingSchema = Flashcard.DeckSettingSchema(req.session.email);
+      let deckSettingModel = flashcardConnection.model('deck settings', deckSettingSchema, req.session.email);
+
+      // Delete deck from DecksInfo document
+      await decksInfoModel.findOne({Tag: "Index"})
+      .then(async decksInfoResult => {
+        var decks = decksInfoResult.decks.slice();
+        
+        // update with new name
+        decks = decks.filter(deck => deck != deleteDeck);
+    
+        await decksInfoModel.updateOne({Tag: "Index"}, {decks: decks}).exec();
+      });
+
+      // Delete DeckSetting document
+      await deckSettingModel.deleteOne({Tag: "Deck Settings", Deck: deleteDeck}).exec()
+
+      // Delete all flashcards
+      await flashcardModel.deleteMany({Deck: deleteDeck}).exec();
+
+      console.log(deleteDeck + " deck deleted!");
+
+      res.send("");
     },
 
     getEnglishTranslation: (req, res) => {
