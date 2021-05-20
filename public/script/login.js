@@ -4,7 +4,6 @@ $(document).ready(function () {
     // login submit event
     loginForm.addEventListener('submit', (e) => {
         // Get login form values
-        console.log(loginForm.elements);
         let emailInput = loginForm.elements['login_email_input'].value;
         let passInput = loginForm.elements['login_password_input'].value;
 
