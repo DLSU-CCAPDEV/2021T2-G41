@@ -65,6 +65,8 @@ router.post('/deleteCard', controller.postDeleteCard);
 
 router.post('/deleteDeck', controller.postDeleteDeck);
 
+router.get('/deleteAccount', controller.getDeleteAccount);
+
 router.get('/getEngTranslation', controller.getEnglishTranslation);
 
 router.get('/checkCurrentEmail', controller.getCheckCurrentEmail);
