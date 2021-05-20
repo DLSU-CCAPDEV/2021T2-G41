@@ -1,4 +1,39 @@
 $(document).ready(function () {
+    var loginForm = document.querySelector('#login-form');
+
+    // login submit event
+    loginForm.addEventListener('submit', (e) => {
+        // Get login form values
+        console.log(loginForm.elements);
+        let emailInput = loginForm.elements['login_email_input'].value;
+        let passInput = loginForm.elements['login_password_input'].value;
+
+        // AJAX Call, check if login information is correct
+        let xhttp = new XMLHttpRequest();
+
+        xhttp.open('POST', '/login');
+
+        xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+
+        xhttp.onload = () => {
+            if (xhttp.responseText == "success") {
+                window.location.href = "/decks";
+                return;
+            }
+            if (xhttp.responseText == "invalidpassword") {
+                $('#login_password_input_error').text(`Incorrect password.`);
+                return;
+            }
+            if (xhttp.responseText == "invalidemail") {
+                $('#login_email_input_error').text('Email does not exist.');
+                return;
+            }
+
+        };
+        
+        xhttp.send("login_email_input=" + emailInput + "&login_password_input=" + passInput);
+    });
+
     //checks if every field is not empty
     function isFilled() {
 
