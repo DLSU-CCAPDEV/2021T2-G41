@@ -46,6 +46,10 @@ myObserver.observe(brandLogoMsg);
 var loginCloseBtn = document.getElementById("login-close-btn");
 loginCloseBtn.addEventListener('click', function(){
     document.getElementById("login-modal").classList.remove("is-active");
+    
+    //remove textarea values
+    document.getElementById("login_email_input").value = "";
+    document.getElementById("login_password_input").value = "";
 });
 
 var loginBtn = document.getElementById("login-button");
@@ -57,6 +61,11 @@ loginBtn.addEventListener('click', function() {
 var registerCloseBtn = document.getElementById("register-close-btn");
 registerCloseBtn.addEventListener('click', function(){
     document.getElementById("register-modal").classList.remove("is-active");
+
+    //remove textarea values
+    document.getElementById("register_email_input").value = "";
+    document.getElementById("register_password_input").value = "";
+    document.getElementById("register_password_confirm_input").value = "";
 });
 
 var registerBtn = document.getElementById("register-button");

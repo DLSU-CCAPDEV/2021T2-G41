@@ -140,7 +140,7 @@ const controller = {
                     res.send('success');
                   }
                   else {
-                    console.log("invalid password");
+                    console.log("Invalid password");
                     res.send('invalidpassword');
                   }
                 })
@@ -883,11 +883,10 @@ const controller = {
         errors = errors.errors;
         var details = {};
         
-        for(i = 0; i < errors.length; i++) {
+        for(i = 0; i < errors.length; i++) 
           details[errors[i].param + '_error'] = errors[i].msg;
-          console.log(errors[i].param + '_error = ' + errors[i].msg);
-        }
-          res.render('account-settings', { title: 'Kanau | Account', info, details});            
+        
+        res.render('account-settings', { title: 'Kanau | Account', info, details});            
       }
       else {
 
@@ -901,16 +900,17 @@ const controller = {
                       userModel.updateOne({Email: curr_email}, {Email: new_email}).exec(); 
                       flashcardConnection.collection(curr_email).rename(new_email);
                       console.log("Email changed from: " + curr_email + " to: " + new_email);
-                      res.redirect('/logout'); 
+                      res.send("success");
                     }
                     else {
-                      console.log("invalid password");
-                      res.redirect('/account'); 
+                      console.log("Invalid password");
+                      res.send("invalidpassword"); 
                     }
                 });
               }
               else {//not yet done
                 console.log("Email is not registered");
+                res.send("invalidemail");
               }
             });  
       }
@@ -943,11 +943,10 @@ const controller = {
         errors = errors.errors;
         var details = {};
         
-        for(i = 0; i < errors.length; i++) {
+        for(i = 0; i < errors.length; i++)
           details[errors[i].param + '_error'] = errors[i].msg;
-          console.log(errors[i].param + '_error = ' + errors[i].msg);
-        }
-          res.render('account-settings', { title: 'Kanau | Account', info, details});            
+
+        res.render('account-settings', { title: 'Kanau | Account', info, details});            
       }
       else {
 
@@ -962,21 +961,19 @@ const controller = {
                     
                     bcrypt.hash(new_password, 10, function(err, hash){
                       userModel.updateOne({Email: curr_email}, {Password: hash}).exec(); 
-                      console.log("Password changed.");
-                      res.redirect('/logout'); 
+                      console.log("Password changed");
+                      res.send("success");
                     });
-
                   }
                   else {
-                    console.log("invalid password");
-                    res.redirect('/account'); 
+                    console.log("Invalid password");
+                    res.send("invalidpassword");
                   }
-
                 });
-
               }
               else {//not yet done
                 console.log("Email is not registered");
+                res.send("invalidemail");
               }
             });  
       }

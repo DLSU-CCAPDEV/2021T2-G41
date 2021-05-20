@@ -1,5 +1,37 @@
 $(document).ready(function () {
+    var changeEmailForm = document.querySelector('#change_email_form');
 
+    // change-email submit event
+    changeEmailForm.addEventListener('submit', (e) => {
+        // Get change-email form values
+        let oldEmailInput = changeEmailForm.elements['old_email_input'].value;
+        let newEmailInput = changeEmailForm.elements['new_email_input'].value;
+        let ConfirmNewEmailInput = changeEmailForm.elements['new_email_confirm_input'].value;
+        let passInput = changeEmailForm.elements['password_input'].value;
+
+        // AJAX Call, check if change-email information is correct
+        let xhttp = new XMLHttpRequest();
+
+        xhttp.open('POST', '/changeEmail');
+
+        xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+
+        xhttp.onload = () => {
+            if (xhttp.responseText == "success") {
+                window.location.href = "/logout";
+                return;
+            }
+            if( xhttp.responseText == "invalidemail") {
+                $('#password_input_error').text('Incorrect password.');
+                return;
+            }
+            if (xhttp.responseText == "invalidpassword" ) {
+                $('#old_email_input_error').text('Email does not exist.');
+                return;
+            }
+        };
+        xhttp.send("old_email_input=" + oldEmailInput + "&new_email_input=" + newEmailInput + "&new_email_confirm_input=" + ConfirmNewEmailInput + "&password_input=" + passInput);
+    });
 	function isFilled() {
 
         var old_email = validator.trim($('#old_email_input').val());

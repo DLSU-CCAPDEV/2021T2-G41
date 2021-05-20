@@ -53,7 +53,7 @@
                     <button class="delete is-large" aria-label="close" id="email-close-btn"></button>
                 </header>
                 <section class="modal-card-body">
-                   <form id="change_email_form" action="/changeEmail" method="post">
+                   <form id="change_email_form" action="/changeEmail" method="post" onsubmit="return false;">
 
                         <label for="old_email_input" class="content is-medium" >Enter Old Email</label>
                         <input type="email" class="input" id="old_email_input" name="old_email_input" placeholder="Old Email">
@@ -87,7 +87,7 @@
                     <button class="delete is-large" aria-label="close" id="password-close-btn"></button>
                 </header>
                 <section class="modal-card-body">
-                   <form id="change_password_form" action="/changePassword" method="post">
+                   <form id="change_password_form" action="/changePassword" method="post" onsubmit="return false;">
 
                         <label for="old_password_input" class="content is-medium" >Enter Old Password</label>
                         <input type="password" class="input" id="old_password_input" name="old_password_input" placeholder="Old Password">

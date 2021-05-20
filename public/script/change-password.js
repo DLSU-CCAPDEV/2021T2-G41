@@ -1,5 +1,37 @@
 $(document).ready(function () {
+    var changePasswordForm = document.querySelector('#change_password_form');
 
+    // change-password submit event
+    changePasswordForm.addEventListener('submit', (e) => {
+        // Get change-password form values
+        let oldPasswordInput = changePasswordForm.elements['old_password_input'].value;
+        let newPasswordInput = changePasswordForm.elements['new_password_input'].value;
+        let ConfirmNewPasswordInput = changePasswordForm.elements['new_password_confirm_input'].value;
+
+        // AJAX Call, check if change-password information is correct
+        let xhttp = new XMLHttpRequest();
+
+        xhttp.open('POST', '/changePassword');
+
+        xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+
+        xhttp.onload = () => {
+            if (xhttp.responseText == "success") {
+                window.location.href = "/logout";
+                return;
+            }
+            if (xhttp.responseText == "invalidpassword" ) {
+                $('#new_password_confirm_input_error').text('Incorrect password.');
+                return;
+            }
+            if( xhttp.responseText == "invalidemail") {
+                $('#new_password_confirm_input_error').text('The current email could not be found.');
+                return;
+            }
+            
+        };
+        xhttp.send("old_password_input=" + oldPasswordInput + "&new_password_input=" + newPasswordInput + "&new_password_confirm_input=" + ConfirmNewPasswordInput);
+    });
 	function isFilled() {
 
         var old_password_input = validator.trim($('#old_password_input').val());

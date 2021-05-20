@@ -20,12 +20,8 @@ $(document).ready(function () {
                 window.location.href = "/decks";
                 return;
             }
-            if (xhttp.responseText == "invalidpassword") {
-                $('#login_password_input_error').text(`Incorrect password.`);
-                return;
-            }
-            if (xhttp.responseText == "invalidemail") {
-                $('#login_email_input_error').text('Email does not exist.');
+            if (xhttp.responseText == "invalidpassword" || xhttp.responseText == "invalidemail") {
+                $('#login_password_input_error').text('Email and/or password is incorrect.');
                 return;
             }
 
