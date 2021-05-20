@@ -42,7 +42,7 @@
             </ul>
         </div>
         <div class="deck-select-container">
-           <table class="deck-select-table">
+           <table class="deck-select-table" id="deck-select-table">
                 <tr>
                    <th class="deck-name-th">Decks</th>
                    <th>Due</th>
@@ -54,14 +54,16 @@
                    <td class="new-count">10</td>
                    <td class="deck-options-button"></td>
                 </tr> -->
-                <%decks.forEach((deck, i) => { %>
-                    <tr>
-                        <td class="deck-name-td"><a class="effect-underline"><%=deck%></a></td>
-                        <td class="due-count"><%=_dueAndNewDecks[i][0]%></td>
-                        <td class="new-count"><%=_dueAndNewDecks[i][1]%></td>
-                        <td class="deck-options-button"></td>
-                    </tr>
-                <%});%>
+                <%if (_dueAndNewDecks != null) {%>
+                    <%decks.forEach((deck, i) => { %>
+                        <tr>
+                            <td class="deck-name-td"><a class="effect-underline"><%=deck%></a></td>
+                            <td class="due-count"><%=_dueAndNewDecks[i][0]%></td>
+                            <td class="new-count"><%=_dueAndNewDecks[i][1]%></td>
+                            <td class="deck-options-button"></td>
+                        </tr>
+                    <%});%>
+                <%}%>
            </table>
         </div>
         <div id="modal-deck-container" class="modal">
