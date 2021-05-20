@@ -45,7 +45,7 @@ app.use(express.urlencoded({extended: true}));
 app.set('view engine','ejs');
 
 app.listen(_Port, () => {
-  console.log('Server is running at http://');
+  console.log('Server is running.');
 });
 
 app.use(router);
