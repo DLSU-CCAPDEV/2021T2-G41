@@ -1,5 +1,5 @@
 // Deck title node (for directing to study page)
-const deck_table = document.getElementById('deck-select-table');
+var deck_table = document.getElementById('deck-select-table');
 var deck_titles = document.querySelectorAll(".deck-name-td");
 var new_counts = document.querySelectorAll(".new-count");
 
@@ -27,6 +27,7 @@ const addCard_backText = document.getElementById("modal-addCard-back-input");
 const addCard_selectDeck = document.getElementById("add-card-select-deck");
 
 // Add new deck modal nodes
+const addDeckForm = document.getElementById('modal-addDeck-form-container');
 const addDeckModal = document.getElementById("modal-addDeck-container");
 const addDeck_onModal = document.getElementById("createDeck-btn");
 const addDeck_offModal = document.getElementById("modal-addDeck-btn-close");
@@ -187,21 +188,33 @@ addDeck_offModal.addEventListener('click', function() {
     addDeckModal.style.display = "none";
 });
 
-addDeck_saveBtn.addEventListener('click', function(event) {
-    var xhttp = new XMLHttpRequest();
+function addNewDeck(newDeckName) {
+    return new Promise((resolve, reject) => {
+        var xhttp = new XMLHttpRequest();
 
-    xhttp.open('POST', '/testajax', true);
-    console.log("XHTTP instance created!");
-
-    xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        xhttp.open('POST', '/addDeck', true);
+        console.log("XHTTP instance created!");
     
-    xhttp.onload = function() {
-        console.log("GOT transaction!");
-        console.log("STATUS" + this.status);
-        console.log(this.responseText);
-    };
+        xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        
+        xhttp.onload = function() {
+            // exit modal
+            addDeckModal.style.display = "none";
 
-    xhttp.send("front=Frontie%back=Backie");
+            // refresh
+            location.reload();
+        };
+    
+        xhttp.send("newDeckName=" + newDeckName);
+    });
+}
+
+addDeck_saveBtn.addEventListener('click', function(event) {
+    let newDeckName = addDeckForm.elements['modal-addDeck-front-input'].value;
+
+    addNewDeck(newDeckName);
+
+    return;
 });
 
 addCard_saveBtn.addEventListener('click', function(event) {
