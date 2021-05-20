@@ -48,6 +48,22 @@ function postEditedDeckInfo(newDeckName, oldDeckName, newCardCount) {
     });
 }
 
+function postDeleteDeck(deckName) {
+    return new Promise((resolve, reject) => {
+        let xhttp = new XMLHttpRequest();
+
+        xhttp.open('POST', '/deleteDeck', true);
+
+        xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+
+        xhttp.onload = () => {
+            resolve();
+        };
+
+        xhttp.send("deckName=" + deckName);
+    });
+}
+
 // Direct to study page event when a deck title is clicked
 deck_titles.forEach(title => {
     title.addEventListener('click', () => window.location.assign('study/' + title.innerText));
@@ -60,11 +76,12 @@ function getDeckRowAndCol(element) { // Returns [Row,Col]
     return [row, col];
 }
 
-// Add event for each deck option button, open the deck modal
+// Add event for each deck option button, OPEN the deck modal
 for (var i = 0; i < deck_onModal.length; i++) {
     // Show modal
     deck_onModal[i].addEventListener('click', function() {
         deck_modal.style.display = "block";
+        modal_deleteBtn.disabled = false;
 
         // Show deck name
         originalDeckName = this.parentElement.cells[0].childNodes[0].innerText;
@@ -95,6 +112,7 @@ deck_offModal.onclick = function() {
     originalDeckName = undefined;
 }
 
+// Deck settings save
 modal_saveBtn.addEventListener('click', async (e) => {
     let newDeckName = modalDeckTitle.innerText;
     let oldDeckName = originalDeckName;
@@ -119,11 +137,22 @@ modal_saveBtn.addEventListener('click', async (e) => {
     originalDeckName = undefined;
 });
 
+// DELETE Deck
+modal_deleteBtn.addEventListener('click', async (e) => {
+    let deckName = originalDeckName;
+
+    await postDeleteDeck(deckName);
+
+    // loop each table row to find the deck list and delete from view
+
+});
+
 // In modal, change deck name
 changeNameBtn.addEventListener('click', function() {
     modalDeckTitle.contentEditable = true;
     modalDeckTitle.style.outline = "none";
     modalDeckTitle.style.border = "1px solid black";
+    modal_deleteBtn.disabled = true;
     changeNameBtn.disabled = true;
 });
 
