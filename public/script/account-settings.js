@@ -1,4 +1,4 @@
-var changeEmailBtn = document.getElementById('change-email-btn');
+const changeEmailBtn = document.getElementById('change-email-btn');
 changeEmailBtn.addEventListener('click', function() {
 	document.getElementById('change-email-modal').classList.add('is-active');
 	
@@ -29,3 +29,22 @@ passwordModalClose.addEventListener('click', function() {
     document.getElementById("new_password_confirm_input").value = "";
 })
 
+const deleteBtn = document.getElementById('delete-account-btn');
+
+function deleteAccount() {
+	return new Promise((resolve, reject) => {
+		let xhttp = new XMLHttpRequest();
+
+		xhttp.open('GET', '/deleteAccount');
+
+		xhttp.onload = () => {
+			window.location.href = "/logout";
+		}
+
+		xhttp.send();
+	});
+};
+
+deleteBtn.addEventListener('click', async () => {
+	await deleteAccount();
+});
