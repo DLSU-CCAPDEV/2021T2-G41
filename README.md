@@ -17,9 +17,9 @@ Kanau is an educational web app to aid knowledge retention for Japanese learners
 ## Installing the Application
 
 1. Clone the project either by directly downloading the repository [here](https://github.com/DLSU-CCAPDEV/2021T2-G41/archive/refs/heads/main.zip), or using the command below. <br>(Note: git should be installed in your system for you to be able to use this command). 
-<pre>
+```
 git clone https://github.com/DLSU-CCAPDEV/2021T2-G41
-</pre>
+```
 2. Open Command Prompt.
     
 3. Navigate to the project folder - the folder containing the contents of the cloned or downloaded repository.
@@ -35,13 +35,13 @@ git clone https://github.com/DLSU-CCAPDEV/2021T2-G41
 2. Navigate to the project folder - the folder containing the contents of the cloned or downloaded repository.
     
 3. Run the command `node app.js`. If the app is working properly, your Command Prompt should display the following statement:
-<pre>
+```
 Server is running.
-</pre>    
+``` 
 4. Open a web browser and type the following URL:
-<pre>
+```
 http://localhost:3000/
-</pre>      
+```     
     
 ## Dependancies
 
