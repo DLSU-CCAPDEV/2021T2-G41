@@ -65,6 +65,7 @@ const controller = {
           });
     },
     
+    // Check if an email exists on the database (register.js, change-email.js)
     postRegister: (req, res) => {
 
         var errors = validationResult(req);
@@ -128,7 +129,7 @@ const controller = {
       
           userModel.findOne({Email: tempEmail})
             .then(result => {
-              //if a match is found
+              // if input email is found on the database
               if(result) {
                 
                 bcrypt.compare(tempPassword, result.Password, function(err, result) {
@@ -136,17 +137,17 @@ const controller = {
                     let username = tempEmail;
                     console.log("Successfully logged in as " + username);
                     req.session.email = username;
-                    res.redirect('/decks');
+                    res.send('success');
                   }
                   else {
                     console.log("invalid password");
-                    res.redirect('/');
+                    res.send('invalidpassword');
                   }
                 })
               }
-              else {//not yet done
+              else { // email NOT found on the database
                 console.log("Email is not registered");
-                res.redirect('/logout');
+                res.send('invalidemail');
               }
             })
           
@@ -826,6 +827,10 @@ const controller = {
         .then(console.log("Deleted successfully."));
       
         res.send();
+    },
+
+    postDeleteDeck : (req, res) => {
+
     },
 
     getEnglishTranslation: (req, res) => {
