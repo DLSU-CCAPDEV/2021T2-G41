@@ -1,4 +1,5 @@
 // Deck title node (for directing to study page)
+const deck_table = document.getElementById('deck-select-table');
 var deck_titles = document.querySelectorAll(".deck-name-td");
 var new_counts = document.querySelectorAll(".new-count");
 
@@ -144,7 +145,17 @@ modal_deleteBtn.addEventListener('click', async (e) => {
     await postDeleteDeck(deckName);
 
     // loop each table row to find the deck list and delete from view
+    (Array.prototype.slice.call(deck_titles)).some((deck_title, index) => {
+        if (deck_title.innerText == deckName)
+            deck_table.deleteRow(index + 1);
+    });
 
+    // exit modal
+    deck_modal.style.display = "none";
+    changeNameBtn.disabled = false;
+    modalDeckTitle.contentEditable = false;
+    modalDeckTitle.style.border = "unset";
+    originalDeckName = undefined;
 });
 
 // In modal, change deck name
