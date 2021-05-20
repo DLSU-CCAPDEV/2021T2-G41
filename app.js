@@ -4,7 +4,6 @@ const dotenv = require('dotenv');
 
 dotenv.config();
 const _Port = process.env.PORT;
-const _Hostname = process.env.HOSTNAME;
 const _Secret_Email = process.env.SECRET_EMAIL;
 const _Account_URL = process.env.ACCOUNT_URL;
 
@@ -46,7 +45,7 @@ app.use(express.urlencoded({extended: true}));
 app.set('view engine','ejs');
 
 app.listen(_Port, () => {
-  console.log('Server is running at http://' + _Hostname + ':' + _Port);
+  console.log('Server is running at http://');
 });
 
 app.use(router);
