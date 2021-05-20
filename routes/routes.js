@@ -57,6 +57,8 @@ router.post('/editDeck', controller.postEditDeck);
 
 router.post('/addCard', controller.postAddCard);
 
+router.post('/addDeck', controller.postAddDeck);
+
 router.post('/editCard', controller.postEditCard);
 
 router.post('/deleteCard', controller.postDeleteCard);
