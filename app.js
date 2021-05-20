@@ -46,7 +46,12 @@ app.set('view engine','ejs');
 
 app.listen(_Port, () => {
   console.log('Server is running!');
+  var x;
 });
+
+function test() {
+  var x;
+}
 
 app.use(router);
 
