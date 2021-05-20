@@ -818,6 +818,40 @@ const controller = {
         res.status(200).send();
     },
 
+    postAddDeck: async (req, res) => {
+      let newDeckName = req.body.newDeckName;
+
+      // Prepare models
+      var decksInfoSchema = Flashcard.DecksInfoSchema(req.session.email);
+      let decksInfoModel = flashcardConnection.model('tag', decksInfoSchema, req.session.email);
+    
+      var deckSettingSchema = Flashcard.DeckSettingSchema(req.session.email);
+      let deckSettingModel = flashcardConnection.model('deck settings', deckSettingSchema, req.session.email);
+
+      await decksInfoModel.findOne({Tag: "Index"})
+      .then(async decksInfoResult => {
+        let decks = decksInfoResult.decks.slice();
+
+        decks.push(newDeckName);
+
+        await decksInfoModel.updateOne({Tag: "Index"}, {decks: decks});
+      })
+
+      const newDeckSetting = new deckSettingModel({
+        Tag: "Deck Settings",
+        Deck: newDeckName,
+        MaxNew: 10,
+
+        CurrentNew: 0,
+        LastStudied: "1970-01-01T00:00:01.000Z"
+      });
+
+      await newDeckSetting.save();
+      console.log(newDeckName + "added!");
+
+      res.send();
+    },
+
     postEditCard: (req, res) => {
 		var flashcardSchema = Flashcard.Flashcardschema(req.session.email);
 		let flashcardModel = flashcardConnection.model('flashcard', flashcardSchema, req.session.email);
