@@ -49,6 +49,10 @@ app.listen(_Port, () => {
   var x;
 });
 
+function test() {
+  var x;
+}
+
 app.use(router);
 
 // 404 page
