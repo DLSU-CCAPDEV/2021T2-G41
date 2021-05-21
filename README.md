@@ -5,7 +5,7 @@
     <img src="https://user-images.githubusercontent.com/55874439/112708392-bda40080-8eec-11eb-9a11-e6c412980db5.png"/>
 </p>
 
-Kanau is an educational web app to aid knowledge retention for Japanese learners through the presentation of flashcards. The review interval of these flashcards are calculated based on how well a user remembers them. It also contains a self-hosted Japanese Dictionary, complete with sample sentences and an easy add-to-card feature.
+Kanau is an educational web app to aid knowledge retention for Japanese learners through the presentation of flashcards. The review interval of these flashcards are calculated based on how well a user remembers them. It also contains a self-hosted Japanese Dictionary, complete with sample sentences and an easy add-to-card feature. Click [here]() for the full specification of the project. 
 
 ## Heroku Deployed Application
 [https://kanau.herokuapp.com](https://kanau.herokuapp.com)
@@ -55,7 +55,15 @@ http://localhost:3000/
 - [mongoose](https://www.npmjs.com/package/mongoose)
 - [serve-favicon](https://www.npmjs.com/package/serve-favicon)
 - [validator](https://www.npmjs.com/package/validator)
-    
+
+## Front End Libraries
+
+- [Bulma](https://bulma.io/)
+- [Bootstrap](https://getbootstrap.com/)
+- [Canva](https://www.canva.com/)
+- [Free Frontend: CSS Buttons](https://freefrontend.com/css-button-hover-effects/)
+- [Google Fonts](https://fonts.google.com/)
+
 ## Authors
 
 - [Escobar, Mark Adrian](https://github.com/markadriii)
