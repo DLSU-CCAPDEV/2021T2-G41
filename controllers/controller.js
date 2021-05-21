@@ -38,7 +38,7 @@ const controller = {
 
 		// check session if valid, redirect to decks
 		if (req.session.email != null) {
-			console.log("Valid session. Redirecting to decks...");
+			console.log(req.session.email + "valid session. Redirecting to decks...");
 			res.redirect('/decks');
 		}
       
@@ -160,6 +160,12 @@ const controller = {
     },
 
     chooseDecks: (req, res) => {
+      // check if session expired (unauthorized access)
+      if (req.session.email == null) {
+        console.log("Session expired.");
+        res.redirect('/');
+      }
+      
       res.render('deck-choose');
     },
 
@@ -321,6 +327,8 @@ const controller = {
 			console.log("Session expired.");
 			res.redirect('/');
 		}
+    else 
+      console.log(req.session.email + "valid session. GET Decks...");
 
 		// Prepare models
 		var decksInfoSchema = Flashcard.DecksInfoSchema(req.session.email);
@@ -348,9 +356,15 @@ const controller = {
 		console.log("Connecting...");
 		await decksInfoModel.find({Tag: "Index"}, 'decks') // Get deck names
 		.then(decksInfoResults => {
-		let personalDecks = decksInfoResults[0].decks.slice();
-		console.log("THE DECK NAMES ARE: ");
-		console.log(personalDecks);
+      if (decksInfoResults == null) { // user may not exist
+        console.log("Erroneous access");
+        res.redirect('/logout');
+      }
+        
+
+      let personalDecks = decksInfoResults[0].decks.slice();
+      console.log("THE DECK NAMES ARE: ");
+      console.log(personalDecks);
 
     // No decks available
     if (personalDecks.length == 0)
@@ -427,7 +441,6 @@ const controller = {
     
           _dueAndNewDecks[index] = [_due, _new];
           trackDecks[index] = true
-          console.log("On deck: " + deck + "and index: " + index)
           console.log(_dueAndNewDecks + " [[due, new]] deck preference GOT!");
           
           if (trackDecks.every((trackDeck) => {return trackDeck == true})) {
