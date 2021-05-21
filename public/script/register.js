@@ -86,30 +86,72 @@ $(document).ready(function () {
 
     //calls isFilled(), isValidPassword(), isValidConfirmPassword(), and isValidEmail
     function validateField(field) {
-    
-        var filled = isFilled();
-        var validPassword = isValidPassword(field);
-        var validConfirmPassword = isValidConfirmPassword(field);
+        return new Promise((resolve, reject) => {
+            var filled = isFilled();
+            var validPassword = isValidPassword(field);
+            var validConfirmPassword = isValidConfirmPassword(field);
+            
+            isValidEmail(field, function (validEmail) {
+                console.log("Check NOW!");
+                if(filled && validPassword && validConfirmPassword && validEmail) // valid input
+                    resolve();
         
-        isValidEmail(field, function (validEmail) {
-            console.log("Check NOW!");
-            if(filled && validPassword && validConfirmPassword && validEmail)
-                $('#register-submit').prop('disabled', false);
-    
-            else
-                $('#register-submit').prop('disabled', true);
+                else
+                    reject(); // invalid input
+            });
         });
     }
-    //call validateField() everytime a key is pressed
+    // call validateField() everytime a key is pressed
     $('#register_email_input').keyup(function () {
-        validateField($('#register_email_input'));
+        validateField($('#register_email_input'))
+        .catch(_ => {return});
     });
 
-    $('#register_password_input').keyup(function () {
-        validateField($('#register_password_input'));
+    $('#register-form').submit(async function (e) {
+        e.preventDefault();
+        $('#register-submit').addClass("is-loading");
+
+        await validateField($('#register_password_input'))
+        .catch(_ => { // invalid input
+            $('#register-submit').removeClass("is-loading");    
+            console.log("INVALID Input!");
+            return
+        });
+
+        await validateField($('#register_password_confirm_input'))
+        .then(_ => { 
+            let registerForm = document.getElementById('register-form');
+
+            // Get register form values
+            let emailInput = registerForm.elements['register_email_input'].value;
+            let passInput = registerForm.elements['register_password_input'].value;
+            let passConfirmInput = registerForm.elements['register_password_confirm_input'].value;
+            
+            // AJAX Call, check if login information is correct
+            let xhttp = new XMLHttpRequest();
+
+            xhttp.open('POST', '/register');
+
+            xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+
+            xhttp.onload = () => {
+                if (xhttp.responseText == "error") {
+                    window.location.href = '/';
+                    return
+                }
+                    
+                window.location.href = '/chooseDeck';
+            };
+            
+            xhttp.send("register_email_input=" + emailInput + "&register_password_input=" + passInput + "&register_password_confirm_input=" + passConfirmInput);    
+        })
+        .catch(_ => {
+            $('#register-submit').removeClass("is-loading");    
+            console.log("INVALID Input!");
+            return
+        });
+
+        return false;
     });
 
-    $('#register_password_confirm_input').keyup(function () {
-        validateField($('#register_password_confirm_input'));
-    });
 });

@@ -38,7 +38,7 @@ const controller = {
 
 		// check session if valid, redirect to decks
 		if (req.session.email != null) {
-			console.log("Valid session. Redirecting to decks...");
+			console.log(req.session.email + "valid session. Redirecting to decks...");
 			res.redirect('/decks');
 		}
       
@@ -67,19 +67,23 @@ const controller = {
     
     // Check if an email exists on the database (register.js, change-email.js)
     postRegister: (req, res) => {
-
+        console.log(req.body);
         var errors = validationResult(req);
 
         userModel = mongoose.model('Client', User);
+        console.log("Creating new user...");
 
         // server-side validation
         if (!errors.isEmpty()) {
           errors = errors.errors;
+          console.log("Errors found!");
+          console.log(errors);
+
           var details = {};
-            for(i = 0; i < errors.length; i++)
-              details[errors[i].param + '_error'] = errors[i].msg;
-      
-            res.render('index', { title: 'Welcome to Kanau', details});            
+          for(i = 0; i < errors.length; i++)
+            details[errors[i].param + '_error'] = errors[i].msg;
+    
+          res.send("error");     
         }
         else {
           
@@ -101,7 +105,8 @@ const controller = {
             //save new user to db
             newUser.save()
               .then((result) => {
-                 res.redirect('/chooseDeck');
+                console.log("Saved new user!");
+                 res.send();
               })
           })
         }
@@ -155,10 +160,16 @@ const controller = {
     },
 
     chooseDecks: (req, res) => {
+      // check if session expired (unauthorized access)
+      if (req.session.email == null) {
+        console.log("Session expired.");
+        res.redirect('/');
+      }
+      
       res.render('deck-choose');
     },
 
-    addPremadeDecks: (req, res) => {
+    addPremadeDecks: async (req, res) => {
         let newUser = req.session.email; // NEW ACCOUNT email here!!!!
         let premadeDecksCollection = "sampleuser@test.com";
         let chosenDecks = JSON.parse("[" + req.query.selectedDecks + "]"); // Chosen premade decks (decided for now...)
@@ -176,7 +187,8 @@ const controller = {
         let DeckSettingCopyModel = flashcardConnection.model('deckSettingCopy', DeckSettingSchema, newUser);
       
         // PROCEED TO DUPLICATE DECKS!!!
-        chosenDecks.forEach(chosenDeck => {
+        chosenDecks.forEach(async (chosenDeck, tempDeckIndex) => {
+          let deckIndex = tempDeckIndex;
           console.log(chosenDeck + " adding...!");
           // Create Deck Setting per deck
           let deckSettingCopyDocument = new DeckSettingCopyModel({
@@ -185,17 +197,18 @@ const controller = {
             MaxNew: 10, // default
             CurrentNew: 10,
             LastStudied: "1970-01-01T00:00:01.000Z"
-          })
-          deckSettingCopyDocument.save()
-          .then(() => console.log("Deck settings for " + chosenDeck + " created."));
+          });
+
+          await deckSettingCopyDocument.save()
+          console.log("Deck settings for " + chosenDeck + " created.");
           
           console.log("Adding premade flashcards for deck " + chosenDeck + "...");
           let trackProgressDeck, i = 0;
           // Copy Flashcards from each deck
-          FlashcardCopyModel.find({Tag: null, Deck: chosenDeck})
+          await FlashcardCopyModel.find({Tag: null, Deck: chosenDeck})
           .then(FlashcardCopyResults => {
             trackProgressDeck = FlashcardCopyResults.length;
-            FlashcardCopyResults.forEach(FlashcardCopyResult => {
+            FlashcardCopyResults.forEach(async FlashcardCopyResult => {
               // copy each premade flashcard to new document
               let FlashcardCopyDocument = new FlashcardDestinationModel({
                 FrontWord: FlashcardCopyResult.FrontWord,
@@ -204,23 +217,29 @@ const controller = {
                 ReviewDate: FlashcardCopyResult.ReviewDate
               });
       
-              FlashcardCopyDocument.save().then(() => {
+              await FlashcardCopyDocument.save()
                 i += 1;
                 console.log(chosenDeck + ": " + i + "/" + trackProgressDeck + " duplicated.");
-              });
+
             })
           })
           .catch(err => console.log(err));
+
+          if (deckIndex == chosenDecks.length - 1) {
+            // Create DecksInfo document
+            let decksInfoCopyDocument = new DecksInfoCopyModel({
+              Tag: "Index",
+              decks: chosenDecks
+            });
+
+            decksInfoCopyDocument.save().then(_ =>  {
+              console.log("DONE Duplicating!");
+              res.send();
+            })
+          }
+
         });
-      
-        // Create DecksInfo document
-        let decksInfoCopyDocument = new DecksInfoCopyModel({
-          Tag: "Index",
-          decks: chosenDecks
-        });
-        decksInfoCopyDocument.save();
-      
-        res.send();
+
     },
 
     getAccountSettings: async (req, res) => {
@@ -308,6 +327,8 @@ const controller = {
 			console.log("Session expired.");
 			res.redirect('/');
 		}
+    else 
+      console.log(req.session.email + "valid session. GET Decks...");
 
 		// Prepare models
 		var decksInfoSchema = Flashcard.DecksInfoSchema(req.session.email);
@@ -335,9 +356,15 @@ const controller = {
 		console.log("Connecting...");
 		await decksInfoModel.find({Tag: "Index"}, 'decks') // Get deck names
 		.then(decksInfoResults => {
-		let personalDecks = decksInfoResults[0].decks.slice();
-		console.log("THE DECK NAMES ARE: ");
-		console.log(personalDecks);
+      if (decksInfoResults == null) { // user may not exist
+        console.log("Erroneous access");
+        res.redirect('/logout');
+      }
+        
+
+      let personalDecks = decksInfoResults[0].decks.slice();
+      console.log("THE DECK NAMES ARE: ");
+      console.log(personalDecks);
 
     // No decks available
     if (personalDecks.length == 0)
@@ -414,7 +441,6 @@ const controller = {
     
           _dueAndNewDecks[index] = [_due, _new];
           trackDecks[index] = true
-          console.log("On deck: " + deck + "and index: " + index)
           console.log(_dueAndNewDecks + " [[due, new]] deck preference GOT!");
           
           if (trackDecks.every((trackDeck) => {return trackDeck == true})) {

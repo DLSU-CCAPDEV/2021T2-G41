@@ -58,7 +58,7 @@ decksChooseTitleContainer.addEventListener('animationend', async (e) => {
     let selectedDecksArray = (Array.from(selectedDecks)).toString();
     await addDeck(selectedDecksArray);
 
-    location.href = "/decks";
+    window.location.href = "/decks";
 });
 
 continueBtn.addEventListener('click', (e) => {

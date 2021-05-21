@@ -42,7 +42,7 @@
                     <button class="delete is-large" id="register-close-btn" aria-label="close"></button>
                 </header>
                 <section class="modal-card-body">
-                    <form id="register-form" action="/register" method="post">
+                    <form id="register-form" action="" method="post">
                         <label for="register_email_input" class="content is-medium">Enter new Email</label>
                         <input type="text" class="input" id="register_email_input" name="register_email_input" placeholder="Email">
                          <p id="register_email_input_error" class="error"><%= details.register_email_input_error %></p>
@@ -55,7 +55,7 @@
                         <input type="password" class="input" id="register_password_confirm_input" name="register_password_confirm_input" placeholder="Confirm Password">
                          <p id="register_password_confirm_input_error" class="error"><%= details.register_password_confirm_input_error %></p>
                         <div class="container">
-                            <input class="button is-primary" id="register-submit" type="submit" value="Create" disabled>
+                            <button class="button is-primary" id="register-submit" type="submit">Create</button>
                             <!-- <button class="button" id="register-google"></button> -->
                         </div>
                     </form>
