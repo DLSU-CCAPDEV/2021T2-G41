@@ -8,7 +8,7 @@
 Kanau is an educational web app to aid knowledge retention for Japanese learners through the presentation of flashcards. The review interval of these flashcards are calculated based on how well a user remembers them. It also contains a self-hosted Japanese Dictionary, complete with sample sentences and an easy add-to-card feature. Click [here]() for the full specification of the project. 
 
 ## Heroku Deployed Application
-[https://kanau.herokuapp.com](https://kanau.herokuapp.com)
+- [Kanau](https://kanau.herokuapp.com)
 
 ## Prerequisites
 - [Node.js](https://nodejs.org/en/)
