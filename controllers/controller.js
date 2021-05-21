@@ -40,6 +40,7 @@ const controller = {
 		if (req.session.email != null) {
 			console.log(req.session.email + "valid session. Redirecting to decks...");
 			res.redirect('/decks');
+      return;
 		}
       
         var details = {
