@@ -10,12 +10,12 @@ Kanau is an educational web app to aid knowledge retention for Japanese learners
 ## Heroku Deployed Application
 - [Kanau](https://kanau.herokuapp.com)
 
-## Running the Application Locally
+## Setting Up the Server Locally
 ### Prerequisites
 - [Node.js](https://nodejs.org/en/)
 - [Git](https://git-scm.com/) (optional)
 
-### Installing the Application
+### Installation
 
 1. Clone the project either by directly downloading the repository [here](https://github.com/DLSU-CCAPDEV/2021T2-G41/archive/refs/heads/main.zip), or using the command below. <br>(Note: git should be installed in your system for you to be able to use this command). 
 ```
@@ -57,13 +57,14 @@ http://localhost:3000/
 - [serve-favicon](https://www.npmjs.com/package/serve-favicon)
 - [validator](https://www.npmjs.com/package/validator)
 
-## Front End Libraries
+## Built with
 
 - [Bulma](https://bulma.io/)
 - [Bootstrap](https://getbootstrap.com/)
 - [Canva](https://www.canva.com/)
 - [Free Frontend: CSS Buttons](https://freefrontend.com/css-button-hover-effects/)
 - [Google Fonts](https://fonts.google.com/)
+- [jQuery](https://www.npmjs.com/package/jquery)
 
 ## Authors
 
