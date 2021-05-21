@@ -67,19 +67,23 @@ const controller = {
     
     // Check if an email exists on the database (register.js, change-email.js)
     postRegister: (req, res) => {
-
+        console.log(req.body);
         var errors = validationResult(req);
 
         userModel = mongoose.model('Client', User);
+        console.log("Creating new user...");
 
         // server-side validation
         if (!errors.isEmpty()) {
           errors = errors.errors;
+          console.log("Errors found!");
+          console.log(errors);
+
           var details = {};
-            for(i = 0; i < errors.length; i++)
-              details[errors[i].param + '_error'] = errors[i].msg;
-      
-            res.render('index', { title: 'Welcome to Kanau', details});            
+          for(i = 0; i < errors.length; i++)
+            details[errors[i].param + '_error'] = errors[i].msg;
+    
+          res.send("error");     
         }
         else {
           
@@ -101,7 +105,8 @@ const controller = {
             //save new user to db
             newUser.save()
               .then((result) => {
-                 res.redirect('/chooseDeck');
+                console.log("Saved new user!");
+                 res.send();
               })
           })
         }
