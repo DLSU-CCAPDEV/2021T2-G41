@@ -5,7 +5,7 @@
     <img src="https://user-images.githubusercontent.com/55874439/112708392-bda40080-8eec-11eb-9a11-e6c412980db5.png"/>
 </p>
 
-Kanau is an educational web app to aid knowledge retention for Japanese learners through the presentation of flashcards. The review interval of these flashcards are calculated based on how well a user remembers them. It also contains a self-hosted Japanese Dictionary, complete with sample sentences and an easy add-to-card feature. Click [here]() for the full specification of the project. 
+Kanau is an educational web app to aid knowledge retention for Japanese learners through the presentation of flashcards. The review interval of these flashcards are calculated based on how well a user remembers them. It also contains a self-hosted Japanese Dictionary, complete with sample sentences and an easy add-to-card feature. Click [here](https://github.com/DLSU-CCAPDEV/2021T2-G41/blob/main/%5BRevised%5D%20S14%20Group%2041%20MP%20Specifications.pdf) for the full specification of the project. 
 
 ## Heroku Deployed Application
 - [Kanau](https://kanau.herokuapp.com)
