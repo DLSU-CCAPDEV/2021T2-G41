@@ -10,11 +10,12 @@ Kanau is an educational web app to aid knowledge retention for Japanese learners
 ## Heroku Deployed Application
 - [Kanau](https://kanau.herokuapp.com)
 
-## Prerequisites
+## Running the Application Locally
+### Prerequisites
 - [Node.js](https://nodejs.org/en/)
 - [Git](https://git-scm.com/) (optional)
 
-## Installing the Application
+### Installing the Application
 
 1. Clone the project either by directly downloading the repository [here](https://github.com/DLSU-CCAPDEV/2021T2-G41/archive/refs/heads/main.zip), or using the command below. <br>(Note: git should be installed in your system for you to be able to use this command). 
 ```
@@ -28,7 +29,7 @@ git clone https://github.com/DLSU-CCAPDEV/2021T2-G41
  
 5. To run the server locally, a `.env` file is required. It was not included in the repository since it contains sensitive information. Please ask the owners for the `.env` file. Once acquired, place the `.env` file in the root directory of the project.
     
-## Running the Application
+### Running the Application
     
 1. Open Command Prompt.
     
