@@ -23,8 +23,8 @@ $(document).ready(function () {
                 if(result.Email != register_email_) {
                     if(field.is($('#register_email_input')))
                         $('#register_email_input_error').text('');
-    
-                    return callback(true);
+                    
+                    return callback(true); 
     
                 }
     
@@ -83,8 +83,8 @@ $(document).ready(function () {
     
         return validConfirmPassword;
     }
-    //calls isFilled(), isValidPassword(), isValidConfirmPassword(), and isValidEmail
 
+    //calls isFilled(), isValidPassword(), isValidConfirmPassword(), and isValidEmail
     function validateField(field) {
     
         var filled = isFilled();
@@ -92,7 +92,7 @@ $(document).ready(function () {
         var validConfirmPassword = isValidConfirmPassword(field);
         
         isValidEmail(field, function (validEmail) {
-    
+            console.log("Check NOW!");
             if(filled && validPassword && validConfirmPassword && validEmail)
                 $('#register-submit').prop('disabled', false);
     
