@@ -406,12 +406,17 @@ const controller = {
         }
         else if (deckSettingResult[0].LastStudied.toISOString() == currDate.toISOString()) { // Deck studied on the same current day
           let findFlashcards = async () => {
-            await flashcardModel.find({Deck: deck, ReviewDate: new Date("1970-01-01T00:00:01.000Z")})
-            .limit(deckSettingResult[0].CurrentNew)
-            .then(newCountResult => {
-            console.log("Deck " + deck + " ready for REPEAT study session.");
-            _new = newCountResult.length;
-            })
+            if (deckSettingResult[0].CurrentNew == 0) // all new cards have been studied on the same day
+              _new = 0;
+            else {
+              await flashcardModel.find({Deck: deck, ReviewDate: new Date("1970-01-01T00:00:01.000Z")})
+              .limit(deckSettingResult[0].CurrentNew)
+              .then(newCountResult => {
+              console.log("Deck " + deck + " ready for REPEAT study session.");
+              _new = newCountResult.length;
+              })
+            }
+
           };
 
           findFlashcards();
@@ -655,11 +660,11 @@ const controller = {
         let currReviewDate = new Date(new Date().toDateString());
         let _currentNew;
 	
-		var flashcardSchema = Flashcard.Flashcardschema(req.session.email);
-		let flashcardModel = flashcardConnection.model('flashcard', flashcardSchema, req.session.email);
-	
-		var deckSettingSchema = Flashcard.DeckSettingSchema(req.session.email);
-		let deckSettingModel = flashcardConnection.model('deck settings', deckSettingSchema, req.session.email);
+        var flashcardSchema = Flashcard.Flashcardschema(req.session.email);
+        let flashcardModel = flashcardConnection.model('flashcard', flashcardSchema, req.session.email);
+      
+        var deckSettingSchema = Flashcard.DeckSettingSchema(req.session.email);
+        let deckSettingModel = flashcardConnection.model('deck settings', deckSettingSchema, req.session.email);
       
         // Get current new count
         deckSettingModel.findOne({Tag: "Deck Settings", Deck: card.Deck})
