@@ -21,11 +21,11 @@ $(document).ready(function () {
                 window.location.href = "/logout";
                 return;
             }
-            if( xhttp.responseText == "invalidemail") {
+            if( xhttp.responseText == "invalidpassword") {
                 $('#password_input_error').text('Incorrect password.');
                 return;
             }
-            if (xhttp.responseText == "invalidpassword" ) {
+            if (xhttp.responseText == "invalidemail" ) {
                 $('#old_email_input_error').text('Email does not exist.');
                 return;
             }
