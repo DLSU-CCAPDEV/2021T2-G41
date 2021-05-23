@@ -48,6 +48,10 @@ http://localhost:3000/
 | Email | Password |
 | ----------- | ----------- |
 | markadriii@gmail.com | vTx2QQAz |
+| gab@gmail.com | T6yGQPsj |
+| mitch@gmail.com | gU7SFDv4 |
+| ashlee_19@gmail.com | yP5Mq61Q |
+| astherielle@gmail.com | cvIyU23B |
     
 ## Dependancies
 
