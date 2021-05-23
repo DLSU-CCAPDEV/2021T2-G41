@@ -37,12 +37,17 @@ git clone https://github.com/DLSU-CCAPDEV/2021T2-G41
     
 3. Run the command `node app.js`. If the app is working properly, your Command Prompt should display the following statement:
 ```
-Server is running.
+Server is running!
 ``` 
 4. Open a web browser and type the following URL:
 ```
 http://localhost:3000/
 ```     
+### Dummy Accounts
+
+| Email | Password |
+| ----------- | ----------- |
+| markadriii@gmail.com | vTx2QQAz |
     
 ## Dependancies
 
