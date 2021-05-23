@@ -169,7 +169,7 @@ changeNameBtn.addEventListener('click', function() {
 });
 
 seeAllCards.addEventListener('click', function() {
-   location.href = "browse-main.html";
+   location.href = "browse";
 });
 
 addCard_onModal.addEventListener('click', function() {
