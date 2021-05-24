@@ -55,6 +55,7 @@ http://localhost:3000/
     
 ## Dependancies
 
+- [Node Language Detect](https://www.npmjs.com/package/languagedetect)
 - [bcrypt](https://www.npmjs.com/package/bcrypt)
 - [connect-mongo](https://www.npmjs.com/package/connect-mongo)
 - [dotenv](https://www.npmjs.com/package/dotenv)
