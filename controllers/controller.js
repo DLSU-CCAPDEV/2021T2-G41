@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const path = require('path');
 const dotenv = require('dotenv');
+const lngDetector = new (require('languagedetect'));
 
 // import module `validationResult` from `express-validator`
 const { validationResult } = require('express-validator');
@@ -509,9 +510,16 @@ const controller = {
     
         let tempMeanings = []
         let trackTermID = -1;
-    
-        dictionaryModel.find({Kanji: req.query.termQuery}).sort({TermID: 'asc'}).limit(2)
-        .then(termResults => {
+
+        let DictionaryResults;
+
+        // Japanese search term
+        if (lngDetector.detect(req.query.termQuery).length == 0) {
+          dictionaryModel.find({Kanji: req.query.termQuery}).sort({TermID: 'asc'}).limit(0)
+          .then(termResults => {
+            if (termResults.length == 0) // No matching result
+              res.render('dictionary.ejs', {Dictionary: null, isSearch: false, title: 'Kanau | About us'});
+
             termResults.forEach(termResult => {
                 if (termResult.TermID != trackTermID) { // new term found
                     if (trackTermID != -1) { // append all recorded meanings
@@ -559,6 +567,74 @@ const controller = {
         })
         .catch(error =>
             console.log(error));
+        }
+
+        // English term
+        else {
+          console.log("English term search!");
+          dictionaryModel.find({Meaning: {"$regex": req.query.termQuery, "$options": "i"}}).sort({TermID: 'asc'}).limit(9)
+          .then(termResults => {
+            if (termResults.length == 0) // No matching result
+              res.render('dictionary.ejs', {Dictionary: null, isSearch: false, title: 'Kanau | About us'});
+
+            termResults.forEach(termResult => {
+                if (termResult.TermID != trackTermID) { // new term found
+                    if (trackTermID != -1) { // append all recorded meanings
+                        termMeaning.push(tempMeanings.slice()); // save all meanings from previous term
+                        tempMeanings.length = 0;
+                    }
+                    trackTermID = termResult.TermID;
+                    termKanji.push(termResult.Kanji);
+                    termKana.push(termResult.Kana);
+                    tempMeanings.push(termResult.Meaning);
+                }
+                else { // continue on to other meanings
+                    tempMeanings.push(termResult.Meaning);
+                }
+            });
+            termMeaning.push(tempMeanings.slice());
+            tempMeanings.length = 0;
+    
+            DictionaryResults = {
+                "Kanjis": termKanji,
+                "Kanas" : termKana,
+                "Meanings": termMeaning
+            }
+            
+            console.log("==== AFTER PARSING to readable object format ====");
+            console.log(DictionaryResults);
+        })
+        .then(termResults => {
+          // Get sentences
+          let sentences = [] // 2D Array containing multiple Japanese sentences per term
+    
+          termKanji.forEach((kanji, index) => {
+            console.log("SEARCH FOR: " + kanji);
+            // find sentences for each term
+            sentenceModel.find({Text: {"$regex": kanji, "$options": "i"}}).limit(2)
+            .then(sentenceResults => {
+              if (kanji == '') {
+                sentences.push([]);
+              }
+              
+              else {
+                sentences.push(sentenceResults);
+              }
+              
+              if (index == termKanji.length - 1) {
+                console.log(sentences);
+                res.render('dictionary.ejs', {Dictionary: DictionaryResults, isSearch: true, Sentence: sentences, decks: deckNames, title: 'Kanau | About us'});
+              }
+            });
+    
+          });
+    
+        })
+        .catch(error =>
+            console.log(error));
+        }
+    
+        
     },
 
     getStudyDeck: (req, res) => {
@@ -944,6 +1020,12 @@ const controller = {
     getEnglishTranslation: (req, res) => {
         let sentence = req.query.sentence;
         let meaningID;
+
+        let sentenceSchema = Sentence;
+        let sentenceModel = dictionaryConnection.model('sentence', sentenceSchema, "Sentence Bank");
+
+        let sentenceTranslationSchema = SentenceTranslation;
+        let sentenceTranslationModel = dictionaryConnection.model('sentence translation', sentenceTranslationSchema, "Sentence Translation Bank");
       
         // Get meaning ID of the Japanese sentence
         sentenceModel.findOne({Text: sentence})
