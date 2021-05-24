@@ -87,14 +87,16 @@
                     <div class="content-footer">
                         <ul>
                             <div class="japanese-sentence-container">
-                            <%Sentence[indexKanji].forEach((sentence, index) => { %>
-                                        <div class="japanese-sentence-example">
-                                            <button class="add-icon"> + </button>
-                                            <div class="japanese-sentence"><%=sentence.Text%></div>
-                                        </div>
-                                    <div class="english-sentence-example" hidden="false">Loading...</div>
-                                    <br>
-                            <%}); %>
+                            <%if (Sentence[indexKanji] != null) { %>
+                                <%Sentence[indexKanji].forEach((sentence, index) => { %>
+                                            <div class="japanese-sentence-example">
+                                                <button class="add-icon"> + </button>
+                                                <div class="japanese-sentence"><%=sentence.Text%></div>
+                                            </div>
+                                        <div class="english-sentence-example" hidden="false">Loading...</div>
+                                        <br>
+                                <%}); %>
+                            <%}%>
                             </div>
                         </ul>
                     </div>
